@@ -64,7 +64,9 @@ class partner_vat(osv.osv_memory):
              raise osv.except_osv(_('Insufficient Data!'), _('No data for the selected year.'))
 
         partners = []
-        partner_ids = obj_partner.search(cr, uid, [('vat_subjected', '!=', False), ('vat','ilike','BE%')], context=context)
+# issue 414 beg
+        partner_ids = obj_partner.search(cr, uid, [('vat_subjected', '!=', False), ('vat','ilike','BE%'), '|', ('active', '=', True), ('active', '=', False)], context=context)
+# issue 414 end
         if not partner_ids:
              raise osv.except_osv(_('Error'),_('No belgium contact with a VAT number in your database.'))
         cr.execute("""SELECT sub1.partner_id, sub1.name, sub1.vat, sub1.turnover, sub2.vat_amount

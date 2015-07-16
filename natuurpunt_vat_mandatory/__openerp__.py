@@ -28,7 +28,7 @@
     """,
     'author': 'Smart Solotution',
     'website': 'http://www.smartsolution.be',
-    'depends': ['base','account'],
+    'depends': ['base','account','base_vat'],
     'data': [
 	'natuurpunt_vat_mandatory_view.xml'
     ],
