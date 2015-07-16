@@ -102,8 +102,10 @@ class partner_vat_intra(osv.osv_memory):
 
         if wiz_data.tax_code_id:
             data_company = wiz_data.tax_code_id.company_id
+            print "1"
         else:
             data_company = obj_user.browse(cr, uid, uid, context=context).company_id
+            print "2"
 
         # Get Company vat
         company_vat = data_company.partner_id.vat
@@ -112,6 +114,8 @@ class partner_vat_intra(osv.osv_memory):
         company_vat = company_vat.replace(' ','').upper()
         company_vat = company_vat[2:]
         issued_by = company_vat[:2]
+        print "COMP VAT:",company_vat
+        print "ISSUED BY:",issued_by
 
         if len(wiz_data.period_code) != 6:
             raise osv.except_osv(_('Error!'), _('Period code is not valid.'))

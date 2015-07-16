@@ -1288,7 +1288,7 @@ account_coda_import()
 class account_move_line(osv.osv):
     _inherit = 'account.move.line' 
     _columns = {
-        'ref': fields.related('move_id', 'ref', string='Reference', type='char', size=64, store=True, select=True),
+        'ref': fields.char('Reference', size=64),
                }
 account_move_line()
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:# -*- coding: utf-8 -*-
