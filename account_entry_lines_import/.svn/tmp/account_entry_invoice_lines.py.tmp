@@ -1,0 +1,230 @@
+# -*- coding: utf-8 -*-
+##############################################################################
+#
+#    Smart Solution bvba
+#    Copyright (C) 2010-Today Smart Solution BVBA (<http://www.smartsolution.be>).
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU Affero General Public License as
+#    published by the Free Software Foundation, either version 3 of the
+#    License, or (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU Affero General Public License for more details.
+#
+#    You should have received a copy of the GNU Affero General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+############################################################################## 
+
+from osv import osv, fields
+from datetime import datetime
+import csv
+import base64
+from tools.translate import _
+
+class account_move_lines_import_wizard(osv.TransientModel):
+
+    _name = "account.move.lines.import.wizard"
+
+    _columns = {
+        'lines_file': fields.binary('Entry Lines File', required=True),
+    }
+
+    def entry_lines_import(self, cr, uid, ids, context=None):
+        """Import journal items from a file"""
+        print "WIZ IDS:",ids
+        print "WIZ CONTEXT:",context
+
+        obj = self.browse(cr, uid, ids)[0]
+
+        fname = '/tmp/csv_temp_' + datetime.today().strftime('%Y%m%d%H%M%S') + '.csv'
+        fp = open(fname,'w+')
+        fp.write(base64.decodestring(obj.lines_file))
+        fp.close()
+        fp = open(fname,'rU')
+        reader = csv.reader(fp, delimiter=",", quoting=csv.QUOTE_NONE)
+        entry_vals = []
+
+        for row in reader:
+            print "READLINE:",reader.line_num
+            if reader.line_num <= 1:
+                continue
+            print "ROW:",row
+
+            # Find the company
+            company = self.pool.get('res.users').browse(cr, uid, uid).company_id.id             
+
+            # Find the partner
+            partner = False
+            if row[1] != "":
+                print "PARTNER:",row[1]
+                partners = self.pool.get('res.partner').search(cr, uid, [('ref','=',row[1])]) 
+                print "PARTNERS:",partners
+                if partners:
+                    if len(partners) > 1:
+                        raise osv.except_osv(_('Multiple Partners found !'), _('Several partners where found for that code %s'%(row[1])))
+                    partner = partners[0]
+                else:
+                    raise osv.except_osv(_('No partner found !'), _('No partner could be found for that reference %s'%(row[1])))
+
+            # Find the account
+            account = False
+            if row[2] == "":
+                raise osv.except_osv(_('No account found !'), _('No account could be found for the line %s'%(row[0])))
+            accounts = self.pool.get('account.account').search(cr, uid, [('code','=',row[2]),('company_id','=',company)])
+            print "ACCOUNTS:",accounts
+            if not accounts:
+                raise osv.except_osv(_('No account found !'), _('No account could be found for that code %s'%(row[2])))
+            account = accounts[0]
+
+            # Find the dimensions
+            dimension1 = False
+            if row[3] != "":
+                dimension1 = self.pool.get('account.analytic.account').search(cr, uid, [('code','=',row[3])])
+                if not dimension1:
+                    raise osv.except_osv(_('No analytic account found !'), _('No analytic account could be found for that code %s'%(row[3])))
+                dimension1 = dimension1[0]
+            dimension2 = False
+            if row[4] != "":
+                dimension2 = self.pool.get('account.analytic.account').search(cr, uid, [('code','=',row[4])])
+                if not dimension2:
+                    raise osv.except_osv(_('No analytic account found !'), _('No analytic account could be found for that code %s'%(row[4])))
+                dimension2 = dimension2[0]
+            dimension3 = False
+            if row[5] != "":
+                dimension3 = self.pool.get('account.analytic.account').search(cr, uid, [('code','=',row[5])])
+                if not dimension3:
+                    raise osv.except_osv(_('No analytic account found !'), _('No analytic account could be found for that code %s'%(row[5])))
+                dimension3 = dimension3[0]
+
+            # Find the employee
+            employee = False
+            if row[7] != "":
+                employees = self.pool.get('hr.employee').search(cr, uid, [('name','=',row[7])])  
+                print "EMPLOYEES:",employees
+                if not employees:
+                    raise osv.except_osv(_('No employee found !'), _('No employee could be found for that code %s'%(row[7])))
+                employee = employees[0]
+
+            # Find the car plate
+            plate = False
+            if row[8] != "":
+                plates = self.pool.get('fleet.vehicle').search(cr, uid, [('license_plate','ilike',row[8])])
+                if plates:
+                    if len(plates) > 1:
+                        raise osv.except_osv(_('Multiple Car Plates found !'), _('Several car plates where found for that code %s'%(row[8])))
+                    plate = plates[0]
+                else:
+                    raise osv.except_osv(_('No plate found !'), _('No car registration plate could be found for that reference %s'%(row[8])))
+
+            # Find the due date
+            duedate = False
+            if row[9] != "":
+                print "DATALEN:",len(row[9])
+                if len(row[9]) != 10 or row[9][4] != '-' or row[9][7] != '-':
+                    raise osv.except_osv(_('Wrong date format!'), _('The format of date %s is wrong. Please use YYYY-MM-DD. (Example: 2014-12-23)'%(row[9])))
+                #duedate = datetime.strftime(row[9], '%y-%m-%d')
+                duedate = row[9]
+
+            # Set Debit and Credit
+            debit = 0.0
+            if row[10] != "":
+                debit = float(row[10].replace(',','.'))
+            credit = 0.0
+            if row[11] != "":
+                credit = float(row[11].replace(',','.'))
+
+            # Find currency
+            currency = False
+            amount_currency = 0.0 
+            if row[13] != "":
+                currencies = self.pool.get('res.currency').search(cr, uid, [('name','=',row[13])])
+                if not currencies:
+                    raise osv.except_osv(_('No currency found !'), _('No currency could be found for that code %s'%(row[13])))
+                currency = currencies[0]
+           
+                if currency:
+                    amount_currency = float(row[12])
+
+            # Find tax account
+            tax_account = False
+            tax_amount = 0.0
+            if row[14] != "":
+                if len(row[14]) == 1:
+                    row[14] = row[14].zfill(2)
+                tax_accounts = self.pool.get('account.tax.code').search(cr, uid, [('code','=',row[14]),('company_id','=',company)])
+                print "TAX ACCOUNTS:",tax_accounts
+                if not tax_accounts:
+                    raise osv.except_osv(_('No tax account found !'), _('No tax account could be found for that code %s'%(row[14])))
+                tax_account = tax_accounts[0]
+
+                if tax_account:
+                    tax_amount = float(row[15])
+
+            vals = {
+                'company_id': company,
+                'move_id': context['active_id'],
+                'name': row[0],
+                'partner_id': partner,
+                'account_id': account,
+                'analytic_dimension_1_id': dimension1,
+                'analytic_dimension_2_id': dimension2,
+                'analytic_dimension_3_id': dimension3,
+                'employee_id': employee,
+                'fleet_id': plate,
+                'date_maturity': duedate,
+                'debit': debit,
+                'credit': credit,
+                'currency_id': currency,
+                'amount_currency': amount_currency,
+                'tax_code_id': tax_account,
+                'tax_amount': tax_amount, 
+            }
+            entry_vals.append(vals)
+
+        print "ENTRYVALS:",entry_vals
+
+        for line_vals in entry_vals:
+            line_id = self.pool.get('account.move.line').create(cr, uid, line_vals)
+            self.pool.get('account.move.line').natuurpunt_account_id_change(cr, uid, [line_id], line_vals['account_id'], line_vals['partner_id'], context=context)
+
+        return True
+
+# SAMPLES
+
+#class account_entry_invoice_lines(osv.osv):
+#	
+#	_name = 'account_entry_invoice_lines'
+#	_description = 'account_entry_invoice_lines'
+#	_columns = {
+#		'char': fields.char('char', size=64, required=True),
+#		'integer': fields.integer('Integer'),
+#		'float': fields.float('Float', digits=(16,2)),
+#       'function': fields.function(_some_function, 
+#       'related': fields.related(...
+#	}
+#account_entry_invoice_lines()
+
+#    _defaults = {
+#            'state': 'draft',
+#    {
+
+#    def create(self, cr, uid, vals, context=None):
+#        ...
+#        return super(account_entry_invoice_lines, self).create(cr, uid, vals, context=context)
+
+#    def write(self, cr, uid, ids, vals, context=None):
+#        ...
+#        return super(account_entry_invoice_lines, self).write(cr, uid, ids, vals, context=context)
+
+#    def copy(self, cr, uid, id, default={}, context=None):
+#        ...
+#        return super(account_invoice, self).copy(cr, uid, id, default=default, context=context)
+
+
+#       raise osv.except_osv(_('No product found !'), _('Could not find any product for the code %s'%(val)))
+
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

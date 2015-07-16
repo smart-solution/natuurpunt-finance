@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+            <record id="view_np_sale_order_form" model="ir.ui.view">
+            <field name="name">view.np.sale.order.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+		    <xpath expr="//field[@name='order_line']/tree//field[@name='name']" position="after">
+			    <field name="analytic_dimension_1_id" context="{'sale_line_id':active_id,'dimension':1,'dimension2':analytic_dimension_2_id,'dimension3':analytic_dimension_3_id}" attrs="{'required':[('analytic_dimension_1_required','=',True)]}"/>
+			    <field name="analytic_dimension_2_id" context="{'sale_line_id':active_id,'dimension':2,'dimension1':analytic_dimension_1_id,'dimension3':analytic_dimension_3_id}" attrs="{'required':[('analytic_dimension_2_required','=',True)]}"/>
+			    <field name="analytic_dimension_3_id" context="{'sale_line_id':active_id,'dimension':3,'dimension1':analytic_dimension_1_id,'dimension2':analytic_dimension_2_id}" attrs="{'required':[('analytic_dimension_3_required','=',True)]}"/>
+			    <field name="analytic_dimension_1_required" context="{'sale_line_id':active_id}" invisible="1"/>
+			    <field name="analytic_dimension_2_required" context="{'sale_line_id':active_id}" invisible="1"/>
+			    <field name="analytic_dimension_3_required" context="{'sale_line_id':active_id}" invisible="1"/>
+		    </xpath>
+            </field>
+        </record>
+        
+
+            <record id="view_np_sale_order_form2" model="ir.ui.view">
+            <field name="name">view.np.sale.order.form2</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+		    <xpath expr="//field[@name='order_line']/form//field[@name='address_allotment_id']" position="after">
+			    <field name="analytic_dimension_1_id" context="{'sale_line_id':active_id,'dimension':1,'dimension2':analytic_dimension_2_id,'dimension3':analytic_dimension_3_id}" attrs="{'required':[('analytic_dimension_1_required','=',True)]}"/>
+			    <field name="analytic_dimension_2_id" context="{'sale_line_id':active_id,'dimension':2,'dimension1':analytic_dimension_1_id,'dimension3':analytic_dimension_3_id}" attrs="{'required':[('analytic_dimension_2_required','=',True)]}"/>
+			    <field name="analytic_dimension_3_id" context="{'sale_line_id':active_id,'dimension':3,'dimension1':analytic_dimension_1_id,'dimension2':analytic_dimension_2_id}" attrs="{'required':[('analytic_dimension_3_required','=',True)]}"/>
+			    <field name="analytic_dimension_1_required" context="{'sale_line_id':active_id}" invisible="1"/>
+			    <field name="analytic_dimension_2_required" context="{'sale_line_id':active_id}" invisible="1"/>
+			    <field name="analytic_dimension_3_required" context="{'sale_line_id':active_id}" invisible="1"/>
+		    </xpath>
+            </field>
+        </record>
+
+            <record id="view_np_sale_order_line_form" model="ir.ui.view">
+            <field name="name">view.np.sale.order.line.form</field>
+            <field name="model">sale.order.line</field>
+            <field name="inherit_id" ref="sale.view_order_line_form2"/>
+            <field name="arch" type="xml">
+		    <field name="discount" position="after">
+			    <field name="analytic_dimension_1_id" context="{'sale_line_id':active_id,'dimension':1,'dimension2':analytic_dimension_2_id,'dimension3':analytic_dimension_3_id}" attrs="{'required':[('analytic_dimension_1_required','=',True)]}"/>
+			    <field name="analytic_dimension_2_id" context="{'sale_line_id':active_id,'dimension':2,'dimension1':analytic_dimension_1_id,'dimension3':analytic_dimension_3_id}" attrs="{'required':[('analytic_dimension_2_required','=',True)]}"/>
+			    <field name="analytic_dimension_3_id" context="{'sale_line_id':active_id,'dimension':3,'dimension1':analytic_dimension_1_id,'dimension2':analytic_dimension_2_id}" attrs="{'required':[('analytic_dimension_3_required','=',True)]}"/>
+			    <field name="analytic_dimension_1_required" context="{'sale_line_id':active_id}" invisible="1"/>
+			    <field name="analytic_dimension_2_required" context="{'sale_line_id':active_id}" invisible="1"/>
+			    <field name="analytic_dimension_3_required" context="{'sale_line_id':active_id}" invisible="1"/>
+		    </field>
+            </field>
+        </record>
+        
+    </data>
+</openerp>

@@ -1,0 +1,9 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+access_account_invoice_patrimonium,access.account.invoice.patrimonium,model_account_invoice,group_patrimonium_user,1,1,1,0
+access_account_invoice_line_patrimonium,access.account.invoice.line.patrimonium,model_account_invoice_line,group_patrimonium_user,1,1,1,0
+access_account_invoice_tax_patrimonium,access.account.invoice.tax.patrimonium,model_account_invoice_tax,group_patrimonium_user,1,1,1,0
+access_account_journal_patrimonium,access.account.journal.patrimonium,model_account_journal,group_patrimonium_user,1,0,0,0
+access_account_period_patrimonium,access.account.period.patrimonium,model_account_period,group_patrimonium_user,1,0,0,0
+access_account_account_patrimonium,access.account.account.patrimonium,model_account_account,group_patrimonium_user,1,0,0,0
+access_account_account_analytic_dimension_patrimonium,access.account.account.analytic.dimension.patrimonium,model_account_account_analytic_dimension,group_patrimonium_user,1,0,0,0
+access_account_analytic_dimension_patrimonium,access.account.analytic.dimension.patrimonium,model_account_analytic_dimension,group_patrimonium_user,1,0,0,0

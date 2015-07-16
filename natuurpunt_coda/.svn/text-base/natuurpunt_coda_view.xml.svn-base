@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+    <!--
+       partner_type Views 
+   -->
+
+    <record model="ir.ui.view" id="view_account_coda_tree">
+        <field name="name">view.account.coda.tree</field>
+        <field name="model">account.coda.account</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="Coda Berichten">
+                <field name="name"/>
+                <field name="journal_id"/>
+		<field name="transaction_code"/>
+                <field name="communication_equal"/>
+                <field name="amount"/>
+                <field name="communication_like"/>
+                <field name="account_id"/>
+                    <field name="analytic_dimension_1_id" />
+                    <field name="analytic_dimension_2_id" />
+                    <field name="analytic_dimension_3_id" />
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_account_coda_form">
+        <field name="name">view.account.coda.form</field>
+        <field name="model">account.coda.account</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Coda Berichten">
+		<group colspan="2" col="2">
+                    <field name="name"/>
+                    <field name="journal_id" domain="[('type', '=', 'bank')]"/>
+                    <field name="account_id"/>
+                    <field name="analytic_dimension_1_id" context="{'account_coda_id':active_id,'account_id':account_id,'dimension':1,'dimension2':analytic_dimension_2_id,'dimension3':analytic_dimension_3_id}" attrs="{'required':[('analytic_dimension_1_required','=',True)]}"/>
+                    <field name="analytic_dimension_2_id" context="{'account_coda_id':active_id,'account_id':account_id,'dimension':2,'dimension1':analytic_dimension_1_id,'dimension3':analytic_dimension_3_id}" attrs="{'required':[('analytic_dimension_2_required','=',True)]}"/>
+                    <field name="analytic_dimension_3_id" context="{'account_coda_id':active_id,'account_id':account_id,'dimension':3,'dimension1':analytic_dimension_1_id,'dimension2':analytic_dimension_2_id}" attrs="{'required':[('analytic_dimension_3_required','=',True)]}"/>
+                    <field name="analytic_dimension_1_required" invisible="1"/>
+                    <field name="analytic_dimension_2_required" invisible="1"/>
+                    <field name="analytic_dimension_3_required" invisible="1"/>
+
+		</group>
+		<group colspan="2" col="2">
+		    <field name="transaction_code"/>
+                    <field name="communication_equal"/>
+                    <field name="amount"/>
+                    <field name="communication_like"/>
+		</group>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_account_coda">
+        <field name="name">Coda Berichten</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">account.coda.account</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_account_coda_tree"/>
+    </record>
+
+    <record model="ir.actions.act_window.view" id="action_accuont_coda_tree_view">
+        <field name="sequence">10</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_account_coda_tree"/>
+        <field name="act_window_id" ref="action_account_coda"/>
+    </record>
+
+    <record model="ir.actions.act_window.view" id="action_account_coda_form_view">
+        <field name="sequence">20</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_account_coda_form"/>
+        <field name="act_window_id" ref="action_account_coda"/>
+    </record>
+
+    <menuitem name="Coda Berichten" id="menu_account_coda_form" action="action_account_coda" parent = "account.menu_finance_configuration" sequence="200"/>
+
+    </data>
+</openerp>
+

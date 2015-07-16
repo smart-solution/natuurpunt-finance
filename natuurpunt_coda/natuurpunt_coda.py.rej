@@ -1,0 +1,11 @@
+--- natuurpunt_coda.py.patched	2015-04-13 13:55:33.426930300 +0200
++++ natuurpunt_coda.py	2015-04-10 12:24:04.000000000 +0200
+@@ -1283,7 +1283,7 @@
+ class account_move_line(osv.osv):
+     _inherit = 'account.move.line' 
+     _columns = {
+-        'ref': fields.char('Reference', size=64),
++        'ref': fields.related('move_id', 'ref', string='Reference', type='char', size=64, store=True, select=True),
+                }
+ account_move_line()
+ # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:# -*- coding: utf-8 -*-

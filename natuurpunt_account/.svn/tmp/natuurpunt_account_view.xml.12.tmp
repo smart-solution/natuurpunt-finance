@@ -1,0 +1,526 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+    <record model="ir.ui.view" id="view_natuurpunt_account_supplier_invoice_form">
+        <field name="name">view.natuurpunt_account.supplier.invoice.form</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_supplier_form"/>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+                <field name="period_id" position="replace">
+                </field>
+                <field name="date_invoice" position="replace">
+		    <field name="date_invoice" on_change="onchange_date_invoice(date_invoice, payment_term)" required="True"/>
+                    <field name="period_id"/>
+		    <field name="payment_sent"/>
+                </field>
+                <field name="journal_id" position="replace">
+                </field>
+                <field name="partner_id" position="before">
+                    <field name="journal_id" groups="account.group_account_user" on_change="onchange_journal_id(journal_id, context)"/>
+                </field>
+                <field name="period_id" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+                <field name="date_due" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+                <field name="supplier_invoice_number" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+                <field name="check_total" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+                <xpath expr="//field[@name='invoice_line']/tree//field[@name='quantity']" position="before">
+                    <field name="employee_mandatory" invisible="1"/>
+                    <field name="fleet_mandatory" invisible="1"/>
+                    <field name="employee_id" attrs="{'required': [('employee_mandatory','=',True)]}"/>
+                    <field name="fleet_id" attrs="{'required': [('fleet_mandatory','=',True)]}"/>
+                </xpath>
+		<field name="payment_term" position="replace">	
+			<field name="payment_term" widget="selection" on_change="onchange_payment_term(date_invoice, payment_term)"/>	
+		</field>
+               <field name="move_id" position="after">
+                        <field name="internal_number" readonly="1"/>
+                </field>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_natuurpunt_account_supplier_invoice_tree">
+        <field name="name">view.natuurpunt_account.supplier.invoice.tree</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_tree"/>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+                <field name="state" position="after">
+                        <field name="payment_sent" readonly="1"/>
+                </field>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="view_natuurpunt_account_supplier_invoice_filter">
+        <field name="name">view.natuurpunt_account.supplier.invoice.filter</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+               <filter name="unpaid" position="after">
+                   <!--                    <filter name="payment_sent" string="Payment Sent" domain="[('payment_sent','=',True)]" help="Invoices for which a payment order is open"/>-->
+                    <filter name="payment_sent" string="Unpaid and Payment not sent" domain="[('payment_sent','=',False),('state','!=','paid')]" help="Invoices for which a payment order is open"/>
+                </filter>
+        </field>
+    </record>
+    
+    <record model="ir.ui.view" id="view_natuurpunt_account_customer_invoice_tree">
+        <field name="name">view.natuurpunt_account.customer.invoice.tree</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_tree"/>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+		<field name="origin" position="replace">
+			<field name="name"/>
+		</field>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_natuurpunt_account_customer_invoice_form">
+        <field name="name">view.natuurpunt_account.customer.invoice.form</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_form"/>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+                <field name="period_id" position="replace">
+                </field>
+                <field name="date_due" position="replace">
+                </field>
+                <field name="date_invoice" position="after">
+                    <field name="period_id"/>
+                    <field name="date_due"/>
+                </field>
+                <field name="journal_id" position="replace">
+                </field>
+                <field name="partner_id" position="before">
+                    <field name="journal_id" groups="account.group_account_user" on_change="onchange_journal_id(journal_id, context)"/>
+                </field>
+                <field name="date_invoice" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+                <field name="period_id" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+                <field name="date_due" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+                <xpath expr="//field[@name='invoice_line']/tree//field[@name='quantity']" position="before">
+                    <field name="employee_mandatory" invisible="1"/>
+                    <field name="fleet_mandatory" invisible="1"/>
+                    <field name="employee_id" attrs="{'required': [('employee_mandatory','=',True)]}"/>
+                    <field name="fleet_id" attrs="{'required': [('fleet_mandatory','=',True)]}"/>
+                </xpath>
+		<field name="payment_term" position="replace">	
+			<field name="payment_term" widget="selection" on_change="onchange_payment_term(date_invoice, payment_term)"/>	
+		</field>
+                <field name="move_id" position="after">
+                        <field name="internal_number" readonly="1"/>
+                </field>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_natuurpunt_account_customer_invoice2_form">
+        <field name="name">view.natuurpunt_account.customer.invoice2.form</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account_voucher.view_invoice_customer"/>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+		<xpath expr="//button[@name='invoice_pay_customer'][last()]" position="replace">
+			<button name="invoice_pay_customer" invisible="1"/>
+		</xpath>
+		<button name="invoice_pay_customer" position="replace">
+			<button name="invoice_pay_customer" invisible="1"/>
+		</button>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_natuurpunt_account_move_form">
+        <field name="name">view.natuurpunt_account_move.form</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+	    <field name="journal_id" position="attributes">
+		<attribute name="domain">[('type', 'in', ('general','situation'))]</attribute>
+	    </field>
+            <xpath expr="/form/sheet/notebook/page[@string='Journal Items']/field[@name='line_id']/tree/field[@name='name']" position="after">
+		<field name="ref"/>
+	    </xpath>
+            <xpath expr="/form/sheet/notebook/page[@string='Journal Items']/field[@name='line_id']/tree/field[@name='partner_id']" position="replace">
+                <field name="partner_mandatory" invisible="1"/>
+                <field name="partner_id" attrs="{'required':[('partner_mandatory','=',True),('overrule_mandatory','=',False)]}"/>
+            </xpath>
+             <xpath expr="/form/sheet/notebook/page[@string='Journal Items']/field[@name='line_id']/tree/field[@name='date_maturity']" position="before">
+                <field name="employee_mandatory" invisible="1"/>
+                <field name="employee_id" attrs="{'required':[('employee_mandatory','=',True),('overrule_mandatory','=',False)]}"/>
+                <field name="fleet_mandatory" invisible="1"/>
+                <field name="fleet_id" attrs="{'required':[('fleet_mandatory','=',True),('overrule_mandatory','=',False)]}"/>
+                <field name="partner_mandatory" invisible="1"/>
+                <field name="overrule_mandatory" invisible="1"/>
+            </xpath> 
+            <xpath expr="/form/sheet/notebook/page[@string='Journal Items']/field[@name='line_id']/tree/field[@name='account_id']" position="attributes">
+                <attribute name="on_change">natuurpunt_account_id_change(account_id, partner_id, parent.journal_id, context)</attribute>
+            </xpath>
+	    <field name="to_check" position="after">
+		<field name="journal_type" invisible="1"/>
+		<field name="modified" readonly="1"/>
+	    </field>
+
+            <button name="button_cancel" position="replace">
+		<button name="button_cancel" string="Cancel Entry" type="object" groups="account.group_account_invoice" attrs="{'invisible':[('journal_type','in',('sale','sale_refund','purchase','purchase_refund')),('state','=','posted')]}"/>
+            </button>
+
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_natuurpunt_account_move_tree">
+        <field name="name">view.natuurpunt_account_move.tree</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_tree"/>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+		<field name="to_check" position="after">
+			<field name="modified"/>
+		</field>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_natuurpunt_account_move_search">
+        <field name="name">view.natuurpunt_account_move.search</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_account_move_filter"/>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+		<field name="partner_id" position="after">
+		    <field name="ref"/>
+                    <filter icon="terp-gtk-jump-to-ltr" string="Modified" domain="[('modified','=',True)]" help="Modified Journal Entries"/>
+		</field>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_natuurpunt_account_move_line_form">
+        <field name="name">view.natuurpunt_account_move_line.form</field>
+        <field name="model">account.move.line</field>
+        <field name="inherit_id" ref="account.view_move_line_tree"/>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="after">
+                <field name="partner_mandatory" invisible="1"/>
+            </field>
+            <field name="date_maturity" position="before">
+                <field name="employee_id" attrs="{'required':[('employee_mandatory','=',True)]}"/>
+                <field name="employee_mandatory" invisible="1"/>
+                <field name="fleet_id" attrs="{'required':[('fleet_mandatory','=',True)]}"/>
+                <field name="fleet_mandatory" invisible="1"/>
+                <field name="partner_mandatory" invisible="1"/>
+            </field> 
+            <field name="partner_id" position="attributes">
+                <attribute name="required">{'required':[('partner_mandatory','=',True)]}</attribute>
+            </field>
+        </field>
+    </record>
+
+        <record id="account.view_account_move_line_filter" model="ir.ui.view">
+            <field name="name">Journal Items</field>
+            <field name="model">account.move.line</field>
+            <field name="arch" type="xml">
+                <search string="Search Journal Items">
+                    <field name="name" filter_domain="['|', ('name','ilike',self), ('ref','ilike',self)]" string="Move"/>
+                    <field name="date"/>
+            			<field name="reconcile_id"/>
+                    <filter icon="terp-document-new" string="Unbalanced" domain="[('state','=','draft')]" help="Unbalanced Journal Items"/>
+                    <separator/>
+                    <filter icon="terp-document-new" string="Unposted" domain="[('move_id.state','=','draft')]" help="Unposted Journal Items"/>
+                    <filter name="posted" icon="terp-camera_test" string="Posted" domain="[('move_id.state','=','posted')]" help="Posted Journal Items"/>
+                    <separator/>
+                    <filter icon="terp-dolar_ok!" string="Unreconciled" domain="[('reconcile_id','=',False), ('account_id.reconcile','=',True)]" help="Unreconciled Journal Items" name="unreconciled"/>
+                    <separator/>
+                    <filter string="Next Partner to Reconcile" help="Next Partner Entries to reconcile" name="next_partner" context="{'next_partner_only': 1}" icon="terp-gtk-jump-to-ltr" domain="[('account_id.reconcile','=',True),('reconcile_id','=',False)]"/>
+                    <field name="move_id" string="Number (Move)"/>
+                    <field name="account_id"/>
+                    <field name="partner_id"/>
+                    <field name="journal_id" context="{'journal_id':self}" widget="selection"/> <!-- it's important to keep widget='selection' in this filter viewbecause without that the value passed in the context is not the ID but the textual value (name) of the selected journal -->
+                    <field name="period_id" context="{'period_id':self}" widget="selection"/> <!-- it's important to keep the widget='selection' in this field, for the same reason as explained above -->
+                    <group expand="0" string="Group By...">
+                        <filter string="Partner" icon="terp-partner" domain="[]" context="{'group_by':'partner_id'}"/>
+                        <filter string="Partner Reference" icon="terp-partner" domain="[]" context="{'group_by':'partner_ref'}"/>
+                        <filter string="Journal" icon="terp-folder-orange" domain="[]" context="{'group_by':'journal_id'}"/>
+                        <filter string="Account"  icon="terp-folder-green" context="{'group_by':'account_id'}"/>
+                        <filter string="Period" icon="terp-go-month" domain="[]" context="{'group_by':'period_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+    <record model="ir.ui.view" id="view_natuurpunt_account_account_form">
+        <field name="name">view.natuurpunt_account_account.form</field>
+        <field name="model">account.account</field>
+        <field name="inherit_id" ref="account.view_account_form"/>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <field name="reconcile" position="after">
+                <field name="partner_mandatory"/>
+                <field name="employee_mandatory"/>
+                <field name="fleet_mandatory"/>
+            </field>
+            <field name="user_type" position="after">
+                <field name="account_group_1"/>
+                <field name="account_group_2"/>
+                <field name="account_group_3"/>
+            </field>
+		<field name="child_consol_ids" position="replace">
+		</field>
+		<label for="note" position="before">
+			<label for="child_consol_ids" attrs="{'invisible':[('type','!=','consolidation')]}"/>
+			<field name="child_consol_ids" attrs="{'invisible':[('type','!=','consolidation')]}">
+			    <tree>
+				<field name="code"/>
+				<field name="name"/>
+				<field name="company_id"/>
+			    </tree>
+			</field>
+			<label for="parent_consol_ids" attrs="{'invisible':[('type','=','consolidation')]}"/>
+			<field name="parent_consol_ids" attrs="{'invisible':[('type','=','consolidation')]}">
+			    <tree>
+				<field name="code"/>
+				<field name="name"/>
+				<field name="company_id"/>
+			    </tree>
+			</field>
+			</label>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_natuurpunt_account_invoice_refund_form">
+        <field name="name">view.natuurpunt_account.invoice.refund.form</field>
+        <field name="model">account.invoice.refund</field>
+        <field name="inherit_id" ref="account.view_account_invoice_refund"/>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+                <field name="journal_id" position="attributes">
+                    <attribute name="required">1</attribute>
+                </field>
+                <field name="date" position="attributes">
+                    <attribute name="required">1</attribute>
+                </field>
+                <field name="period" position="attributes">
+                    <attribute name="required">1</attribute>
+                </field>
+        </field>
+    </record>
+
+
+        <record model="ir.ui.view" id="account_bank_statement_tree_employee_inherit">
+            <field name="name">account.bank.statement.tree.employee.inherit</field>
+            <field name="model">account.bank.statement</field>
+            <field name="inherit_id" ref="account.view_bank_statement_form"/>
+            <field name="arch" type="xml">
+            <xpath expr="//field[@name='line_ids']/tree//field[@name='amount']" position="before">
+                <field name="partner_mandatory" invisible="1"/>
+                <field name="employee_mandatory" invisible="1"/>
+                <field name="employee_id" attrs="{'required':[('employee_mandatory','=',True)]}" on_change="onchange_employee(employee_id)"/>
+                <!--
+                <field name="fleet_mandatory" invisible="1"/>
+                <field name="fleet_id" attrs="{'required':[('fleet_mandatory','=',True)]}"/>
+-->
+            </xpath>
+            <xpath expr="//field[@name='line_ids']/tree//field[@name='partner_id']" position="replace">
+                <field name="partner_id" on_change="onchange_partner_id(partner_id)" attrs="{'required':[('partner_mandatory','=',True)]}"/>
+            </xpath>
+            </field>
+        </record>
+        
+                <record id="view_np_bank_statement_line_filter" model="ir.ui.view">
+                        <field name="name">bank.statement.line..np.filter</field>
+                        <field name="model">account.bank.statement.line</field>
+			            <field name="inherit_id" ref="l10n_be_coda.view_bank_statement_line_coda_filter"/>
+                        <field name="arch" type="xml">
+                            <field name="name" position="after">
+                                <filter name="draft_state" domain="[('state','ilike','draft')]" icon="terp-folder-green" string="Draft"/>
+                                <filter name="confirm_state" domain="[('state','ilike','confirm')]" icon="terp-folder-red" string="Confirm"/>
+				                <newline/>
+			                </field>
+                        </field>
+                </record>
+
+
+        <record model="ir.ui.view" id="account_bank_statement_line_tree_inherit">
+            <field name="name">account.bank.statement.line.inherit</field>
+            <field name="model">account.bank.statement.line</field>
+            <field name="inherit_id" ref="l10n_be_coda.view_account_bank_statement_line_coda_tree"/>
+            <field name="arch" type="xml">
+		<field name="note" position="after">
+			<field name="state"/>
+		</field>
+            </field>
+        </record>
+
+
+        <record id="account.action_account_moves_all_a" model="ir.actions.act_window">
+            <field name="name">Journal Items</field>
+            <field name="res_model">account.move.line</field>
+            <field name="view_id" ref="account.view_move_line_tree"/>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem
+            action="account.action_account_moves_all_a"
+            icon="STOCK_JUSTIFY_FILL"
+            id="account.menu_action_account_moves_all"
+            parent="account.menu_finance_entries"
+            sequence="1"
+            groups="account.group_account_user"
+        />
+
+        <record id="view_account_move_line_tree_move_inherit" model="ir.ui.view">
+            <field name="name">view.account.move.line.tree.move.inherit</field>
+            <field name="model">account.move.line</field>
+            <field name="inherit_id" ref="account.view_move_line_tree"/>
+            <field name="arch" type="xml">
+                <field name="move_id" position="replace">
+                </field>
+                <field name="journal_id" position="after">
+                    <field name="move_id"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_np_partner_tree" model="ir.ui.view">
+            <field name="name">view.np.partner.tree</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_tree"/>
+            <field name="arch" type="xml">
+                <field name="email" position="replace">
+			<field name="email" invisible="1"/>
+                </field>
+                <field name="phone" position="replace">
+			<field name="phone" invisible="1"/>
+			<field name="vat"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_np_partner_tree2" model="ir.ui.view">
+            <field name="name">view.np.partner.tree2</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="account_report_company.account_report_copmany_partner_tree_view"/>
+            <field name="arch" type="xml">
+		<field name="display_name" position="replace">
+			<field name="ref"/>
+			<field name="name"/>
+		</field>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="account_report_copmany_partner_kanban_np_view">
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="account_report_company.account_report_copmany_partner_kanban_view"/>
+            <field name="arch" type="xml">
+                <field name="display_name" position="replace">
+                    <field name="name"/>
+                </field>
+            </field>
+        </record>
+
+
+
+        <record id="view_np_partner_form" model="ir.ui.view">
+            <field name="name">view.np.partner.tree</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <field name="vat" position="replace">
+			<field name="vat" attrs="{'required':[('customer','=',True),('is_company','=',True)]}"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_np_partner_search" model="ir.ui.view">
+            <field name="name">view.np.partner.search</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_res_partner_filter"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+			<field name="vat"/>
+			<field name="ref"/>
+			<field name="street"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_np_invoice_customer" model="ir.ui.view">
+            <field name="name">account.np.invoice.customer.pay</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account_voucher.view_invoice_customer"/>
+            <field name="arch" type="xml">
+                    <button name="invoice_pay_customer" position="replace"> 
+                    	<button name="invoice_pay_customer" invisible="1"/> 
+		    </button>
+            </field>
+        </record>
+        <record id="view_np_invoice_supplier" model="ir.ui.view">
+            <field name="name">account.np.invoice.supplier.pay</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account_voucher.view_invoice_supplier"/>
+            <field name="arch" type="xml">
+                    <button name="invoice_pay_customer" position="replace"> 
+                    	<button name="invoice_pay_customer" invisible="1"/> 
+                    	<button name="payment_list_get" type="object" string="Payment Lines"/> 
+		    </button>
+            </field>
+        </record>
+
+        <record id="invoice_form_cancel_np_inherit" model="ir.ui.view">
+            <field name="name">invoice.form.cancel.np.inherit</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account_cancel.invoice_form_cancel_inherit"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='invoice_cancel']" position="replace">
+                    <button name="invoice_cancel" states="proforma2,sale,open" string="Cancel Invoice" groups="account.group_account_invoice"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="invoice_supplier_cancel_form_np_inherit" model="ir.ui.view">
+            <field name="name">invoice.supplier.cancel.form.np.inherit</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account_cancel.invoice_supplier_cancel_form_inherit"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='invoice_cancel']" position="replace">
+                    <button name="invoice_cancel" states="proforma2,sale,open" string="Cancel Invoice" groups="account.group_account_invoice"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_payment_line_tree_np" model="ir.ui.view">
+            <field name="name">Payment Lines</field>
+            <field name="model">payment.line</field>
+	    <field name="inherit_id" ref="account_payment.view_payment_line_tree"/>
+            <field name="arch" type="xml">
+                    <field name="name" position="after">
+			<field name="payment_state"/>
+		    </field>
+            </field>
+        </record>
+
+        <record id="account_journal_overrule_form" model="ir.ui.view">
+            <field name="name">account.journal.overrule.form</field>
+            <field name="model">account.journal</field>
+            <field name="inherit_id" ref="account.view_account_journal_form"/>
+            <field name="arch" type="xml">
+                <field name="centralisation" position="after">
+                    <field name="overrule_mandatory"/>
+                </field>
+            </field>
+        </record>
+
+</data>
+</openerp>
+

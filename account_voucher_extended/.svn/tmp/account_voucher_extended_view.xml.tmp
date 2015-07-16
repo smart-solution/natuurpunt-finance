@@ -1,0 +1,147 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+        <record id="view_account_bank_statement_vouvher_ext_form" model="ir.ui.view">
+            <field name="name">account.bank.statement.voucher.ext.form</field>
+            <field name="model">account.bank.statement</field>
+            <field name="inherit_id" ref="account.view_bank_statement_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='import_buttons']" position="inside">
+                    <button name="action_vouchers_get" type="object" string="Display Vouchers" icon="gtk-execute"/>
+                    <button name="action_voucher_lines_get" type="object" string="Display Voucher Lines" icon="gtk-execute"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_account_voucher_ext_tree" model="ir.ui.view">
+            <field name="name">account.voucher.ext.tree</field>
+            <field name="model">account.voucher</field>
+            <field name="priority">1</field>
+            <field name="inherit_id" ref="account_voucher.view_voucher_tree"/>
+            <field name="arch" type="xml">
+                <field name="amount" position="replace">
+		    <field name="amount" invisible="1"/>
+		    <field name="line_amount" string="Amount"/>
+                    <field name="amount_delta"/>
+                    <field name="statement_line_id" invisible="0"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_account_voucher_ext_form" model="ir.ui.view">
+            <field name="name">account.voucher.ext.form</field>
+            <field name="model">account.voucher</field>
+             <field name="priority">1</field>
+            <field name="inherit_id" ref="account_voucher.view_voucher_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='line_ids']/tree//field[@name='name']" position="replace">
+                </xpath>
+                <xpath expr="//field[@name='line_ids']/tree//field[@name='type']" position="replace">
+                </xpath>
+                <xpath expr="//field[@name='line_ids']/tree//field[@name='account_analytic_id']" position="replace">
+                </xpath>
+                <xpath expr="//field[@name='line_ids']/tree//field[@name='amount']" position="replace">
+                    <field name="name"/>
+                    <field name="move_line_id"/>
+                    <field name="move_line_partner_id" invisible="1"/>
+                    <field name="date_due"/>
+                    <field name="amount_original"/>
+                    <field name="amount_unreconciled"/>
+                    <field name="amount"/>
+                    <field name="type"/>
+                </xpath>
+                <xpath expr="//field[@name='line_ids']/tree//field[@name='account_id']" position="replace">
+                    <field name="statement_line_date"/>
+                    <field name="statement_line_ref"/>
+                    <field name="statement_line_partner"/>
+                    <field name="statement_line_name"/>
+                    <field name="statement_line_amount"/>
+                    <field name="account_id" invisible="1"/>
+                </xpath>
+
+                <field name="partner_id" position="after">
+                    <field name="statement_line_id"/>
+                </field>
+
+            </field>
+        </record>
+
+        <record id="view_account_voucher_ext_filter" model="ir.ui.view">
+            <field name="name">account.voucher.ext.flter</field>
+            <field name="model">account.voucher</field>
+             <field name="priority">1</field>
+            <field name="inherit_id" ref="account_voucher.view_voucher_filter"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="replace">
+                    <field name="partner_id"/>
+                </field>
+            </field>
+        </record>
+
+    <record model="ir.ui.view" id="view_account_voucher_line_extended_tree">
+        <field name="name">view.account_voucher_line_extended.tree</field>
+        <field name="model">account.voucher.line</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="Voucher Lines">
+                <field name="statement_line_date"/>
+                <field name="statement_line_ref"/>
+                <field name="statement_line_partner"/>
+                <field name="statement_line_name"/>
+                <field name="statement_line_amount"/>
+                <field name="move_line_ref_id" invisible="0"/>
+                    <field name="name"/>
+                    <field name="move_line_id"/>
+                    <field name="date_due"/>
+                    <field name="move_line_partner_id" invisible="1"/>
+                    <field name="amount_original"/>
+                    <field name="amount_unreconciled"/>
+                    <field name="amount"/>
+                    <field name="type"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <record model="ir.ui.view" id="view_account_voucher_line_extended_form">
+        <field name="name">view.account_voucher_line_extended.form</field>
+        <field name="model">account.voucher.line</field>
+        <field name="inherit_id" ref="account_voucher.view_voucher_line_form"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="move_line_id"/>
+            </field>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_account_voucher_line_extended_filter">
+        <field name="name">view.account_voucher_line_extended.filter</field>
+        <field name="model">account.voucher.line</field>
+        <field name="type">search</field>
+        <field name="arch" type="xml">
+            <search string="Search Invoice">
+                <field name="name" string="Description"/>
+                <field name="statement_line_ref" string="Stmt Reference"/>
+                <field name="move_line_id" string="Journal Item"/>
+                <field name="move_line_ref_id" string="Journal Item Reference"/>
+                <field name="move_line_partner_id" string="Journal Item Partner"/>
+           </search>
+        </field>
+    </record>
+
+       <record model="ir.actions.act_window" id="account_voucher.action_voucher_list">
+            <field name="name">Journal Vouchers</field>
+            <field name="res_model">account.voucher</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,graph</field>
+            <field name="context">{'type':'general'}</field>
+            <field name="domain">['|',('active','=',True),('active','=',False)]</field>
+            <!--            <field name="domain">['|',('active','=',True),('active','=',False),('amount_delta','!=',0)]</field>-->
+            <field name="view_id" eval="view_account_voucher_ext_tree"/>
+            <field name="search_view_id" ref="view_account_voucher_ext_filter"/>
+        </record>
+
+
+    </data>
+</openerp>

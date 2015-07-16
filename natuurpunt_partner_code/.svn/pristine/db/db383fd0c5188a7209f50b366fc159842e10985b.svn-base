@@ -1,0 +1,66 @@
+# -*- coding: utf-8 -*-
+##############################################################################
+#
+#    Smart Solution bvba
+#    Copyright (C) 2010-Today Smart Solution BVBA (<http://www.smartsolution.be>).
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU Affero General Public License as
+#    published by the Free Software Foundation, either version 3 of the
+#    License, or (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU Affero General Public License for more details.
+#
+#    You should have received a copy of the GNU Affero General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+############################################################################## 
+
+from osv import osv, fields
+from openerp.tools.translate import _
+
+
+
+
+
+
+
+
+# SAMPLES
+
+#class natuurpunt_partner_code(osv.osv):
+#	
+#	_name = 'natuurpunt_partner_code'
+#	_description = 'natuurpunt_partner_code'
+#	_columns = {
+#		'char': fields.char('char', size=64, required=True),
+#		'integer': fields.integer('Integer'),
+#		'float': fields.float('Float', digits=(16,2)),
+#       'function': fields.function(_some_function, 
+#       'related': fields.related(...
+#	}
+#natuurpunt_partner_code()
+
+#    _defaults = {
+#            'state': 'draft',
+#    {
+
+#    def create(self, cr, uid, vals, context=None):
+#        ...
+#        return super(natuurpunt_partner_code, self).create(cr, uid, vals, context=context)
+
+#    def write(self, cr, uid, ids, vals, context=None):
+#        ...
+#        return super(natuurpunt_partner_code, self).write(cr, uid, ids, vals, context=context)
+
+#    def copy(self, cr, uid, id, default={}, context=None):
+#        ...
+#        return super(account_invoice, self).copy(cr, uid, id, default=default, context=context)
+
+
+#       raise osv.except_osv(_('No product found !'), _('Could not find any product for the code %s'%(val)))
+
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

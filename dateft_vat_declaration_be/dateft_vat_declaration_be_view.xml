@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+
+<openerp>
+    <data>
+
+        <record id="dateft_view_vat_declaration" model="ir.ui.view">
+            <field name='name'>dateft.view.vat.declaration</field>
+            <field name='model'>l1on_be.vat.declaration</field>
+            <field name="inherit_id" ref="l10n_be.view_vat_declaration"/>
+            <field name='arch' type='xml'>
+		<field name="period_id" position="after">
+		    <field name="period_to_id" widget="selection"/>
+		</field>
+            </field>
+        </record>
+
+    </data>
+</openerp>

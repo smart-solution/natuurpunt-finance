@@ -1,0 +1,22 @@
+--- account.py	2014-12-10 11:27:14.257534825 +0100
++++ account.py.patched	2014-12-10 15:05:21.000000000 +0100
+@@ -330,7 +330,8 @@
+         dim_group = self.pool.get('res.groups').browse(cr, uid, res_id)
+         gp_users = [x.id for x in dim_group.users]
+         for mod_field in vals:
+-            if uid in gp_users and mod_field not in ('invoice_line','dimension_user_id'):
++            # TODO fix reference
++            if uid in gp_users and mod_field not in ('invoice_line','dimension_user_id','reference'):
+                 raise osv.except_osv(_('Error'),_("You can only modify the following: analytic assignment, number plate, employee as well as responsible (tab ‘Other info’)"))
+ 
+         return res
+@@ -493,7 +494,8 @@
+         dim_group = self.pool.get('res.groups').browse(cr, uid, res_id)
+         gp_users = [x.id for x in dim_group.users]
+         for mod_field in vals:
+-            if uid in gp_users and mod_field not in ('analytic_dimension_1_id','analytic_dimension_1_id','analytic_dimension_1_id','fleet_id', 'employee_id'):
++            # TODO reference field gets added by natuurpunt_sepa
++            if uid in gp_users and mod_field not in ('analytic_dimension_1_id','analytic_dimension_2_id','analytic_dimension_3_id','fleet_id', 'employee_id','reference'):
+                 raise osv.except_osv(_('Error'),_("You can only modify the following: analytic assignment, number plate, employee as well as responsible (tab ‘Other info’)"))
+ 
+ 

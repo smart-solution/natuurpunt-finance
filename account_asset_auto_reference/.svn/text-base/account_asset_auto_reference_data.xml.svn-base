@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+
+        <record id="seq_account_asset_ref_type" model="ir.sequence.type">
+            <field name="name">Account Asset Sequence Type</field>
+            <field name="code">account.asset.ref</field>
+        </record>
+
+        <record id="seq_account_asset_ref" model="ir.sequence">
+            <field name="name">Account Asset</field>
+            <field name="code">account.asset.ref</field>
+            <field name="prefix">ASSET/</field>
+            <field name="padding">8</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</openerp>

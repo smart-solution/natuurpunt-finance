@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+
+    <data noupdate="1">
+        <record id="seq_np_partner_ref_type" model="ir.sequence.type">
+            <field name="name">Partner Sequence Type</field>
+            <field name="code">res.partner.np.ref</field>
+        </record>
+
+        <record id="seq_np_partner_ref" model="ir.sequence">
+            <field name="name">Partner</field>
+            <field name="code">res.partner.np.ref</field>
+            <field name="prefix"></field>
+            <field name="padding">8</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+
+    <data noupdate="0">
+	<record id="account.account_invoices" model="ir.actions.report.xml">
+	     <field name="report_file">natuurpunt_account/report/account_print_invoice.rml</field>
+	     <field name="attachment_use" eval="False"/>
+	</record>
+
+<!--	<record id="l10n_be_coda.menu_account_bank_statement_line_coda" model="ir.ui.menu">
+	     <field name="groups_id" eval="[(6, 0, [])]"/>
+	</record> -->
+
+	<delete model="ir.ui.menu" id="account_voucher.menu_action_vendor_payment"/>
+	<delete model="ir.ui.menu" id="account_voucher.menu_action_vendor_receipt"/>
+	<delete model="ir.ui.menu" id="account_voucher.menu_action_sale_receipt"/>
+	<delete model="ir.ui.menu" id="account_voucher.menu_action_purchase_receipt"/>
+    </data>
+
+</openerp>

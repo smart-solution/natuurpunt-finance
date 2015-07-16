@@ -1,0 +1,837 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+# 	* multi_analytical_account
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 7.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-01-03 11:34+0000\n"
+"PO-Revision-Date: 2014-01-03 14:11+0100\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 1.5.7\n"
+
+#. module: multi_analytical_account
+#: field:wizard.data,wiz_move_id:0
+msgid "Account Move"
+msgstr "Rekening-beweging"
+
+#. module: multi_analytical_account
+#: field:account.analytic.account,asset_ids:0
+#: model:ir.model,name:multi_analytical_account.model_account_asset_asset
+msgid "Asset"
+msgstr "Investering"
+
+#. module: multi_analytical_account
+#: field:wizard.data,wiz_invoice_id:0
+msgid "Account Invoice"
+msgstr "Factuur"
+
+#. module: multi_analytical_account
+#: field:account.analytic.account,dimensions_mandatory:0
+msgid "Dependent Dimensions Mandatory"
+msgstr "Afhankelijke Dimensies Verplicht"
+
+#. module: multi_analytical_account
+#: view:account.analytic.account:0
+msgid "Children Analytic Accounts"
+msgstr "Sub Analytische Rekeningen"
+
+#. module: multi_analytical_account
+#: field:account.analytic.dimension.distribution.wizard,wiz_invoice_line_id:0
+#: field:wizard.data,wiz_invoice_line_id:0
+msgid "Account Invoice Line"
+msgstr "Factuurlijn"
+
+#. module: multi_analytical_account
+#: code:addons/multi_analytical_account/account/account.py:948
+#, python-format
+msgid "You don't have the right to modify that field in a posted journal item"
+msgstr "Dit veld kan niet gewijzigd worden op een geboekte documentlijn"
+
+#. module: multi_analytical_account
+#: field:account.analytic.dimension,company_id:0
+msgid "Company"
+msgstr "Bedrijf"
+
+#. module: multi_analytical_account
+#: code:addons/multi_analytical_account/account/account.py:433
+#: code:addons/multi_analytical_account/account/account.py:903
+#: code:addons/multi_analytical_account/account/account.py:1261
+#, python-format
+msgid ""
+"The analytic account for dimension 1 is not from the right dimension for the "
+"line %s"
+msgstr ""
+"De analytische rekening voor dimensie 1 behoort niet tot de correcte "
+"dimensie voor lijn %s"
+
+#. module: multi_analytical_account
+#: field:account.bank.statement.line,employee_mandatory:0
+msgid "Employee Mandatory"
+msgstr "Werknemer Verplicht"
+
+#. module: multi_analytical_account
+#: field:account.invoice.line,purchase_order_line_id:0
+#: model:ir.model,name:multi_analytical_account.model_purchase_order_line
+msgid "Purchase Order Line"
+msgstr "Aankooporderlijn"
+
+#. module: multi_analytical_account
+#: code:addons/multi_analytical_account/account/account.py:435
+#: code:addons/multi_analytical_account/account/account.py:905
+#: code:addons/multi_analytical_account/account/account.py:1263
+#, python-format
+msgid ""
+"The analytic account for dimension 2 is not from the right dimension for the "
+"line %s"
+msgstr ""
+"De analytische rekening voor dimensie 2 behoort niet tot de correcte "
+"dimensie voor lijn %s"
+
+#. module: multi_analytical_account
+#: field:account.journal,overrule_mandatory:0
+msgid "Disregard mandatory fields"
+msgstr "Negeer verplichte velden"
+
+#. module: multi_analytical_account
+#: field:account.journal,payment_order_exclude:0
+msgid "Not included in payment order"
+msgstr "Niet meenemen in betaalopdracht"
+
+#. module: multi_analytical_account
+#: field:account.account.analytic.dimension,account_id:0
+#: model:ir.model,name:multi_analytical_account.model_account_account
+msgid "Account"
+msgstr "Rekening"
+
+#. module: multi_analytical_account
+#: field:account.analytic.dimension.distribution.wizard,sale_order_id:0
+#: field:wizard.data,sale_order_id:0
+msgid "Sale Order"
+msgstr "Verkoopsorder"
+
+#. module: multi_analytical_account
+#: field:account.analytic.dimension.distribution.wizard,purchase_order_id:0
+#: model:ir.model,name:multi_analytical_account.model_purchase_order
+#: field:wizard.data,purchase_order_id:0
+msgid "Purchase Order"
+msgstr "Aankooporder"
+
+#. module: multi_analytical_account
+#: code:addons/multi_analytical_account/account/account.py:745
+#, python-format
+msgid "You cannot delete a journal item with an assigned number"
+msgstr "Het is niet mogelijk een boeking te verwijderen met toegekend nummer"
+
+#. module: multi_analytical_account
+#: field:account.analytic.dimension.distribution.wizard,statement_line_id:0
+#: field:account.move.line,statement_line_id:0
+#: model:ir.model,name:multi_analytical_account.model_account_bank_statement_line
+#: field:wizard.data,statement_line_id:0
+msgid "Bank Statement Line"
+msgstr "Rekeninguittreksellijn"
+
+#. module: multi_analytical_account
+#: view:account.analytic.dimension.distribution:0
+msgid "OK"
+msgstr "OK"
+
+#. module: multi_analytical_account
+#: code:addons/multi_analytical_account/account/account.py:474
+#: code:addons/multi_analytical_account/account/account.py:615
+#: code:addons/multi_analytical_account/account/account.py:961
+#: code:addons/multi_analytical_account/account/account.py:1290
+#, python-format
+msgid "The analytic account for dimension 1 is not from the right dimension"
+msgstr ""
+"De analytische rekening voor dimensie 1 behoort niet tot de correcte dimensie"
+
+#. module: multi_analytical_account
+#: field:account.account,dimension_ids:0
+#: field:account.account.analytic.dimension,dimension_id:0
+msgid "Analytic Dimension"
+msgstr "Analytische Dimensie"
+
+#. module: multi_analytical_account
+#: field:account.analytic.dimension.distribution.wizard,analytic_account_id:0
+#: field:hr.employee,analytic_account_id:0
+#: model:ir.model,name:multi_analytical_account.model_account_analytic_account
+#: field:wizard.data,analytic_account_id:0
+msgid "Analytic Account"
+msgstr "Analytische rekening"
+
+#. module: multi_analytical_account
+#: view:account.account.analytic.dimension:0 view:account.analytic.dimension:0
+msgid "Account analytical dimension"
+msgstr "Analytische Dimensie"
+
+#. module: multi_analytical_account
+#: code:addons/multi_analytical_account/analytic/wizard/analytic_dimention_wizard.py:375
+#, python-format
+msgid "A required analytic account is not set"
+msgstr "Een verplichte analytische rekening werd niet ingegeven"
+
+#. module: multi_analytical_account
+#: view:account.analytic.account:0
+#: field:account.analytic.account,dimension_id:0 view:res.company:0
+#: field:res.company,dimension_id:0
+msgid "Analytical Dimension"
+msgstr "Analytische Dimensie"
+
+#. module: multi_analytical_account
+#: field:account.analytic.account,dimension_id:0 view:res.company:0
+#: field:res.company,dimension_id:0
+msgid "Analytical Dimensions"
+msgstr "Analytische Dimensies"
+
+#. module: multi_analytical_account
+#: model:ir.model,name:multi_analytical_account.model_sale_order
+msgid "Sales Order"
+msgstr "Verkooporder"
+
+#. module: multi_analytical_account
+#: field:account.analytic.line,journal_entry_id:0
+msgid "Journal Entry"
+msgstr "Boeking"
+
+#. module: multi_analytical_account
+#: field:account.analytic.dimension.distribution.wizard,sale_order_line_id:0
+#: field:account.invoice.line,sale_order_line_id:0
+#: model:ir.model,name:multi_analytical_account.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Verkooporderlijn"
+
+#. module: multi_analytical_account
+#: code:addons/multi_analytical_account/account/account.py:167
+#: code:addons/multi_analytical_account/account/account.py:170
+#: code:addons/multi_analytical_account/account/account.py:173
+#, python-format
+msgid ""
+"Analytic accounts for the line %s do not correspond with those as defined "
+"for the asset."
+msgstr ""
+"De analytische rekeningen voor lijn %s stemmen niet overeen met deze "
+"gedefinieerd voor het actief"
+
+#. module: multi_analytical_account
+#: selection:account.fiscalyear,analytic_state:0
+msgid "Closed"
+msgstr "Gesloten"
+
+#. module: multi_analytical_account
+#: model:res.groups,name:multi_analytical_account.group_multi_analytic_dimension_manager
+msgid "Asset Manager"
+msgstr "Activa Manager"
+
+#. module: multi_analytical_account
+#: field:wizard.data,sale_order_line_id:0
+msgid "Sale OrderLine"
+msgstr "Verkoopsorderlijn"
+
+#. module: multi_analytical_account
+#: field:account.analytic.dimension.distribution.wizard,purchase_order_line_id:0
+#: field:wizard.data,purchase_order_line_id:0
+msgid "Purchase OrderLine"
+msgstr "Aankooporderlijn"
+
+#. module: multi_analytical_account
+#: model:ir.model,name:multi_analytical_account.model_stock_picking
+msgid "Picking List"
+msgstr "Pick-lijst"
+
+#. module: multi_analytical_account
+#: model:ir.model,name:multi_analytical_account.model_hr_employee
+msgid "Employee"
+msgstr "Werknemer"
+
+#. module: multi_analytical_account
+#: model:ir.model,name:multi_analytical_account.model_purchase_requisition
+msgid "Purchase Requisition"
+msgstr "Inkoopaanvraag"
+
+#. module: multi_analytical_account
+#: code:addons/multi_analytical_account/account/account.py:116
+#, python-format
+msgid ""
+"Taxes are missing!\n"
+"Click on compute button."
+msgstr ""
+"Btw ontbreekt!\n"
+"Klik op Bijwerken"
+
+#. module: multi_analytical_account
+#: field:account.analytic.dimension.distribution,wizard_link_id:0
+msgid "Wizard Link ID"
+msgstr "Wizard Link ID"
+
+#. module: multi_analytical_account
+#: field:account.asset.asset,account_id:0
+msgid "Depreciation Expense Account"
+msgstr "Afschrijving-kostenrekening"
+
+#. module: multi_analytical_account
+#: view:account.invoice:0
+msgid ""
+"\"{'partner_id': partner_id, 'price_type': context.get('price_type') or "
+"False, 'type': type, 'id':active_id}\""
+msgstr ""
+"\"{'partner_id': partner_id, 'price_type': context.get('price_type') or "
+"False, 'type': type, 'id':active_id}\""
+
+#. module: multi_analytical_account
+#: code:addons/multi_analytical_account/account/account.py:110
+#: code:addons/multi_analytical_account/account/account.py:113
+#: code:addons/multi_analytical_account/account/account.py:116
+#, python-format
+msgid "Warning!"
+msgstr "Waarschuwing!"
+
+#. module: multi_analytical_account
+#: field:account.asset.asset,analytic_dimension_1_required:0
+#: field:account.bank.statement.line,analytic_dimension_1_required:0
+#: field:account.invoice.line,analytic_dimension_1_required:0
+#: field:account.move.line,analytic_dimension_1_required:0
+#: field:purchase.order.line,analytic_dimension_1_required:0
+#: field:purchase.requisition.line,analytic_dimension_1_required:0
+#: field:sale.order.line,analytic_dimension_1_required:0
+msgid "Analytic Dimension 1 Required"
+msgstr "Analytische Dimensie 1 Verplicht"
+
+#. module: multi_analytical_account
+#: model:ir.model,name:multi_analytical_account.model_account_analytic_dimension_distribution_wizard
+msgid "account.analytic.dimension.distribution.wizard"
+msgstr "account.analytic.dimension.distribution.wizard"
+
+#. module: multi_analytical_account
+#: code:addons/multi_analytical_account/account/account.py:645
+#, python-format
+msgid "A non-authorized analytic account is set for the line %s"
+msgstr "Een niet-toegelaten analytische rekening is ingegeven voor lijn %s"
+
+#. module: multi_analytical_account
+#: view:account.analytic.dimension.distribution:0 view:account.asset.asset:0
+#: model:ir.actions.act_window,name:multi_analytical_account.act_view_account_distribution_wizard
+#: model:ir.actions.act_window,name:multi_analytical_account.action_account_analytic_np_dimension_form
+msgid "Analytic Dimensions"
+msgstr "Analytische Dimensies"
+
+#. module: multi_analytical_account
+#: field:account.analytic.dimension.distribution.wizard,distribution_id:0
+#: field:account.analytic.line,dimension_id:0
+#: field:wizard.data,distribution_id:0
+msgid "Dimension"
+msgstr "Dimensie"
+
+#. module: multi_analytical_account
+#: code:addons/multi_analytical_account/account/account.py:951
+#, python-format
+msgid ""
+"You don't have the right to modify a posted journal item for an analytically "
+"closed fiscal year"
+msgstr ""
+"Het is niet mogelijk een geboekt document te wijzigen voor een analytische "
+"gesloten boekhoudjaar"
+
+#. module: multi_analytical_account
+#: field:account.analytic.dimension.distribution,clear_accounts:0
+msgid "Clear Analytic Accounts"
+msgstr "Wis Analytische Rekeningen"
+
+#. module: multi_analytical_account
+#: model:ir.model,name:multi_analytical_account.model_account_account_analytic_dimension
+msgid "account.account.analytic.dimension"
+msgstr "account.account.analytic.dimension"
+
+#. module: multi_analytical_account
+#: model:ir.model,name:multi_analytical_account.model_wizard_data
+msgid "wizard.data"
+msgstr "wizard.data"
+
+#. module: multi_analytical_account
+#: field:account.invoice.tax,invoice_line_id:0
+#: field:account.move.line,invoice_line_id:0
+#: model:ir.model,name:multi_analytical_account.model_account_invoice_line
+msgid "Invoice Line"
+msgstr "Factuurlijn"
+
+#. module: multi_analytical_account
+#: view:account.move.post:0
+msgid "Journal Entries"
+msgstr "Boekingen"
+
+#. module: multi_analytical_account
+#: code:addons/multi_analytical_account/account/account.py:437
+#: code:addons/multi_analytical_account/account/account.py:907
+#: code:addons/multi_analytical_account/account/account.py:1265
+#, python-format
+msgid ""
+"The analytic account for dimension 3 is not from the right dimension for the "
+"line %s"
+msgstr ""
+"De analytische rekening voor dimensie 3 behoort niet tot de correcte "
+"dimensie voor lijn %s"
+
+#. module: multi_analytical_account
+#: code:addons/multi_analytical_account/account/account.py:693
+#, python-format
+msgid "Please assign an analytic journal to this financial journal : %s"
+msgstr ""
+"Gelieve een analytisch journaal in te geven voor het financieel journaal %s"
+
+#. module: multi_analytical_account
+#: field:account.analytic.line,period_id:0
+msgid "Accounting Period"
+msgstr "Boekhoudperiode"
+
+#. module: multi_analytical_account
+#: view:account.analytic.account:0
+msgid "Multi-Analytic Allowed Analytic Accounts"
+msgstr "Toegelaten Analytische Rekeningen multi-analytisch"
+
+#. module: multi_analytical_account
+#: model:ir.model,name:multi_analytical_account.model_purchase_order_line_invoice
+msgid "Purchase Order Line Make Invoice"
+msgstr "Factuur maken van aankooporderlijnen"
+
+#. module: multi_analytical_account
+#: field:account.bank.statement.line,partner_mandatory:0
+msgid "Partner Mandatory"
+msgstr "Partner Verplicht"
+
+#. module: multi_analytical_account
+#: view:account.analytic.account:0
+#: field:account.analytic.account,allowed_account_ids:0
+msgid "Allowed Analytic Accounts"
+msgstr "Toegelaten Analytische Rekeningen"
+
+#. module: multi_analytical_account
+#: field:account.fiscalyear,analytic_state:0
+msgid "Analytic Status"
+msgstr "Analytische Status"
+
+#. module: multi_analytical_account
+#: code:addons/multi_analytical_account/account/account.py:527
+#: code:addons/multi_analytical_account/account/account.py:619
+#: code:addons/multi_analytical_account/account/account.py:1026
+#: code:addons/multi_analytical_account/account/account.py:1343
+#, python-format
+msgid "The analytic account for dimension 3 is not from the right dimension"
+msgstr ""
+"De analytische rekening voor dimensie 3 behoort niet tot de correcte dimensie"
+
+#. module: multi_analytical_account
+#: view:account.analytic.account:0
+msgid "Status"
+msgstr "Status"
+
+#. module: multi_analytical_account
+#: model:res.groups,name:multi_analytical_account.group_multi_analytic_dimenion_user
+msgid "Multi-Analytic Dimension User"
+msgstr "Verantw Analytische Toewijzing"
+
+#. module: multi_analytical_account
+#: model:ir.model,name:multi_analytical_account.model_account_analytic_line
+msgid "Analytic Line"
+msgstr "Analytische lijn"
+
+#. module: multi_analytical_account
+#: field:res.company,invoice_logo:0
+msgid "Invoice Logo"
+msgstr "Factuurlogo"
+
+#. module: multi_analytical_account
+#: field:account.bank.statement.line,employee_id:0
+msgid "Werknemer"
+msgstr "Werknemer"
+
+#. module: multi_analytical_account
+#: field:account.asset.asset,analytic_dimension_3_id:0
+#: field:account.bank.statement.line,analytic_dimension_3_id:0
+#: field:account.invoice.line,analytic_dimension_3_id:0
+#: field:account.move.line,analytic_dimension_3_id:0
+#: field:purchase.order.line,analytic_dimension_3_id:0
+#: field:purchase.requisition.line,analytic_dimension_3_id:0
+#: field:sale.order.line,analytic_dimension_3_id:0
+msgid "Dimension 3"
+msgstr "Dimensie 3"
+
+#. module: multi_analytical_account
+#: field:account.asset.asset,analytic_dimension_2_id:0
+#: field:account.bank.statement.line,analytic_dimension_2_id:0
+#: field:account.invoice.line,analytic_dimension_2_id:0
+#: field:account.move.line,analytic_dimension_2_id:0
+#: field:purchase.order.line,analytic_dimension_2_id:0
+#: field:purchase.requisition.line,analytic_dimension_2_id:0
+#: field:sale.order.line,analytic_dimension_2_id:0
+msgid "Dimension 2"
+msgstr "Dimensie 2"
+
+#. module: multi_analytical_account
+#: field:account.asset.asset,analytic_dimension_1_id:0
+#: field:account.bank.statement.line,analytic_dimension_1_id:0
+#: field:account.invoice.line,analytic_dimension_1_id:0
+#: field:account.move.line,analytic_dimension_1_id:0
+#: field:purchase.order.line,analytic_dimension_1_id:0
+#: field:purchase.requisition.line,analytic_dimension_1_id:0
+#: field:sale.order.line,analytic_dimension_1_id:0
+msgid "Dimension 1"
+msgstr "Dimensie 1"
+
+#. module: multi_analytical_account
+#: field:account.analytic.account,active:0
+msgid "Active"
+msgstr "Actief"
+
+#. module: multi_analytical_account
+#: field:hr.employee,reference_nbr:0
+msgid "Reference Number"
+msgstr "Referentienummer"
+
+#. module: multi_analytical_account
+#: field:account.asset.asset,analytic_dimension_2_required:0
+#: field:account.bank.statement.line,analytic_dimension_2_required:0
+#: field:account.invoice.line,analytic_dimension_2_required:0
+#: field:account.move.line,analytic_dimension_2_required:0
+#: field:purchase.order.line,analytic_dimension_2_required:0
+#: field:purchase.requisition.line,analytic_dimension_2_required:0
+#: field:sale.order.line,analytic_dimension_2_required:0
+msgid "Analytic Dimension 2 Required"
+msgstr "Analytische Dimensie 2 Verplicht"
+
+#. module: multi_analytical_account
+#: code:addons/multi_analytical_account/account/account.py:946
+#, python-format
+msgid "You don't have the right to modify a posted journal item"
+msgstr "Het is niet toegelaten een geboekt document te wijzigen"
+
+#. module: multi_analytical_account
+#: code:addons/multi_analytical_account/account/account.py:690
+#, python-format
+msgid "Cannot find the amount for account move line %s (%s)"
+msgstr "Kan het bedrag niet vinden voor boekingslijn %s (%s)"
+
+#. module: multi_analytical_account
+#: model:ir.model,name:multi_analytical_account.model_res_company
+msgid "Companies"
+msgstr "Bedrijven"
+
+#. module: multi_analytical_account
+#: field:account.asset.asset,analytic_dimension_3_required:0
+#: field:account.bank.statement.line,analytic_dimension_3_required:0
+#: field:account.invoice.line,analytic_dimension_3_required:0
+#: field:account.move.line,analytic_dimension_3_required:0
+#: field:purchase.order.line,analytic_dimension_3_required:0
+#: field:purchase.requisition.line,analytic_dimension_3_required:0
+#: field:sale.order.line,analytic_dimension_3_required:0
+msgid "Analytic Dimension 3 Required"
+msgstr "Analytische Dimensie 3 Verplicht"
+
+#. module: multi_analytical_account
+#: code:addons/multi_analytical_account/account/account.py:137
+#: code:addons/multi_analytical_account/account/account.py:160
+#: code:addons/multi_analytical_account/account/account.py:167
+#: code:addons/multi_analytical_account/account/account.py:170
+#: code:addons/multi_analytical_account/account/account.py:173
+#: code:addons/multi_analytical_account/account/account.py:211
+#: code:addons/multi_analytical_account/account/account.py:275
+#: code:addons/multi_analytical_account/account/account.py:433
+#: code:addons/multi_analytical_account/account/account.py:435
+#: code:addons/multi_analytical_account/account/account.py:437
+#: code:addons/multi_analytical_account/account/account.py:474
+#: code:addons/multi_analytical_account/account/account.py:502
+#: code:addons/multi_analytical_account/account/account.py:527
+#: code:addons/multi_analytical_account/account/account.py:599
+#: code:addons/multi_analytical_account/account/account.py:601
+#: code:addons/multi_analytical_account/account/account.py:603
+#: code:addons/multi_analytical_account/account/account.py:610
+#: code:addons/multi_analytical_account/account/account.py:615
+#: code:addons/multi_analytical_account/account/account.py:617
+#: code:addons/multi_analytical_account/account/account.py:619
+#: code:addons/multi_analytical_account/account/account.py:645
+#: code:addons/multi_analytical_account/account/account.py:670
+#: code:addons/multi_analytical_account/account/account.py:690
+#: code:addons/multi_analytical_account/account/account.py:693
+#: code:addons/multi_analytical_account/account/account.py:745
+#: code:addons/multi_analytical_account/account/account.py:903
+#: code:addons/multi_analytical_account/account/account.py:905
+#: code:addons/multi_analytical_account/account/account.py:907
+#: code:addons/multi_analytical_account/account/account.py:946
+#: code:addons/multi_analytical_account/account/account.py:948
+#: code:addons/multi_analytical_account/account/account.py:951
+#: code:addons/multi_analytical_account/account/account.py:961
+#: code:addons/multi_analytical_account/account/account.py:996
+#: code:addons/multi_analytical_account/account/account.py:1026
+#: code:addons/multi_analytical_account/account/account.py:1261
+#: code:addons/multi_analytical_account/account/account.py:1263
+#: code:addons/multi_analytical_account/account/account.py:1265
+#: code:addons/multi_analytical_account/account/account.py:1290
+#: code:addons/multi_analytical_account/account/account.py:1317
+#: code:addons/multi_analytical_account/account/account.py:1343
+#: code:addons/multi_analytical_account/account/account.py:1403
+#: code:addons/multi_analytical_account/account/account.py:1426
+#: code:addons/multi_analytical_account/analytic/wizard/analytic_dimention_wizard.py:375
+#, python-format
+msgid "Error"
+msgstr "Fout"
+
+#. module: multi_analytical_account
+#: code:addons/multi_analytical_account/account/account.py:211
+#, python-format
+msgid "Cannot find the amount for an invoice line"
+msgstr "Kan het bedrag niet vinden voor een factuurlijn"
+
+#. module: multi_analytical_account
+#: field:account.analytic.dimension.distribution.wizard,wizard_id:0
+msgid "Wizard ID"
+msgstr "Wizard ID"
+
+#. module: multi_analytical_account
+#: field:account.account.analytic.dimension,analytic_account_required:0
+#: field:account.analytic.dimension.distribution.wizard,analytic_account_required:0
+#: field:wizard.data,analytic_account_required:0
+msgid "Analytic Account Required"
+msgstr "Analytische Rekening Verplicht"
+
+#. module: multi_analytical_account
+#: model:ir.model,name:multi_analytical_account.model_account_invoice_tax
+msgid "Invoice Tax"
+msgstr "Factuur-btw"
+
+#. module: multi_analytical_account
+#: code:addons/multi_analytical_account/account/account.py:610
+#, python-format
+msgid "A required analytic account is not set for the  dimension %s"
+msgstr ""
+"Een verplichte analytische rekening werd niet ingegeven voor dimensie %s"
+
+#. module: multi_analytical_account
+#: view:account.analytic.line:0
+msgid "Period"
+msgstr "Periode"
+
+#. module: multi_analytical_account
+#: field:account.analytic.dimension.distribution.wizard,statement_id:0
+#: model:ir.model,name:multi_analytical_account.model_account_bank_statement
+#: field:wizard.data,statement_id:0
+msgid "Bank Statement"
+msgstr "Rekeninguittreksel"
+
+#. module: multi_analytical_account
+#: model:ir.model,name:multi_analytical_account.model_account_analytic_dimension
+msgid "account.analytic.dimension"
+msgstr "account.analytic.dimension"
+
+#. module: multi_analytical_account
+#: model:ir.model,name:multi_analytical_account.model_account_invoice
+msgid "Invoice"
+msgstr "Factuur"
+
+#. module: multi_analytical_account
+#: code:addons/multi_analytical_account/account/account.py:113
+#, python-format
+msgid ""
+"Tax base different!\n"
+"Click on compute to update the tax base."
+msgstr ""
+"Verschillende btw-basis!\n"
+"Gelieve te klikken op Bijwerken om btw-basis bij te werken."
+
+#. module: multi_analytical_account
+#: view:account.analytic.dimension.distribution:0 view:account.move.post:0
+msgid "Cancel"
+msgstr "Annuleer"
+
+#. module: multi_analytical_account
+#: selection:account.fiscalyear,analytic_state:0
+msgid "Open"
+msgstr "Open"
+
+#. module: multi_analytical_account
+#: model:ir.model,name:multi_analytical_account.model_account_move_line
+msgid "Journal Items"
+msgstr "Boekingen"
+
+#. module: multi_analytical_account
+#: code:addons/multi_analytical_account/account/account.py:160
+#: code:addons/multi_analytical_account/account/account.py:670
+#: code:addons/multi_analytical_account/account/account.py:1426
+#, python-format
+msgid "A dependent analytic account is not set for the line %s"
+msgstr "Een afhankelijke analytische rekening werd niet ingegeven voor lijn %s"
+
+#. module: multi_analytical_account
+#: field:account.bank.statement.line,fleet_mandatory:0
+msgid "Number Plate Mandatory"
+msgstr "Nummerplaat Verplicht"
+
+#. module: multi_analytical_account
+#: field:account.analytic.dimension.distribution.wizard,move_line_id:0
+#: field:wizard.data,move_line_id:0
+msgid "Account Move Line"
+msgstr "Boekingslijn"
+
+#. module: multi_analytical_account
+#: view:account.move.post:0
+msgid "Are you sure you want to post those journal entries ?"
+msgstr "OK voor doorboeking?"
+
+#. module: multi_analytical_account
+#: code:addons/multi_analytical_account/account/account.py:1403
+#, python-format
+msgid "A required analytic account is not set for the dimension %s"
+msgstr ""
+"Een afhankelijke analytische rekening is niet ingegeven voor dimensie %s"
+
+#. module: multi_analytical_account
+#: view:account.analytic.account:0
+msgid "Chidren Analytic Accounts"
+msgstr "Sub Analytische Rekeningen"
+
+#. module: multi_analytical_account
+#: model:ir.model,name:multi_analytical_account.model_purchase_requisition_line
+msgid "Purchase Requisition Line"
+msgstr "Inkoopaanvraagregel"
+
+#. module: multi_analytical_account
+#: code:addons/multi_analytical_account/account/account.py:137
+#, python-format
+msgid ""
+"A required analytic account is not set for the line %s, the dimension %s"
+msgstr ""
+"Een verplichte analytische rekening is niet ingegeven voor lijn %s, dimensie "
+"%s"
+
+#. module: multi_analytical_account
+#: code:addons/multi_analytical_account/account/account.py:275
+#, python-format
+msgid "Cannot find the amount for an invoice tax line"
+msgstr "Kan het bedrag niet vinden voor een factuur btw-lijn"
+
+#. module: multi_analytical_account
+#: field:account.bank.statement.line,fleet_id:0
+msgid "Nummerplaat"
+msgstr "Nummerplaat"
+
+#. module: multi_analytical_account
+#: view:account.move.post:0
+#: model:ir.actions.act_window,name:multi_analytical_account.action_account_move_post_wizard
+msgid "Post Journal Entries"
+msgstr "Boekingen definitief maken"
+
+#. module: multi_analytical_account
+#: field:account.analytic.dimension.distribution.wizard,invoice_tax_id:0
+#: field:account.move.line,invoice_tax_id:0 field:wizard.data,invoice_tax_id:0
+msgid "Invoice Tax Line"
+msgstr "Factuur btw-lijn"
+
+#. module: multi_analytical_account
+#: field:account.analytic.dimension,name:0
+#: field:account.analytic.dimension.distribution.wizard,name:0
+msgid "Name"
+msgstr "Naam"
+
+#. module: multi_analytical_account
+#: code:addons/multi_analytical_account/account/account.py:502
+#: code:addons/multi_analytical_account/account/account.py:617
+#: code:addons/multi_analytical_account/account/account.py:996
+#: code:addons/multi_analytical_account/account/account.py:1317
+#, python-format
+msgid "The analytic account for dimension 2 is not from the right dimension"
+msgstr ""
+"De analytische rekening voor dimensie 2 behoort niet tot de correcte dimensie"
+
+#. module: multi_analytical_account
+#: model:ir.model,name:multi_analytical_account.model_account_fiscalyear
+msgid "Fiscal Year"
+msgstr "Boekjaar"
+
+#. module: multi_analytical_account
+#: model:ir.model,name:multi_analytical_account.model_account_asset_depreciation_line
+msgid "Asset depreciation line"
+msgstr "Afschrijvingslijn"
+
+#. module: multi_analytical_account
+#: code:addons/multi_analytical_account/account/account.py:599
+#: code:addons/multi_analytical_account/account/account.py:601
+#: code:addons/multi_analytical_account/account/account.py:603
+#, python-format
+msgid "A required analytic account is not set for the line %s, dimension %s"
+msgstr ""
+"Een verplichte analytische rekening is niet ingegeven voor lijn %s, dimensie "
+"%s"
+
+#. module: multi_analytical_account
+#: model:ir.model,name:multi_analytical_account.model_account_analytic_dimension_distribution
+msgid "account.analytic.dimension.distribution"
+msgstr "account.analytic.dimension.distribution"
+
+#. module: multi_analytical_account
+#: view:account.move:0
+msgid "Open Journal Items"
+msgstr "Open Boekingslijnen"
+
+#. module: multi_analytical_account
+#: model:ir.model,name:multi_analytical_account.model_account_move_post
+msgid "account.move.post"
+msgstr "account.move.post"
+
+#. module: multi_analytical_account
+#: model:ir.model,name:multi_analytical_account.model_account_move
+msgid "Account Entry"
+msgstr "Boeking"
+
+#. module: multi_analytical_account
+#: field:account.analytic.dimension,sequence:0
+msgid "Sequence"
+msgstr "Sequentie"
+
+#. module: multi_analytical_account
+#: view:account.move.post:0
+msgid "or"
+msgstr "of"
+
+#. module: multi_analytical_account
+#: code:addons/multi_analytical_account/account/account.py:114
+#, python-format
+msgid "Global taxes defined, but they are not in invoice lines !"
+msgstr "Btw algemeen ingegeven, maar niet aanwezig op factuurlijnen!"
+
+#. module: account
+#: model:ir.ui.menu,name:multi_analytical_account.np_items_to_reconcile_menu
+msgid "Journal Items to Reconcile"
+msgstr "Boekingslijnen voor afpunting"
+
+#. module: account
+#: model:ir.ui.menu,name:multi_analytical_account.account_analytic_account_np
+msgid "Analytic Accounts"
+msgstr "Analytische rekeningen"
+
+#. module: account
+#: model:ir.ui.menu,name:account_easy_reconcile.menu_easy_reconcile
+msgid "Easy Automatic Reconcile"
+msgstr "Semi-automatische afpunting"
+
+#. module: account
+#: model:ir.ui.menu,name:multi_analytical_account.account_analytic_dimension_np
+msgid "Analytic Dimensions"
+msgstr "Analytische dimensies"
+
+#. module: multi_analytical_account
+#: view:purchase.orde.line:0
+#: field:purchase.order.line,purchase_resp_id:0
+msgid "Resp Req"
+msgstr "Verantw aanvraag"
+
+#. module: multi_analytical_account
+#: code:addons/multi_analytical_account/account/account.py:334
+#: code:addons/multi_analytical_account/account/account.py:495
+#, python-format
+msgid "You can only modify the following: analytic assignment, number plate, employee as well as responsible (tab ‘Other info’)"
+msgstr "U kan enkel volgende veranderen: analytische toewijzing, nummerplaat, werknemer evenals verantw. voor analytische toewijzing"
+

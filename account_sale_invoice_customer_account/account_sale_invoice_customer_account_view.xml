@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+    <record model="ir.ui.view" id="view_customer_cost_accout_form">
+        <field name="name">view.customer.cost.account.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="type">form</field>
+            <field name="arch" type="xml">
+                    <field name="property_account_receivable" position="after">
+                        <field name="property_customer_cost_account"/>
+                    </field>
+            </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_customer_cost_account_invoice_form">
+        <field name="name">view.customer.cost.account.invoice.form</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_form"/>
+        <field name="type">form</field>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='invoice_line']" position="attributes">
+                    <attribute name="context">{'partner_id': partner_id,  'type':type}</attribute>
+                </xpath>
+            </field>
+    </record>
+
+    </data>
+</openerp>

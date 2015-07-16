@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="0">
+        <report
+            attachment_use="False"
+            auto="False"
+            id="account_vordering"
+            model="account.invoice"
+            name="account.vordering"
+            rml="natuurpunt_account/report/vordering.rml"
+            string="Vorderingen"
+            attachment="(object.state in ('open','paid')) and ('VOR'+(object.number or '').replace('/','')+'.pdf')"
+            usage="default"
+            />
+
+    </data>
+</openerp>

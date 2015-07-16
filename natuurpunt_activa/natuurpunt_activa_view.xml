@@ -1,0 +1,238 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+    <record model="ir.ui.view" id="view_natuurpunt_asset_account_account_form">
+        <field name="name">view.natuurpunt_asset_account_account.form</field>
+        <field name="model">account.account</field>
+        <field name="inherit_id" ref="account.view_account_form"/>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <field name="reconcile" position="after">
+                <field name="asset_mandatory"/>
+            </field>
+        </field>
+    </record>
+
+
+        <record id="view_np_account_asset_category_form" model="ir.ui.view">
+            <field name='name'>view.np.account.asset.category.form</field>
+            <field name='model'>account.asset.category</field>
+            <field name="inherit_id" ref="account_asset.view_account_asset_category_form"/>
+            <field name='arch' type='xml'>
+                <field name="account_asset_id" position="after">
+                    <field name="account_disinvestment_id"/>
+                    <field name="account_gainloss_id"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_np_account_asset_asset_form" model="ir.ui.view">
+            <field name='name'>view.np.account.asset.asset.form</field>
+            <field name='model'>account.asset.asset</field>
+            <field name="inherit_id" ref="account_asset.view_account_asset_asset_form"/>
+            <field name='arch' type='xml'>
+
+                <button name="set_to_draft" position="after">
+                        <button name="set_to_open" states="close" string="Reopen" type="object" />
+                </button>
+
+                <field name="code" position="replace">
+                        <field name="code" required="1"/>
+                        <field name="serial_number"/>
+                </field>
+                <field name="currency_id" position="replace">
+                        <field name="currency_id" invisible="1"/>
+                        <field name="fleet_id"/>
+                        <!-- field name="maintenance_id"/>-->
+                </field>
+                <field name="method_period" position="after">
+			        <newline/>
+                    <field name="period_depreciation_amount" attrs="{'readonly': [('state','in',('open','close'))]}"/>
+                    <field name="location_analytic_id" attrs="{'readonly': [('state','in',('open','close'))]}"/>
+                    <field name="location_partner_id" attrs="{'readonly': [('state','in',('open','close'))]}"/>
+                </field>
+		
+                <button name="open_entries" string="Entries" type="object" class="oe_inline">
+                    <button name="open_contracts" string="Contracts" type="object" class="oe_inline"/>
+                </button>
+                <!--
+                <field name="depreciation_line_ids" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </field>
+                <xpath expr="//field[@name='depreciation_line_ids']/tree//field[@name='move_check']" position="replace">
+                    <field name="move_check" string="Processed"/>
+                </xpath>
+                -->
+                <xpath expr="//field[@name='depreciation_line_ids']/tree//field[@name='remaining_value']" position="replace">
+                    <field name="remaining_value" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='depreciation_line_ids']/form//field[@name='remaining_value']" position="replace">
+                    <field name="remaining_value" invisible="1"/>
+                </xpath>
+
+                <button name="set_to_draft" position="attributes">
+                    <attribute name="groups">multi_analytical_account.group_multi_analytic_dimension_manager</attribute>
+                </button>
+                <!--
+                <field name="purchase_date" position="replace">
+                    <field name="purchase_date" string="Date of Exploitation"/>
+                </field>
+-->
+            </field>
+        </record>
+
+        <record id="view_np_account_asset_asset_tree" model="ir.ui.view">
+            <field name='name'>view.np.account.asset.asset.tree</field>
+            <field name='model'>account.asset.asset</field>
+            <field name="inherit_id" ref="account_asset.view_account_asset_asset_tree"/>
+            <field name='arch' type='xml'>
+                <field name="name" position="before">
+                        <field name="code"/>
+                </field>
+                <field name="purchase_value" position="replace">
+                    <!--
+                        <field name="purchase_value" invisible="1"/>
+-->
+                </field>
+                <field name="value_residual" position="replace">
+                    <!--
+                        <field name="value_residual" invisible="1"/>
+-->
+                </field>
+                <!--
+            <xpath expr="//button[@string='Change Duration']" position="replace">
+                <button name="%(account_asset.action_asset_modify)d" states="open,close" string="Change Duration" type="action" icon="terp-stock_effects-object-colorize" class="oe_inline" colspan="1"/>
+            </xpath>
+-->
+            </field>
+        </record>
+
+        <record id="view_np_account_asset_asset_search" model="ir.ui.view">
+            <field name='name'>view.np.account.asset.asset.search</field>
+            <field name='model'>account.asset.asset</field>
+            <field name="inherit_id" ref="account_asset.view_account_asset_search"/>
+            <field name='arch' type='xml'>
+                <field name="name" position="before">
+                        <field name="code"/>
+                        <field name="state"/>
+                        <field name="category_id" string="Asset Category"/>
+			<group expand="0" string="Group By...">
+				<filter context="{'group_by':'category_id'}" string="Asset Category"/>
+			</group>
+                </field>
+            </field>
+        </record>
+
+    <record model="ir.actions.act_window" id="action_account_asset_depreciation_line_form">
+        <field name="name">Depreciations</field>
+        <field name="res_model">account.asset.depreciation.line</field>
+        <field name="view_type">form</field>
+        <field name="context">{'asset_id':active_id}</field>
+    </record>
+
+    
+                  
+        <record id="view_np_account_move_asset_form" model="ir.ui.view">
+            <field name='name'>view.np.account.move.asset.form</field>
+            <field name='model'>account.move</field>
+            <field name="inherit_id" ref="natuurpunt_account.view_natuurpunt_account_move_form"/>
+            <field name='arch' type='xml'>
+                   <xpath expr="//field[@name='line_id']/tree//field[@name='employee_id']" position="before">
+                        <field name="asset_mandatory" invisible="1"/>
+                        <field name="asset_id" on_change="onchange_asset(asset_id)" attrs="{'required': [('asset_mandatory','=',True),('overrule_mandatory','=',False)]}"/> 
+                  </xpath>
+                  <!--
+                   <xpath expr="//field[@name='line_id']/tree//field[@name='account_id']" position="replace">
+                        <field name="account_id" on_change="onchange_account(account_id,asset_id)"/> 
+                  </xpath>
+                  -->
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="view_account_invoice_np_asset_form">
+            <field name="name">account.invoice.line.np.asset.form</field>
+            <field name="model">account.invoice.line</field>
+            <field name="inherit_id" ref="account_asset.view_account_invoice_asset_form"/>
+            <field name="arch" type="xml">
+                <field name="asset_category_id" position="replace">
+                    <field name="asset_category_id" invisible="1"/>
+                </field>
+                <field name="asset_category_id" position="after">
+                    <field name="asset_mandatory" invisible="1"/>
+                    <field name="asset_id" domain="[('state','=','draft')]" attrs="{'required': [('asset_mandatory','=',True)]}"/>
+                </field>
+            </field>
+        </record>
+     
+        <record model="ir.ui.view" id="view_invoice_np_asset_category">
+            <field name="name">account.invoice.supplier.np.asset.form</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account_asset.view_invoice_asset_category"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='invoice_line']/tree/field[@name='asset_category_id']" position="replace">
+                    <field name="asset_category_id" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='invoice_line']/tree/field[@name='asset_category_id']" position="before">
+                    <field name="asset_mandatory" invisible="1"/>
+                    <field name="asset_id" on_change="onchange_asset(asset_id)" domain="[('state','=','draft')]" attrs="{'required': [('asset_mandatory','=',True)]}"/>
+                </xpath>
+            <xpath expr="//field[@name='invoice_line']/tree/field[@name='account_id']" position="attributes">
+                <attribute name="context">{'supplier_invoice_id':active_id, 'asset_id':asset_id}</attribute>
+            </xpath>
+
+            </field>
+        </record>
+        <!--
+        <record model="ir.ui.view" id="account_bank_statement_tree_asset_inherit">
+            <field name="name">account.bank.statement.tree.asset.inherit</field>
+            <field name="model">account.bank.statement</field>
+            <field name="inherit_id" ref="account.view_bank_statement_form"/>
+            <field name="arch" type="xml">
+            <xpath expr="//field[@name='line_ids']/tree//field[@name='amount']" position="before">
+                    <field name="asset_mandatory" invisible="1"/>
+                <field name="asset_id" on_change="onchange_asset(asset_id)" attrs="{'required': [('asset_mandatory','=',True)]}"/>
+            </xpath>
+            </field>
+        </record>
+-->
+        <!--
+        <record id="view_account_move_tree_asset_inherit" model="ir.ui.view">
+            <field name="name">view.account.tree.move.asset.inherit</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="multi_analytical_account.view_account_move_tree_acespritech_inherit"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='line_id']/tree//field[@name='analytic_dimension_3_required']" position="after">
+                    <field name="asset_id"/>
+                </xpath>
+            </field>
+        </record>
+        <record id="view_account_analytic_account_asset_form" model="ir.ui.view">
+            <field name="name">view.account.analytic.account.asset.form.ace</field>
+            <field name="model">account.analytic.account</field>
+            <field name="inherit_id" ref="multi_analytical_account.view_account_analytic_account_form_ace"/>
+            <field name="arch" type="xml">
+                <field name='dimensions_mandatory' position='after'>
+                    <field name="asset_ids" widget="many2many_tags"/>
+                </field>
+            </field>
+        </record>
+-->
+
+        <record id="view_np_account_asset_asset_auto_ref_form" model="ir.ui.view">
+            <field name='name'>view.np.account.asset.asset.auto.ref.form</field>
+            <field name='model'>account.asset.asset</field>
+            <field name="inherit_id" ref="account_asset_auto_reference.view_account_asset_asset_auto_ref_form"/>
+            <field name='arch' type='xml'>
+                <field name="sequence_id" position="replace">
+                    <field name="sequence_id" invisible="1"/>
+                </field>
+            </field>
+        </record>
+
+
+
+    </data>
+</openerp>
+

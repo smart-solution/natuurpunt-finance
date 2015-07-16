@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<openerp>
+    <data>
+        <record id="group_multi_analytic_dimenion_user" model="res.groups">
+            <field name="name">Multi-Analytic Dimension User</field>
+            <field name="category_id" ref="base.module_category_hidden"/>
+        </record>
+        
+        <record id="group_multi_analytic_dimension_manager" model="res.groups">
+            <field name="name">Asset Manager</field>
+            <!--            <field name="implied_ids" eval="[(4, ref('group_multi_analytic_dimension_user'))]"/>-->
+            <field name="category_id" ref="base.module_category_hidden"/>
+        </record>
+
+    <record id="account_anamylic_dimension_rule" model="ir.rule">
+        <field name="name">Analytic Dimension </field>
+        <field name="model_id" ref="model_account_analytic_dimension"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+    </record>
+
+
+    </data>
+</openerp>

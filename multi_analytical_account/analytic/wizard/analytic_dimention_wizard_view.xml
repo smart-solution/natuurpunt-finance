@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+    
+        
+        <!--  Analytic Dimension -->
+<!--        
+        <record id="view_account_distribution_wizard" model="ir.ui.view">
+            <field name="name">Analytic Dimensions</field>
+            <field name="model">account.analytic.dimension.distribution</field>
+            <field name="arch" type="xml">
+            <form string="Analytic Dimensions" version="7.0">
+            
+            <footer>
+             <div name="create_dimension">
+                    <button name="create_dimension" type="object" string="OK" class="oe_highlight"/>
+                    <button string="Cancel" class="oe_link" special="cancel" />
+             </div>
+             </footer>
+             
+                 <field name="wizard_link_id">
+	                 <form string="Analytic Dimensions" version="7.0">
+		                    <group col="4">
+		                        <field name="distribution_id"/>
+                                <field name="analytic_account_id" attrs="{'required':[('analytic_account_required','=',True)]}" />
+                                <field name="analytic_account_required"/>
+		                    </group>
+	               </form>
+	               <tree string="Analytic Dimensions" editable="bottom">
+			                <field name="distribution_id"/>
+		                    <field name="analytic_account_id" context="{'distribution_id':distribution_id,'analytic_account_id':analytic_account_id,'wizard_link_id':parent.wizard_link_id}" attrs="{'required':[('analytic_account_required','=',True)]}"/>
+                            <field name="analytic_account_required" invisible="1"/>
+	               </tree>
+                </field>
+
+            </form>
+            </field>
+        </record>
+
+        <record id="act_view_account_distribution_wizard" model="ir.actions.act_window">
+            <field name="name">Analytic Dimensions</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.analytic.dimension.distribution</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_account_distribution_wizard"/>
+            <field name="target">new</field>
+        </record>
+-->
+    </data>
+</openerp>

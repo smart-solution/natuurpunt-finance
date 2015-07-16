@@ -1,0 +1,76 @@
+10
+
+dir
+116
+svn+ssh://openerp@193.104.8.19/var/svn/projects/natuurpunt/multi_analytical_account
+svn+ssh://openerp@193.104.8.19/var/svn/projects/natuurpunt/multi_analytical_account
+
+
+
+2014-05-13T09:59:12.386942Z
+116
+openerp
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+525892b2-d7c3-47d3-8fde-821910bece50
+
+i18n
+dir
+
+stock
+dir
+
+analytic
+dir
+
+sale
+dir
+
+__init__.py
+file
+
+
+
+
+
+c06149d79122cae8a96bfffba3538a56
+2013-12-10T15:36:10.802233Z
+42
+openerp
+
+security
+dir
+
+base
+dir
+
+purchase
+dir
+
+__openerp__.py
+file
+
+
+
+
+
+4f5a3e02482594ff683f89a5c8f71acf
+2013-12-10T15:36:10.802233Z
+42
+openerp
+
+account
+dir
+

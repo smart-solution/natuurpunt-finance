@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+    <record model="ir.ui.view" id="view_supplier_cost_accout_form">
+        <field name="name">view.supplier.cost.account.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="type">form</field>
+            <field name="arch" type="xml">
+                    <field name="property_account_payable" position="after">
+                        <field name="property_supplier_cost_account"/>
+                    </field>
+            </field>
+    </record>
+
+    </data>
+</openerp>

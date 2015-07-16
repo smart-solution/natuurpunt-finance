@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+   <!--
+       account_entry_invoice_lines Views 
+   -->
+
+        <record id="view_account_move_entry_lines_import_wizard" model="ir.ui.view">
+            <field name="name">Import Journal Items</field>
+            <field name="model">account.move.lines.import.wizard</field>
+            <field name="arch" type="xml">
+            <form string="Import Journal Items" version="7.0">
+                <group colspan="4">
+                    <!--    <label for="lines_file" string="Entry Lines File"/>-->
+                    <field name="lines_file"/>
+                </group>
+                <footer>
+                 <div name="journal_entry_lines_import">
+                        <button name="entry_lines_import" type="object" string="Import File" class="oe_highlight"/>
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                 </div>
+                 </footer>
+            </form>
+            </field>
+        </record>
+
+        <record id="act_entry_lines_import_wizard" model="ir.actions.act_window">
+            <field name="name">Import Journal Items</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.move.lines.import.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_account_move_entry_lines_import_wizard"/>
+            <field name="target">new</field>
+        </record>
+
+        <record id="view_account_move_tree_lines_import_inherit" model="ir.ui.view">
+            <field name="name">view.account.tree.move.lines_import.inherit</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <button name="button_validate" position="after">
+                    <button name="%(account_entry_lines_import.act_entry_lines_import_wizard)d" string="Import Journal Items"
+                            type="action" class="oe_highlight" states="draft"/>
+                </button>
+            </field>
+        </record>
+
+    </data>
+</openerp>

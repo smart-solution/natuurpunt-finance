@@ -1,0 +1,513 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+# 	* natuurpunt_account
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 7.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-01-03 11:24+0000\n"
+"PO-Revision-Date: 2014-01-03 14:14+0100\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 1.5.7\n"
+
+#. module: natuurpunt_account
+#: code:addons/natuurpunt_account/natuurpunt_account.py:143
+#, python-format
+msgid ""
+"You cannot cancel an invoice which is partially paid. You need to "
+"unreconcile related payment entries first."
+msgstr ""
+"Het is niet mogelijk een gedeeltelijk betaalde factuur te annuleren. Gelieve "
+"aflettering eerst te verwijderen."
+
+#. module: natuurpunt_account
+#: sql_constraint:res.partner:0
+msgid "Error! The VAT number already exists!"
+msgstr "Fout! Het BTW nummer bestaat reeds!"
+
+#. module: natuurpunt_account
+#: field:account.invoice.line,fleet_mandatory:0
+#: field:account.move.line,fleet_mandatory:0
+#: field:account.account,fleet_mandatory:0
+msgid "Number Plate Mandatory"
+msgstr "Nummerplaat Verplicht"
+
+#. module: natuurpunt_account
+#: field:account.account,account_group_2:0
+msgid "Account Group 2"
+msgstr "Rekeninggroep 2"
+
+#. module: natuurpunt_account
+#: field:account.account,account_group_1:0
+msgid "Account Group 1"
+msgstr "Rekeninggroep 1"
+
+#. module: natuurpunt_account
+#: field:account.invoice.line,partner_mandatory:0
+#: field:account.move.line,partner_mandatory:0
+#: field:account.account,partner_mandatory:0
+msgid "Partner Mandatory"
+msgstr "Partner Verplicht"
+
+#. module: natuurpunt_account
+#: field:account.invoice.line,employee_id:0
+#: field:account.move.line,employee_id:0
+msgid "Werknemer"
+msgstr "Werknemer"
+
+#. module: natuurpunt_account
+#: field:account.invoice.line,employee_mandatory:0
+#: field:account.move.line,employee_mandatory:0
+#: field:account.account,employee_mandatory:0
+msgid "Employee Mandatory"
+msgstr "Werknemer Verplicht"
+
+#. module: natuurpunt_account
+#: field:account.invoice.line,fleet_id:0 field:account.move.line,fleet_id:0
+msgid "Nummerplaat"
+msgstr "Nummerplaat"
+
+#. module: natuurpunt_account
+#: model:ir.model,name:natuurpunt_account.model_account_move_line
+msgid "Journal Items"
+msgstr "Boekingen"
+
+#. module: natuurpunt_account
+#: view:account.invoice:0
+msgid "True"
+msgstr "Geldig"
+
+#. module: natuurpunt_account
+#: model:ir.model,name:natuurpunt_account.model_account_account
+msgid "Account"
+msgstr "Rekening"
+
+#. module: natuurpunt_account
+#: model:ir.model,name:natuurpunt_account.model_account_invoice_refund
+msgid "Invoice Refund"
+msgstr "Creditnota"
+
+#. module: natuurpunt_account
+#: view:account.move:0
+msgid "[('type', 'in', ('general','situation'))]"
+msgstr "[('type', 'in', ('general','situation'))]"
+
+#. module: natuurpunt_account
+#: view:account.move:0
+msgid "natuurpunt_account_id_change(account_id, partner_id, context)"
+msgstr "natuurpunt_account_id_change(account_id, partner_id, context)"
+
+#. module: natuurpunt_account
+#: code:addons/natuurpunt_account/natuurpunt_account.py:143
+#, python-format
+msgid "Error!"
+msgstr "Fout!"
+
+#. module: natuurpunt_account
+#: field:account.account,parent_consol_ids:0
+msgid "Consolidated Parents"
+msgstr "Hoofdrekeningen"
+
+#. module: natuurpunt_account
+#: field:account.account,account_group_3:0
+msgid "Account Group 3"
+msgstr "Rekeninggroep 3"
+
+#. module: natuurpunt_account
+#: model:ir.model,name:natuurpunt_account.model_account_bank_statement_line
+msgid "Bank Statement Line"
+msgstr "Rekeninguittreksellijn"
+
+#. module: natuurpunt_account
+#: model:ir.model,name:natuurpunt_account.model_account_move
+msgid "Account Entry"
+msgstr "Boeking"
+
+#. module: natuurpunt_account
+#: model:ir.model,name:natuurpunt_account.model_account_tax
+msgid "Tax"
+msgstr "Btw"
+
+#. module: natuurpunt_account
+#: model:ir.model,name:natuurpunt_account.model_account_invoice_line
+msgid "Invoice Line"
+msgstr "Factuurlijn"
+
+#. module: natuurpunt_account
+#: view:account.move.line:0
+msgid "{'required':[('partner_mandatory','=',True)]}"
+msgstr "{'required':[('partner_mandatory','=',True)]}"
+
+#. module: natuurpunt_account
+#: model:ir.model,name:natuurpunt_account.model_account_invoice
+msgid "Invoice"
+msgstr "Factuur"
+
+#. module: natuurpunt_account
+#: model:ir.model,name:natuurpunt_account.model_res_partner
+msgid "Partner"
+msgstr "Relatie"
+
+#. module: natuurpunt_account
+#: sql_constraint:account.invoice:0
+msgid ""
+"Error! The supplier invoice reference number already exists for this "
+"supplier within this company!"
+msgstr ""
+"Fout! Het leveranciersreferentienummer bestaat reeds voor deze leverancier "
+"in dit bedrijf!"
+
+
+#. module: natuurpunt_account
+#: report:account.vordering:0
+msgid "Taxes"
+msgstr "Btw"
+
+
+#. module: natuurpunt_account
+#: report:account.vordering:0
+msgid "Invoice Date"
+msgstr "Factuurdatum"
+
+
+#. module: natuurpunt_account
+#: report:account.vordering:0
+msgid "TIN :"
+msgstr "BTW Nr :"
+
+#. module: natuurpunt_account
+#: report:account.vordering:0
+msgid "Invoice"
+msgstr "Factuur"
+
+
+#. module: natuurpunt_account
+#: report:account.vordering:0
+msgid "Customer Code"
+msgstr "Klantencode"
+
+#. module: natuurpunt_account
+#: report:account.vordering:0
+msgid "Description"
+msgstr "Referentie klant"
+
+
+#. module: natuurpunt_account
+#: report:account.vordering:0
+msgid "Tax"
+msgstr "Btw"
+
+
+#. module: natuurpunt_account
+#: report:account.vordering:0
+msgid "Disc.(%)"
+msgstr "Korting(%)"
+
+
+#. module: natuurpunt_account
+#: report:account.vordering:0
+msgid "Draft Invoice"
+msgstr "Voorlopige factuur"
+
+
+#. module: natuurpunt_account
+#: report:account.vordering:0
+msgid "Unit Price"
+msgstr "Eenheidsprijs"
+
+#. module: natuurpunt_account
+#: report:account.vordering:0
+msgid "Cancelled Invoice"
+msgstr "Geannuleerde factuur"
+
+
+#. module: natuurpunt_account
+#: report:account.vordering:0
+msgid "Amount"
+msgstr "Bedrag"
+
+
+#. module: natuurpunt_account
+#: report:account.vordering:0
+msgid "Quantity"
+msgstr "Hoeveelheid"
+
+
+#. module: natuurpunt_account
+#: report:account.vordering:0
+msgid "Fiscal Position Remark :"
+msgstr "Opmerking fiscale positie:"
+
+
+#. module: natuurpunt_account
+#: report:account.vordering:0
+msgid "Supplier Refund"
+msgstr "Aankoopcreditnota"
+
+
+#. module: natuurpunt_account
+#: report:account.vordering:0
+msgid "Base"
+msgstr "Basis"
+
+
+#. module: natuurpunt_account
+#: report:account.vordering:0
+msgid "Fax :"
+msgstr "Fax:"
+
+
+#. module: natuurpunt_account
+#: report:account.vordering:0
+msgid "Total:"
+msgstr "Totaal:"
+
+
+#. module: natuurpunt_account
+#: report:account.vordering:0
+msgid "Taxes:"
+msgstr "Btw:"
+
+
+#. module: natuurpunt_account
+#: report:account.vordering:0
+msgid "Price"
+msgstr "Prijs"
+
+
+#. module: natuurpunt_account
+#: report:account.vordering:0
+msgid "PRO-FORMA"
+msgstr "PRO FORMA"
+
+
+#. module: natuurpunt_account
+#: report:account.vordering:0
+msgid "Net Total:"
+msgstr "Nettototaal:"
+
+
+#. module: natuurpunt_account
+#: report:account.vordering:0
+msgid "Tel. :"
+msgstr "Tel.:"
+
+
+#. module: natuurpunt_account
+#: report:account.vordering:0
+msgid "Source"
+msgstr "Onze referentie"
+
+
+#. module: natuurpunt_account
+#: report:account.vordering:0
+msgid "Supplier Invoice"
+msgstr "Aankoopfactuur"
+
+
+#. module: natuurpunt_account
+#: report:account.vordering:0
+msgid "Refund"
+msgstr "Creditnota"
+
+#. module: natuurpunt_account
+#: report:account.vordering:0
+msgid "Receivable"
+msgstr "Vordering"
+
+#. module: natuurpunt_account
+#: report:account.vordering:0
+msgid "Refund Receivable"
+msgstr "Creditnota Vordering"
+
+#. module: natuurpunt_account
+#: report:account.vordering:0
+msgid "Expiration Date"
+msgstr "Vervaldatum"
+
+#. module: natuurpunt_account
+#: report:account.vordering:0
+msgid "Due Date"
+msgstr "Vervaldatum"
+
+#. module: natuurpunt_account
+#: report:account.vordering:0
+msgid "Date"
+msgstr "Datum"
+
+#. module: account_payment
+#: report:payment.order:0
+msgid "Value Date"
+msgstr "Valutadatum"
+
+#. module: account_payment
+#: report:payment.order:0
+msgid "Journal Entry"
+msgstr "Boeking"
+
+#. module: account
+#: report:account.overdue:0
+msgid "Journal Entry"
+msgstr "Boeking"
+
+#. module: account
+#: report:account.overdue:0
+msgid "Balance"
+msgstr "Saldo"
+
+#. module: account
+#: report:account.overdue:0
+msgid "Invoice Date"
+msgstr "Datum"
+
+#. module: account
+#: report:account.overdue:0
+msgid "Reference"
+msgstr "Referentie"
+
+#. module: account
+#: report:account.overdue:0
+msgid "Maturity Date"
+msgstr "Vervaldatum"
+
+#. module: account
+#: report:account.overdue:0
+msgid "Amount Due"
+msgstr "Open bedrag"
+
+#. module: account
+#: report:account.overdue:0
+msgid "Amount Overdue"
+msgstr "Vervallen bedrag"
+
+#. module: account
+#: report:account.overdue:0
+msgid "Total:"
+msgstr "Totaal:"
+
+#. module: account_followup
+#: field:res.partner,payment_amount_due:0
+msgid "Amount Due"
+msgstr "Open bedrag"
+
+#. module: account_followup
+#: report:account_followup.followup.print:0
+msgid "Journal Entry"
+msgstr "Boeking"
+
+#. module: account_followup
+#: report:account_followup.followup.print:0
+msgid "Balance"
+msgstr "Saldo"
+
+#. module: account_followup
+#: report:account_followup.followup.print:0
+msgid "Invoice Date"
+msgstr "Datum"
+
+#. module: account_followup
+#: report:account_followup.followup.print:0
+msgid "Reference"
+msgstr "Referentie"
+
+#. module: account_followup
+#: report:account_followup.followup.print:0
+msgid "Maturity Date"
+msgstr "Vervaldatum"
+
+#. module: account_followup
+#: report:account_followup.followup.print:0
+msgid "Amount Due"
+msgstr "Open bedrag"
+
+#. module: account_followup
+#: report:account_followup.followup.print:0
+msgid "Amount Overdue"
+msgstr "Vervallen bedrag"
+
+#. module: account
+#: report:account.invoice:0
+#: report:account.vordering:0
+msgid "Description"
+msgstr "Referentie klant"
+
+#. module: account
+#: report:account.invoice:0
+msgid "Source"
+msgstr "Onze referentie"
+
+#. module: natuurpunt_account
+#: report:account.vordering:0
+msgid "Please use following structured communication:"
+msgstr "Gelieve volgende mededeling te gebruiken bij betaling:"
+
+#. module: account
+#: model:ir.ui.menu,name:account.menu_finance_management_belgian_reports
+msgid "Belgian Reports"
+msgstr "Belgische rapporten"
+
+#. module: account
+#: field:account.invoice,payment_sent:0
+msgid "Payment Sent"
+msgstr "Betaling verstuurd"
+
+#. module: account
+#: field:account.invoice,dimension_user_id:0
+msgid "Resp. for analytic assignment"
+msgstr "Verantw voor analytische toewijzing"
+
+#. module: account
+#: field:account.invoice,payment_sent:0
+msgid "Payment Sent"
+msgstr "Betaling verstuurd"
+
+#. module: account
+#: selection:account.invoice,state:0
+msgid "Waiting Approval"
+msgstr "Wachten op goedkeuring"
+
+#. module: account
+#: selection:account.invoice,state:0
+msgid "Approved"
+msgstr "Goedgekeurd"
+
+#. module: natuurpunt_account
+#: view:account.invoice:0
+msgid "Payment Lines"
+msgstr "Betaal-lijnen"
+
+#. module: natuurpunt_account
+#: field:payment.order,execution_date:0
+msgid "Value Date"
+msgstr "Betaaldatum"
+
+#. module: natuurpunt_account
+#: view:account.invoice:0
+msgid "Debit denied"
+msgstr "Domciliëring geweigerd"
+
+#. module: natuurpunt_account
+#: view:account.invoice:0
+msgid "Unpaid and Payment not sent"
+msgstr "Betaling nog niet doorgestuurd"
+
+#. module: natuurpunt_account
+#: view:account.invoice:0
+msgid "Resp. for analytic assignment"
+msgstr "Verantw voor anal toewijzing"
+
+#. module: natuurpunt_account
+#: view:res.partner:0
+msgid "Functions"
+msgstr "Functies"
+
+#. module: natuurpunt_account
+#: view:res.partner:0
+msgid "Old Codes"
+msgstr "Oude Codes"

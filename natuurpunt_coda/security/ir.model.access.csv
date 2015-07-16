@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_account_coda_fys_file_user,access.account.coda.fys.file.user,model_account_coda_fys_file,natuurpunt_coda.group_natuurpunt_coda_user,1,1,1,1
+access_account_coda_file_user,access.account.coda.file.user,model_account_coda_file,natuurpunt_coda.group_natuurpunt_coda_user,1,1,1,1
+access_account_coda_free_message_user,access.account.coda.free.message.user,model_account_coda_free_message,natuurpunt_coda.group_natuurpunt_coda_user,1,1,1,1
+access_account_coda_lines2_user,access.account.coda.lines2.user,model_account_coda_lines2,natuurpunt_coda.group_natuurpunt_coda_user,1,1,1,1
+access_account_coda_lines3_user,access.account.coda.lines3.user,model_account_coda_lines3,natuurpunt_coda.group_natuurpunt_coda_user,1,1,1,1
+access_account_coda_det2_user,access.account.coda.det2.user,model_account_coda_det2,natuurpunt_coda.group_natuurpunt_coda_user,1,1,1,1
+access_account_coda_det3_user,access.account.coda.det3.user,model_account_coda_det3,natuurpunt_coda.group_natuurpunt_coda_user,1,1,1,1
+access_account_coda_sdd_refused_user,access.account.coda.sdd.refused.user,model_account_coda_sdd_refused,natuurpunt_coda.group_natuurpunt_coda_user,1,1,1,1
+access_account_coda_account_user,access.account.coda.account.user,model_account_coda_account,natuurpunt_coda.group_natuurpunt_coda_user,1,0,0,0
+access_account_analytic_account_user,access.account.analytic.account.user,model_account_analytic_account,natuurpunt_coda.group_natuurpunt_coda_user,1,0,0,0
+access_account_bank_statement_user,access.account.bank.statement.user,model_account_bank_statement,natuurpunt_coda.group_natuurpunt_coda_user,1,1,1,1
+access_account_bank_statement_line_user,access.account.bank.statement.line.user,model_account_bank_statement_line,natuurpunt_coda.group_natuurpunt_coda_user,1,1,1,1

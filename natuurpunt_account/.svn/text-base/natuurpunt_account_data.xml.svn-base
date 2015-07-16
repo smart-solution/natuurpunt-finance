@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+
+    <data noupdate="1">
+        <record id="seq_np_partner_ref_type" model="ir.sequence.type">
+            <field name="name">Partner Sequence Type</field>
+            <field name="code">res.partner.np.ref</field>
+        </record>
+
+        <record id="seq_np_partner_ref" model="ir.sequence">
+            <field name="name">Partner</field>
+            <field name="code">res.partner.np.ref</field>
+            <field name="prefix"></field>
+            <field name="padding">8</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+
+    <data noupdate="1">
+        <record id="seq_np_product_ref_type" model="ir.sequence.type">
+            <field name="name">Product Sequence Type</field>
+            <field name="code">res.product.np.ref</field>
+        </record>
+
+        <record id="seq_np_product_ref" model="ir.sequence">
+            <field name="name">Product</field>
+            <field name="code">res.product.np.ref</field>
+            <field name="prefix"></field>
+            <field name="padding">8</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+
+    <data noupdate="1">
+	<record id="account.account_invoices" model="ir.actions.report.xml">
+	     <field name="report_file">natuurpunt_account/report/account_print_invoice.rml</field>
+	     <field name="attachment_use" eval="False"/>
+	</record>
+	<record id="account_payment.payment_order1" model="ir.actions.report.xml">
+	    <field name="report_file">natuurpunt_account/report/order.rml</field>
+	    <field name="attachment_use" eval="False"/>
+	</record>
+	<record id="natuurpunt_account.account_vordering" model="ir.actions.report.xml">
+	    <field name="attachment_use" eval="False"/>
+	</record>
+
+	<record id="l10n_be_coda.menu_account_bank_statement_line_coda" model="ir.ui.menu">
+	<field name="groups_id" eval="[(6, 0, [])]"/>
+	</record>
+
+	<delete model="ir.ui.menu" id="account_voucher.menu_action_vendor_payment"/>
+	<delete model="ir.ui.menu" id="account_voucher.menu_action_vendor_receipt"/>
+	<delete model="ir.ui.menu" id="account_voucher.menu_action_sale_receipt"/>
+	<delete model="ir.ui.menu" id="account_voucher.menu_action_purchase_receipt"/>
+	<delete model="ir.ui.menu" id="account_voucher.menu_encode_entries_by_voucher"/>
+	<delete model="ir.ui.menu" id="account.journal_cash_move_lines"/>
+    
+	<delete model="ir.ui.menu" id="account.menu_manual_reconcile"/>
+	<delete model="ir.ui.menu" id="account.menu_automatic_reconcile"/>
+	<delete model="ir.ui.menu" id="asset.menu_finance_assets"/>
+
+    </data>
+
+</openerp>

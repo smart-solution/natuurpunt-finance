@@ -1,0 +1,228 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+# 	* natuurpunt_activa
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 7.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-01-03 11:24+0000\n"
+"PO-Revision-Date: 2014-01-03 14:22+0100\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 1.5.7\n"
+
+#. module: natuurpunt_activa
+#: field:account.asset.asset,fleet_id:0
+msgid "Vehicle"
+msgstr "Voertuig"
+
+#. module: natuurpunt_activa
+#: field:account.asset.asset,account_analytic_ids:0
+msgid "Analytic Accounts"
+msgstr "Analytische Rekeningen"
+
+#. module: natuurpunt_activa
+#: view:account.asset.asset:0
+msgid "Group By..."
+msgstr "Groepering ..."
+
+#. module: natuurpunt_activa
+#: field:account.bank.statement.line,asset_id:0
+#: field:account.invoice.line,asset_id:0
+#: model:ir.model,name:natuurpunt_activa.model_account_asset_asset
+msgid "Asset"
+msgstr "Investering"
+
+#. module: natuurpunt_activa
+#: field:account.asset.asset,maintenance_id:0
+msgid "Maintenance"
+msgstr "Onderhoud"
+
+#. module: natuurpunt_activa
+#: code:addons/natuurpunt_activa/natuurpunt_activa.py:486
+#, python-format
+msgid "The asset %s should be in draft state in order to validate that invoice"
+msgstr ""
+"Het actief %s moet in concept status staan om de factuur te kunnen bevestigen"
+
+#. module: natuurpunt_activa
+#: code:addons/natuurpunt_activa/natuurpunt_activa.py:484
+#, python-format
+msgid "The account %s does not match any of the accounts of the asset"
+msgstr "De rekening %s stemt met geen enkele activa-rekening overeen"
+
+#. module: natuurpunt_activa
+#: view:account.asset.asset:0
+msgid "Contracts"
+msgstr "Contracten"
+
+#. module: natuurpunt_activa
+#: field:account.asset.asset,serial_number:0
+msgid "Serial Number"
+msgstr "Serienummer"
+
+#. module: natuurpunt_activa
+#: model:ir.actions.act_window,name:natuurpunt_activa.action_account_asset_depreciation_line_form
+msgid "Depreciations"
+msgstr "Afschrijvingen"
+
+#. module: natuurpunt_activa
+#: code:addons/natuurpunt_activa/natuurpunt_activa.py:409
+#, python-format
+msgid "This account does not match the asset account %s"
+msgstr "Deze rekening stemt niet overeen met de activa-rekening %s"
+
+#. module: natuurpunt_activa
+#: field:account.account,asset_mandatory:0
+#: field:account.bank.statement.line,asset_mandatory:0
+#: field:account.invoice.line,asset_mandatory:0
+#: field:account.move.line,asset_mandatory:0
+msgid "Asset Mandatory"
+msgstr "Actief Verplicht"
+
+#. module: natuurpunt_activa
+#: code:addons/natuurpunt_activa/natuurpunt_activa.py:338
+#: code:addons/natuurpunt_activa/natuurpunt_activa.py:510
+#, python-format
+msgid "This account %s does not match any of the accounts of the asset"
+msgstr "De rekening %s stemt met geen enkele activa-rekening overeen"
+
+#. module: natuurpunt_activa
+#: code:addons/natuurpunt_activa/natuurpunt_activa.py:501
+#, python-format
+msgid "This account (%s) requires an asset"
+msgstr "De rekening %s kan enkel gebruikt worden in combinatie met een actief"
+
+#. module: natuurpunt_activa
+#: view:account.asset.asset:0
+msgid "Entries"
+msgstr "Boekingen"
+
+#. module: natuurpunt_activa
+#: model:ir.model,name:natuurpunt_activa.model_account_move_line
+msgid "Journal Items"
+msgstr "Boekingslijnen"
+
+#. module: natuurpunt_activa
+#: field:account.asset.category,account_gainloss_id:0
+msgid "Gain/Loss Account"
+msgstr "Meer-/minwaarde-rekening"
+
+#. module: natuurpunt_activa
+#: model:ir.model,name:natuurpunt_activa.model_account_account
+msgid "Account"
+msgstr "Rekening"
+
+#. module: natuurpunt_activa
+#: code:addons/natuurpunt_activa/natuurpunt_activa.py:305
+#, python-format
+msgid "You cannot delete a depreciation line for a confirmed journal entry"
+msgstr ""
+"Het is niet mogelijk een afschrijvingslijn te verwijderen voor een geboekt "
+"document"
+
+#. module: natuurpunt_activa
+#: view:account.asset.asset:0
+msgid "Asset Category"
+msgstr "Investeringscategorie"
+
+#. module: natuurpunt_activa
+#: field:account.asset.asset,location_analytic_id:0
+msgid "Location - Analytic"
+msgstr "Locatie - Analytisch"
+
+#. module: natuurpunt_activa
+#: field:account.asset.category,account_disinvestment_id:0
+msgid "Disinvestment Account"
+msgstr "Desinvesteringsrekening"
+
+#. module: natuurpunt_activa
+#: field:account.asset.asset,period_depreciation_amount:0
+msgid "Period depreciation amount"
+msgstr "Bedrag voor afschrijving per periode"
+
+#. module: natuurpunt_activa
+#: model:ir.model,name:natuurpunt_activa.model_account_asset_depreciation_line
+msgid "Asset depreciation line"
+msgstr "Afschrijvingslijn"
+
+#. module: natuurpunt_activa
+#: model:ir.model,name:natuurpunt_activa.model_account_asset_category
+msgid "Asset category"
+msgstr "Investeringscategorie"
+
+#. module: natuurpunt_activa
+#: code:addons/natuurpunt_activa/natuurpunt_activa.py:305
+#: code:addons/natuurpunt_activa/natuurpunt_activa.py:327
+#: code:addons/natuurpunt_activa/natuurpunt_activa.py:338
+#: code:addons/natuurpunt_activa/natuurpunt_activa.py:409
+#: code:addons/natuurpunt_activa/natuurpunt_activa.py:473
+#: code:addons/natuurpunt_activa/natuurpunt_activa.py:484
+#: code:addons/natuurpunt_activa/natuurpunt_activa.py:486
+#: code:addons/natuurpunt_activa/natuurpunt_activa.py:501
+#: code:addons/natuurpunt_activa/natuurpunt_activa.py:510
+#, python-format
+msgid "Error"
+msgstr "Fout"
+
+#. module: natuurpunt_activa
+#: field:account.asset.asset,location_partner_id:0
+msgid "Location - Partner"
+msgstr "Locatie - Partner"
+
+#. module: natuurpunt_activa
+#: model:ir.model,name:natuurpunt_activa.model_account_bank_statement_line
+msgid "Bank Statement Line"
+msgstr "Rekeninguittreksellijn"
+
+#. module: natuurpunt_activa
+#: field:account.asset.asset,initial_depreciation_nbr:0
+msgid "Initial number of depreciations"
+msgstr "Initial number of depreciations"
+
+#. module: natuurpunt_activa
+#: model:ir.model,name:natuurpunt_activa.model_account_move
+msgid "Account Entry"
+msgstr "Boeking"
+
+#. module: natuurpunt_activa
+#: view:account.invoice:0
+msgid "{'supplier_invoice_id':active_id, 'asset_id':asset_id}"
+msgstr "{'supplier_invoice_id':active_id, 'asset_id':asset_id}"
+
+#. module: natuurpunt_activa
+#: model:ir.model,name:natuurpunt_activa.model_account_invoice_line
+msgid "Invoice Line"
+msgstr "Factuurlijn"
+
+#. module: natuurpunt_activa
+#: model:ir.model,name:natuurpunt_activa.model_account_bank_statement
+msgid "Bank Statement"
+msgstr "Rekeninguittreksel"
+
+#. module: natuurpunt_activa
+#: model:ir.model,name:natuurpunt_activa.model_account_analytic_account
+msgid "Analytic Account"
+msgstr "Analytische rekening"
+
+#. module: natuurpunt_activa
+#: model:ir.model,name:natuurpunt_activa.model_account_invoice
+msgid "Invoice"
+msgstr "Factuur"
+
+#. module: natuurpunt_activa
+#: code:addons/natuurpunt_activa/natuurpunt_activa.py:327
+#: code:addons/natuurpunt_activa/natuurpunt_activa.py:473
+#, python-format
+msgid "The account %s requires an asset"
+msgstr "De rekening %s kan enkel gebruikt worden in combinatie met een actief"
+
+#. module: natuurpunt_activa
+#: field:account.move,from_asset:0
+msgid "From Asset"
+msgstr "Van Actief"

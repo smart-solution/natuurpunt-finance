@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <!--
+    <record model="ir.ui.view" id="account_invoice_supplier_compute_taxes_form">
+        <field name="name">account.invoice.supplier.compute.taxes.form</field>
+        <field name="model">account.invoice</field>
+	<field name="inherit_id" ref="account.invoice_supplier_form"/> 
+        <field name="arch" type="xml">
+            <data>
+                <field name="amount_untaxed" position="after">
+                    <field name="manual_tax"/>
+                </field>
+            </data>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="account_invoice_customer_compute_taxes_form">
+        <field name="name">account.invoice.customer.compute.taxes.form</field>
+        <field name="model">account.invoice</field>
+	<field name="inherit_id" ref="account.invoice_form"/> 
+        <field name="arch" type="xml">
+            <data>
+                <field name="amount_untaxed" position="after">
+                    <field name="manual_tax"/>
+                </field>
+            </data>
+        </field>
+    </record> 
+-->
+    </data>
+</openerp>

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="account_account_form_view" model="ir.ui.view">
+            <field name="name">acc.acc.analytical.view.form</field>
+            <field name="model">account.account</field>
+            <field name="inherit_id" ref="account.view_account_form"/>
+            <field name="arch" type="xml">
+                <label for='note' position='before'>
+                    <field name="dimension_ids"/>
+                </label>
+            </field>
+        </record>
+        
+        <record id="view_acc_acc_analytic_dim_form" model="ir.ui.view">
+            <field name="name">view.acc.acc.analytic.dim.form</field>
+            <field name="model">account.account.analytic.dimension</field>
+            <field name="arch" type="xml">
+                <form string="Account analytical dimension">
+                    <field name="dimension_id" domain="[('company_id','=',parent.company_id)]"/>
+                    <field name="analytic_account_required"/>
+                </form>
+            </field>
+        </record>
+        
+        <record id="view_acc_acc_analytic_dim_tree" model="ir.ui.view">
+            <field name="name">view.acc.acc.analytic.dim.tree</field>
+            <field name="model">account.account.analytic.dimension</field>
+            <field name="arch" type="xml">
+                <tree string="Account analytical dimension">
+                    <field name="dimension_id"/>
+                    <field name="analytic_account_required"/>
+                </tree>
+            </field>
+        </record>
+        <!-- 
+         <record id="view_account_invoice_acespritech_inherit" model="ir.ui.view">
+            <field name="name">view.account.invoice.acespritech.inherit</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                 <button name="invoice_open" states="draft" position="after">
+                    <button name="%(multi_analytical_account.act_view_account_distribution_wizard)d" string="Default Analytical Dimensions"
+                            type="action" class="oe_highlight" states="draft"/>
+                </button>
+            </field>
+        </record>
+       --> 
+        <record model="ir.ui.view" id="account_invoice_tree_acespritech_inherit">
+            <field name="name">account.invoice.tree.acespritech.inherit</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form" />
+            <field name="arch" type="xml">
+            <xpath expr="//field[@name='invoice_line']/tree//field[@name='account_analytic_id']" position="replace">
+                    <field name="analytic_dimension_1_id" context="{'invoice_line_id':active_id,'account_id':account_id,'dimension':1,'dimension2':analytic_dimension_2_id,'dimension3':analytic_dimension_3_id}" attrs="{'required':[('analytic_dimension_1_required','=',True)]}"/>
+                    <field name="analytic_dimension_2_id" context="{'invoice_line_id':active_id,'account_id':account_id,'dimension':2,'dimension1':analytic_dimension_1_id,'dimension3':analytic_dimension_3_id}" attrs="{'required':[('analytic_dimension_2_required','=',True)]}"/>
+                    <field name="analytic_dimension_3_id" context="{'invoice_line_id':active_id,'account_id':account_id,'dimension':3,'dimension1':analytic_dimension_1_id,'dimension2':analytic_dimension_2_id}" attrs="{'required':[('analytic_dimension_3_required','=',True)]}"/>
+                    <field name="analytic_dimension_1_required" context="{'invoice_line_id':active_id,'account_id':account_id}" invisible="1"/>
+                    <field name="analytic_dimension_2_required" context="{'invoice_line_id':active_id,'account_id':account_id}" invisible="1"/>
+                    <field name="analytic_dimension_3_required" context="{'invoice_line_id':active_id,'account_id':account_id}" invisible="1"/>
+            </xpath>
+
+            <xpath expr="//field[@name='invoice_line']/tree//field[@name='account_id']" position="replace">
+<!--                <field name="account_id" on_change="onchange_account_id(account_id)" context="{'supplier_invoice_id':active_id}"/>-->
+                <field name="account_id" on_change="onchange_account_id(product_id, parent.partner_id, parent.type, parent.fiscal_position, account_id)" context="{'supplier_invoice_id':active_id}"/>
+            </xpath>
+            
+            </field>
+        </record>
+        <!-- 
+        <record id="view_account_move_acespritech_inherit" model="ir.ui.view">
+            <field name="name">view.account.move.acespritech.inherit</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                 <button name="button_validate" states="draft" position="after">
+                    <button name="%(multi_analytical_account.act_view_account_distribution_wizard)d" string="Default Analytical Dimensions"
+                            type="action" class="oe_highlight" states="draft"/>
+                </button>
+            </field>
+        </record>
+       --> 
+        <record id="view_account_move_tree_acespritech_inherit" model="ir.ui.view">
+            <field name="name">view.account.tree.move.acespritech.inherit</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='line_id']/tree//field[@name='analytic_account_id']" position="replace">
+                    <field name="analytic_account_id" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='line_id']/tree//field[@name='account_id']" position="after">
+                    <field name="analytic_dimension_1_id" context="{'move_line_id':active_id,'account_id':account_id,'dimension':1,'dimension2':analytic_dimension_2_id,'dimension3':analytic_dimension_3_id}" attrs="{'required':[('analytic_dimension_1_required','=',True)]}"/>
+                    <field name="analytic_dimension_2_id" context="{'move_line_id':active_id,'account_id':account_id,'dimension':2,'dimension1':analytic_dimension_1_id,'dimension3':analytic_dimension_3_id}" attrs="{'required':[('analytic_dimension_2_required','=',True)]}"/>
+                    <field name="analytic_dimension_3_id" context="{'move_line_id':active_id,'account_id':account_id,'dimension':3,'dimension1':analytic_dimension_1_id,'dimension2':analytic_dimension_2_id}" attrs="{'required':[('analytic_dimension_3_required','=',True)]}"/>
+                    <field name="analytic_dimension_1_required" invisible="1"/>
+                    <field name="analytic_dimension_2_required" invisible="1"/>
+                    <field name="analytic_dimension_3_required" invisible="1"/>
+                </xpath>
+                <xpath expr="//field[@name='line_id']/tree//field[@name='account_id']" position="replace">
+                    <field name="account_id"  domain="[('company_id', '=', parent.company_id), ('type','&lt;&gt;','view'),('type','&lt;&gt;','consolidation')]" context="{'asset_id':asset_id}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="account_supplier_invoice_tree_acespritech_inherit">
+            <field name="name">account.supplier.invoice.tree.acespritech.inherit</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_form" />
+            <field name="arch" type="xml">
+            <xpath expr="//field[@name='invoice_line']/tree//field[@name='account_analytic_id']" position="replace">
+                <!--
+                    <field name="analytic_dimension_1_id" context="{'invoice_line_id':active_id,'account_id':account_id,'dimension':1,'dimension2':analytic_dimension_2_id,'dimension3':analytic_dimension_3_id, 'asset_id':asset_id}" attrs="{'required':[('analytic_dimension_1_required','=',True)], 'readonly':[('asset_id','!=',False)]}"/>
+                    <field name="analytic_dimension_2_id" context="{'invoice_line_id':active_id,'account_id':account_id,'dimension':2,'dimension1':analytic_dimension_1_id,'dimension3':analytic_dimension_3_id, 'asset_id':asset_id}" attrs="{'required':[('analytic_dimension_2_required','=',True)], 'readonly':[('asset_id','!=',False)]}"/>
+                    <field name="analytic_dimension_3_id" context="{'invoice_line_id':active_id,'account_id':account_id,'dimension':3,'dimension1':analytic_dimension_1_id,'dimension2':analytic_dimension_2_id, 'asset_id':asset_id}" attrs="{'required':[('analytic_dimension_3_required','=',True)], 'readonly':[('asset_id','!=',False)]}"/>
+                    <field name="analytic_dimension_1_required" context="{'invoice_line_id':active_id,'account_id':account_id}" invisible="1"/>
+                    <field name="analytic_dimension_2_required" context="{'invoice_line_id':active_id,'account_id':account_id}" invisible="1"/>
+                    <field name="analytic_dimension_3_required" context="{'invoice_line_id':active_id,'account_id':account_id}" invisible="1"/>
+-->
+                    <field name="analytic_dimension_1_id" context="{'invoice_line_id':active_id,'account_id':account_id,'dimension':1,'dimension2':analytic_dimension_2_id,'dimension3':analytic_dimension_3_id, 'asset_id':asset_id}" attrs="{'required':[('analytic_dimension_1_required','=',True)]}"/>
+                    <field name="analytic_dimension_2_id" context="{'invoice_line_id':active_id,'account_id':account_id,'dimension':2,'dimension1':analytic_dimension_1_id,'dimension3':analytic_dimension_3_id, 'asset_id':asset_id}" attrs="{'required':[('analytic_dimension_2_required','=',True)]}"/>
+                    <field name="analytic_dimension_3_id" context="{'invoice_line_id':active_id,'account_id':account_id,'dimension':3,'dimension1':analytic_dimension_1_id,'dimension2':analytic_dimension_2_id, 'asset_id':asset_id}" attrs="{'required':[('analytic_dimension_3_required','=',True)]}"/>
+                    <field name="analytic_dimension_1_required" context="{'invoice_line_id':active_id,'account_id':account_id}" invisible="1"/>
+                    <field name="analytic_dimension_2_required" context="{'invoice_line_id':active_id,'account_id':account_id}" invisible="1"/>
+                    <field name="analytic_dimension_3_required" context="{'invoice_line_id':active_id,'account_id':account_id}" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='invoice_line']/tree//field[@name='account_id']" position="replace">
+<<<<<<< .mine
+                <field name="account_id" on_change="onchange_account_id(account_id)" context="{'asset_id':asset_id, 'supplier_invoice_id':active_id}"/>
+=======
+<!--                <field name="account_id" on_change="onchange_account_id(account_id)" context="{'asset_id':asset_id}"/>-->
+                <field name="account_id" on_change="onchange_account_id(product_id, parent.partner_id, parent.type, parent.fiscal_position, account_id)" context="{'supplier_invoice_id':active_id}"/>
+>>>>>>> .r27
+            </xpath>
+             
+            <xpath expr="//field[@name='tax_line']/tree//field[@name='account_analytic_id']" position="replace">
+                <field name="account_analytic_id" invisible="1"/>
+            </xpath>
+
+            <field name="invoice_line" position="attributes">            
+                <attribute name="context">"{'partner_id': partner_id, 'price_type': context.get('price_type') or False, 'type': type, 'id':active_id}"</attribute>
+            </field>
+
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="account_bank_statement_tree_acespritech_inherit">
+            <field name="name">account.bank.statement.tree.acespritech.inherit</field>
+            <field name="model">account.bank.statement</field>
+            <field name="inherit_id" ref="account.view_bank_statement_form"/>
+            <field name="arch" type="xml">
+            <xpath expr="//field[@name='line_ids']/tree//field[@name='analytic_account_id']" position="replace">
+                    <field name="analytic_dimension_1_id" context="{'statement_line_id':active_id,'account_id':account_id,'dimension':1,'dimension2':analytic_dimension_2_id,'dimension3':analytic_dimension_3_id}" attrs="{'required':[('analytic_dimension_1_required','=',True)]}"/>
+                    <field name="analytic_dimension_2_id" context="{'statement_line_id':active_id,'account_id':account_id,'dimension':2,'dimension1':analytic_dimension_1_id,'dimension3':analytic_dimension_3_id}" attrs="{'required':[('analytic_dimension_2_required','=',True)]}"/>
+                    <field name="analytic_dimension_3_id" context="{'statement_line_id':active_id,'account_id':account_id,'dimension':3,'dimension1':analytic_dimension_1_id,'dimension2':analytic_dimension_2_id}" attrs="{'required':[('analytic_dimension_3_required','=',True)]}"/>
+                    <field name="analytic_dimension_1_required" invisible="1"/>
+                    <field name="analytic_dimension_2_required" invisible="1"/>
+                    <field name="analytic_dimension_3_required" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='line_ids']/tree//field[@name='account_id']" position="replace">
+                <field name="account_id" options='{"no_open":True}' domain="[('journal_id','=',parent.journal_id), ('company_id', '=', parent.company_id)]" on_change="onchange_account_id(account_id)" context="{'asset_id':asset_id}"/>
+            </xpath>
+            </field>
+        </record>
+
+        <record id="view_account_move_line_tree_dimension_inherit" model="ir.ui.view">
+            <field name="name">view.account.move.line.tree.dimension.inherit</field>
+            <field name="model">account.move.line</field>
+            <field name="inherit_id" ref="account.view_move_line_tree"/>
+            <field name="arch" type="xml">
+                <field name="account_id" position="after">
+                    <field name="analytic_dimension_1_id" context="{'move_line_id':active_id,'account_id':account_id,'dimension':1,'dimension2':analytic_dimension_2_id,'dimension3':analytic_dimension_3_id}" attrs="{'required':[('analytic_dimension_1_required','=',True)]}"/>
+                    <field name="analytic_dimension_2_id" context="{'move_line_id':active_id,'account_id':account_id,'dimension':2,'dimension1':analytic_dimension_1_id,'dimension3':analytic_dimension_3_id}" attrs="{'required':[('analytic_dimension_2_required','=',True)]}"/>
+                    <field name="analytic_dimension_3_id" context="{'move_line_id':active_id,'account_id':account_id,'dimension':3,'dimension1':analytic_dimension_1_id,'dimension2':analytic_dimension_2_id}" attrs="{'required':[('analytic_dimension_3_required','=',True)]}"/>
+                    <field name="analytic_dimension_1_required" invisible="1"/>
+                    <field name="analytic_dimension_2_required" invisible="1"/>
+                    <field name="analytic_dimension_3_required" invisible="1"/>
+                </field>
+            </field>
+        </record>
+
+       <record id="view_np_account_asset_asset_dimensions_form" model="ir.ui.view">
+            <field name='name'>view.np.account.asset.asset.dimensions.form</field>
+            <field name='model'>account.asset.asset</field>
+            <field name="inherit_id" ref="account_asset.view_account_asset_asset_form"/>
+            <field name='arch' type='xml'>
+                <field name="category_id" position="replace">
+                    <field name="category_id" on_change="onchange_category_id(category_id)"/>
+                </field>
+                <field name="partner_id" position="after">
+                    <field name="account_id"/>
+                    <separator string="Analytic Dimensions" colspan="4"/>
+                    <field name="analytic_dimension_1_id" context="{'asset_id':active_id,'account_id':account_id,'dimension':1,'dimension2':analytic_dimension_2_id,'dimension3':analytic_dimension_3_id}" attrs="{'required':[('analytic_dimension_1_required','=',True)]}"/>
+                    <field name="analytic_dimension_2_id" context="{'asset_id':active_id,'account_id':account_id,'dimension':2,'dimension1':analytic_dimension_1_id,'dimension3':analytic_dimension_3_id}" attrs="{'required':[('analytic_dimension_2_required','=',True)]}"/>
+                    <field name="analytic_dimension_3_id" context="{'asset_id':active_id,'account_id':account_id,'dimension':3,'dimension1':analytic_dimension_1_id,'dimension2':analytic_dimension_2_id}" attrs="{'required':[('analytic_dimension_3_required','=',True)]}"/>
+                    <field name="analytic_dimension_1_required" invisible="1"/>
+                    <field name="analytic_dimension_2_required" invisible="1"/>
+                    <field name="analytic_dimension_3_required" invisible="1"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>
+

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+            <record id="view_np_purchase_order_form" model="ir.ui.view">
+            <field name="name">view.np.purchase.order.form</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+		    <xpath expr="//field[@name='order_line']/tree//field[@name='name']" position="after">
+			    <field name="analytic_dimension_1_id" context="{'purchase_line_id':active_id,'dimension':1,'dimension2':analytic_dimension_2_id,'dimension3':analytic_dimension_3_id}" attrs="{'required':[('analytic_dimension_1_required','=',True)]}" required="True"/>
+			    <field name="analytic_dimension_2_id" context="{'purchase_line_id':active_id,'dimension':2,'dimension1':analytic_dimension_1_id,'dimension3':analytic_dimension_3_id}" attrs="{'required':[('analytic_dimension_2_required','=',True)]}"/>
+			    <field name="analytic_dimension_3_id" context="{'purchase_line_id':active_id,'dimension':3,'dimension1':analytic_dimension_1_id,'dimension2':analytic_dimension_2_id}" attrs="{'required':[('analytic_dimension_3_required','=',True)]}"/>
+			    <field name="analytic_dimension_1_required" context="{'purchase_line_id':active_id}" invisible="1"/>
+			    <field name="analytic_dimension_2_required" context="{'purchase_line_id':active_id}" invisible="1"/>
+			    <field name="analytic_dimension_3_required" context="{'purchase_line_id':active_id}" invisible="1"/>
+		    </xpath>
+		    <xpath expr="//field[@name='order_line']/tree//field[@name='company_id']" position="replace">
+			<field name="company_id" invisible="True"/>
+			<field name="requisition_id" readonly="True"/>
+			<field name="purchase_resp_id"/>
+		    </xpath>
+	            <field name="product_id" position="attributes">
+        	        <attribute name="required">1</attribute>
+           	    </field>
+
+            </field>
+        </record>
+
+    <record model="ir.ui.view" id="view_purchase_requisition_np2_form">
+        <field name="name">purchase.requisition.np2.form</field>
+        <field name="inherit_id" ref="purchase_requisition.view_purchase_requisition_form"/>
+        <field name="model">purchase.requisition</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='line_ids']/tree//field[@name='product_id']" position="after">
+			    <field name="analytic_dimension_1_id" context="{'purchase_requisition_line_id':active_id,'dimension':1,'dimension2':analytic_dimension_2_id,'dimension3':analytic_dimension_3_id}" attrs="{'required':[('analytic_dimension_1_required','=',True)]}" required="True"/>
+			    <field name="analytic_dimension_2_id" context="{'purchase_requisition_line_id':active_id,'dimension':2,'dimension1':analytic_dimension_1_id,'dimension3':analytic_dimension_3_id}" attrs="{'required':[('analytic_dimension_2_required','=',True)]}"/>
+			    <field name="analytic_dimension_3_id" context="{'purchase_requisition_line_id':active_id,'dimension':3,'dimension1':analytic_dimension_1_id,'dimension2':analytic_dimension_2_id}" attrs="{'required':[('analytic_dimension_3_required','=',True)]}"/>
+			    <field name="analytic_dimension_1_required" context="{'purchase_requisition_line_id':active_id}" invisible="1"/>
+			    <field name="analytic_dimension_2_required" context="{'purchase_requisition_line_id':active_id}" invisible="1"/>
+			    <field name="analytic_dimension_3_required" context="{'purchase_requisition_line_id':active_id}" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    </data>
+</openerp>

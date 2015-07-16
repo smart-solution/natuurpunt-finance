@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+    <record model="ir.ui.view" id="view_natuurpunt_journal_followup_form">
+        <field name="name">view.natuurpunt.journal.followup.form</field>
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="account.view_account_journal_form"/>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+		<field name="entry_posted" position="after">
+			<field name="auto_block_followup"/>
+		</field>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_natuurpunt_partner_followup_tree">
+        <field name="name">view.natuurpunt.partner.followup.tree</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="account_followup.customer_followup_tree"/>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+		<field name="name" position="before">
+			<field name="id"/>
+		</field>
+        </field>
+    </record>
+
+    </data>
+</openerp>
+

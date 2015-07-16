@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_account_analytic_account_form_ace" model="ir.ui.view">
+            <field name="name">view.account.analytic.account.form.ace</field>
+            <field name="model">account.analytic.account</field>
+            <field name="inherit_id" ref="analytic.view_account_analytic_account_form"/>
+            <field name="arch" type="xml">
+                <field name='company_id' position='after'>
+                    <field name="dimension_id" domain="[('company_id','=',company_id)]"/>
+				<field name="dimension_sequence" invisible="1"/>
+                                <field name="default_dimension_1_id" attrs="{'invisible':[('dimension_sequence','=',1)]}" context="{'analytic_account_id':active_id,'dimension':1}"/>
+                                <field name="default_dimension_2_id" attrs="{'invisible':[('dimension_sequence','=',2)]}" context="{'analytic_account_id':active_id,'dimension':2}"/>
+                                <field name="default_dimension_3_id" attrs="{'invisible':[('dimension_sequence','=',3)]}" context="{'analytic_account_id':active_id,'dimension':3}"/>
+                    <field name="dimensions_mandatory"/>
+                    <field name="asset_ids" widget="many2many_tags"/>
+                    <field name="active"/>
+                </field>
+                <field name="code" position="after">
+                    <field name="old_code"/>
+                </field>
+                <notebook position="inside">
+                    <page string="Allowed Analytic Accounts">
+                        <separator string="Multi-Analytic Allowed Analytic Accounts" colspan="4"/>
+                        <field name="allowed_account_ids" colspan="4" nolabel="1" domain="[('company_id','=',company_id),('dimension_id','!=',dimension_id)]">
+                            <tree string="Allowed Analytic Accounts">
+                                <field name="dimension_id"/>
+                                <field name="name"/>
+                                <field name="code"/>
+                                <field name="partner_id"/>
+                                <field name="company_id"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="Chidren Analytic Accounts">
+                        <separator string="Children Analytic Accounts" colspan="4"/>
+                        <field name="child_ids" colspan="4" nolabel="1" readonly="1"/>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+
+        <record id="view_account_analytic_account_np_list" model="ir.ui.view">
+            <field name="name">account.analytic.account.np.list</field>
+            <field name="model">account.analytic.account</field>
+            <field name="inherit_id" ref="account.view_account_analytic_account_list"/>
+            <field eval="6" name="priority"/>
+            <field name="arch" type="xml">
+                    <field name="complete_name" position="before">
+                    <field name="dimension_id"/>
+                    </field>
+            </field>
+        </record>
+        
+        <record id="view_account_analytic_account_dimension_tree" model="ir.ui.view">
+            <field name="name">view.account.analytic.account.dimension.tree</field>
+            <field name="model">account.analytic.account</field>
+            <field name="priority">5</field>
+            <field name="inherit_id" ref="account.view_account_analytic_account_tree"/>
+            <field name="arch" type="xml">
+                <field name='name' position='before'>
+                    <field name="dimension_id"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_account_analytic_account_dimension_search" model="ir.ui.view">
+            <field name="name">account.analytic.account.dimension.search</field>
+            <field name="model">account.analytic.account</field>
+            <field name="priority">1</field>
+            <field name="inherit_id" ref="account.view_account_analytic_account_search"/>
+            <field name="arch" type="xml">
+                <field name="name" position="before">
+                    <field name="dimension_id" />
+                </field>
+                  <filter string="Status" domain="[]" context="{'group_by':'state'}" groups="base.group_no_one" position="after">
+                        <filter string="Analytical Dimension" context="{'group_by':'dimension_id'}"/>
+                  </filter>
+            </field>
+        </record>
+
+
+        <record id="view_account_analytic_line_form_ace" model="ir.ui.view">
+            <field name="name">ccount.analytic.line.form.ace</field>
+            <field name="model">account.analytic.line</field>
+            <field name="inherit_id" ref="account.view_account_analytic_line_form"/>
+            <field name="arch" type="xml">
+                <field name='journal_id' position='replace'>
+                    <field name='journal_id' required="0"/>
+                </field>
+                    <field name="date" position="before">
+                        <field name="period_id"/>
+                    </field>
+            </field>
+        </record>
+        <record id="view_account_analytic_line_tree_ace" model="ir.ui.view">
+            <field name="name">ccount.analytic.line.period.tree</field>
+            <field name="model">account.analytic.line</field>
+            <field name="inherit_id" ref="account.view_account_analytic_line_tree"/>
+            <field name="arch" type="xml">
+                    <field name="date" position="before">
+                        <field name="period_id"/>
+                    </field>
+                    <field name="ref" position="before">
+                        <field name="journal_entry_id"/>
+                    </field>
+		   <field name="account_id" position="before">
+			<field name="dimension_id"/>
+		   </field>
+            </field>
+        </record>
+
+        <record id="view_account_analytic_line_ref_filter" model="ir.ui.view">
+            <field name="name">account.analytic.line.ref.select</field>
+            <field name="model">account.analytic.line</field>
+            <field name="inherit_id" ref="account.view_account_analytic_line_filter"/>
+            <field name="arch" type="xml">
+                    <field name="date" position="after">
+                        <field name="ref"/>
+                        <field name="period_id"/>
+                        <field name="dimension_id"/>
+                        <field name="journal_entry_id"/>
+                    </field>
+		  <filter name="group_date" position="after">
+                        <filter string="Period" context="{'group_by':'period_id'}"/>
+<!--                       <filter string="Dimension" context="{'group_by':'dimension_id'}"/>-->
+                  </filter>
+            </field>
+        </record>
+
+        <record id="view_np_account_analytic_account_search" model="ir.ui.view">
+            <field name="name">account.analytic.account.np.search</field>
+            <field name="model">account.analytic.account</field>
+            <field name="arch" type="xml">
+                <search string="Analytic Account">
+                    <field name="name" filter_domain="['|', ('name','ilike',self), ('code','ilike',self)]" string="Analytic Account"/>
+                    <field name="date"/>
+                    <field name="partner_id" filter_domain="[('partner_id','child_of',self)]"/>
+                    <field name="manager_id"/>
+                    <field name="parent_id"/>
+                    <field name="user_id"/>
+                    <filter string="Open" domain="[('state','=','open')]" help="Current Accounts"/>
+                    <filter string="Pending" domain="[('state','=','pending')]" help="Pending Accounts"/>
+                    <filter name="dimension1" string="Dimension 1" domain="[('dimension_sequence','=',1)]" help="Dimension 1"/>
+                    <filter name="dimension2" string="Dimension 2" domain="[('dimension_sequence','=',2)]" help="Dimension 2"/>
+                    <filter name="dimension3" string="Dimension 3" domain="[('dimension_sequence','=',3)]" help="Dimension 3"/>
+                    <group expand="0" string="Group By...">
+                        <filter string="Associated Partner" domain="[]" context="{'group_by':'partner_id'}"/>
+                        <filter string="Type" domain="[]" context="{'group_by':'type'}"/>
+                        <filter string="Template" domain="[]" context="{'group_by':'template_id'}"/>
+                        <filter string="Analytical Dimension" name="dimension_id" context="{'group_by':'dimension_id'}"/>
+                        <filter string="Parent Account" name="parent"  domain="[]" context="{'group_by':'parent_id'}"/>
+                        <filter string="Status" domain="[]" context="{'group_by':'state'}" groups="base.group_no_one"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+       <record id="view_np_account_analytic_account_tree" model="ir.ui.view">
+            <field name="name">account.analytic.account.np.tree</field>
+            <field name="model">account.analytic.account</field>
+            <field name="field_parent">child_complete_ids</field>
+            <field name="arch" type="xml">
+                <tree colors="blue:state=='pending';grey:state in ('close','cancelled');blue:type=='view'" string="Analytic account" toolbar="1">
+                    <field name="name" invisible="1"/>
+                    <field name="complete_name"/>
+                    <field name="code"/>
+                    <field name="state" invisible="1"/>
+                    <field name="date" invisible="1"/>
+                    <field name="user_id" invisible="1"/>
+                    <field name="partner_id" invisible="1"/>
+                    <field name="parent_id" invisible="1"/>
+                    <field name="type"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="template_id" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+        <record id="action_account_analytic_account_np_open_form" model="ir.actions.act_window">
+            <field name="name">Analytic Accounts</field>
+            <field name="res_model">account.analytic.account</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_np_account_analytic_account_tree"/>
+            <field name="search_view_id" ref="view_np_account_analytic_account_search"/>
+            <field name="context">{'search_default_dimension_id':1, 'search_default_parent':1}</field>
+        </record>
+        <menuitem groups="analytic.group_analytic_accounting"
+            action="action_account_analytic_account_np_open_form"
+            id="account_analytic_account_np"
+            parent="account.menu_finance_entries"
+            sequence="66"/>
+
+       <record id="view_np_account_analytic_dimension_tree" model="ir.ui.view">
+            <field name="name">account.analytic.dimension.np.tree</field>
+            <field name="model">account.analytic.dimension</field>
+            <field name="arch" type="xml">
+                <tree string="Analytic Dimensions">
+                    <field name="name"/>
+                    <field name="sequence"/>
+                    <field name="company_id"/>
+                </tree>
+            </field>
+        </record>
+       <record id="view_np_account_analytic_dimension_form" model="ir.ui.view">
+            <field name="name">account.analytic.dimension.np.form</field>
+            <field name="model">account.analytic.dimension</field>
+            <field name="arch" type="xml">
+                <form string="Analytic Dimensions">
+                    <field name="name"/>
+                    <field name="sequence"/>
+                    <field name="company_id"/>
+                </form>
+            </field>
+        </record>
+        <record id="action_account_analytic_np_dimension_form" model="ir.actions.act_window">
+            <field name="name">Analytic Dimensions</field>
+            <field name="res_model">account.analytic.dimension</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem groups="analytic.group_analytic_accounting"
+            action="action_account_analytic_np_dimension_form"
+            id="account_analytic_dimension_np"
+            parent="account.menu_analytic_accounting"
+            sequence="69"/>
+
+    </data>
+</openerp>
