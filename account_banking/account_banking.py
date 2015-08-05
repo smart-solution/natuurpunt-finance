@@ -599,6 +599,7 @@ class res_partner_bank(orm.Model):
         '''
         Update existing iban accounts to comply to new regime
         '''
+        print "account.banking init"
         
         partner_bank_obj = self.pool.get('res.partner.bank')
         bank_ids = partner_bank_obj.search(
@@ -622,6 +623,8 @@ class res_partner_bank(orm.Model):
         Routine to correct IBAN values and deduce localized values when valid.
         Note: No check on validity IBAN/Country
         '''
+        print "account.banking _correct_IBAN"
+        
         iban = sepa.IBAN(acc_number)
         return (str(iban), iban.localized_BBAN)
 
@@ -629,11 +632,14 @@ class res_partner_bank(orm.Model):
         '''
         Create dual function IBAN account for SEPA countries
         '''
+        print "account.banking create", vals
+        
         if vals.get('state') == 'iban':
             iban = (vals.get('acc_number')
                     or vals.get('acc_number_domestic', False))
             vals['acc_number'], vals['acc_number_domestic'] = (
                 self._correct_IBAN(iban))
+            print vals
         return self._founder.create(self, cr, uid, vals, context)
 
     def write(self, cr, uid, ids, vals, context=None):
@@ -643,6 +649,8 @@ class res_partner_bank(orm.Model):
         Update the domestic account number when the IBAN is
         written, or clear the domestic number on regular account numbers.
         '''
+        print "account.banking write", vals
+        
         if ids and isinstance(ids, (int, long)):
             ids = [ids]
         for account in self.read(
@@ -745,6 +753,8 @@ class res_partner_bank(orm.Model):
         '''
         Check IBAN number
         '''
+        print "account.banking check_iban"
+        
         for bank_acc in self.browse(cr, uid, ids, context=context):
             if bank_acc.state == 'iban' and bank_acc.acc_number:
                 iban = sepa.IBAN(bank_acc.acc_number)
@@ -756,6 +766,8 @@ class res_partner_bank(orm.Model):
         '''
         Return the local bank account number aka BBAN from the IBAN.
         '''
+        print "account.banking get_bban_from_iban"
+        
         res = {}
         for record in self.browse(cr, uid, ids, context):
             if not record.state == 'iban':
@@ -771,6 +783,9 @@ class res_partner_bank(orm.Model):
     def onchange_acc_number(
         self, cr, uid, ids, acc_number, acc_number_domestic,
         state, partner_id, country_id, context=None):
+        
+        print "account.banking onchange_acc_number"
+        
         if state == 'iban':
             return self.onchange_iban(
                 cr, uid, ids, acc_number, acc_number_domestic,
@@ -793,6 +808,9 @@ class res_partner_bank(orm.Model):
         TODO: prevent unnecessary assignment of country_ids and
         browsing of the country
         '''
+        
+        print "account.banking onchange_domestic"
+        
         if not acc_number:
             return {}
 
@@ -900,6 +918,8 @@ class res_partner_bank(orm.Model):
             1. Extract BBAN as local account
             2. Auto complete bank
         '''
+        print "account.banking onchange_iban"
+        
         if not acc_number:
             return {}
 
