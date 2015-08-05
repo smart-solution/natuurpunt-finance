@@ -110,8 +110,9 @@ class partner_vat_intra(osv.osv_memory):
         if not company_vat:
             raise osv.except_osv(_('Insufficient Data!'),_('No VAT number associated with your company.'))
         company_vat = company_vat.replace(' ','').upper()
-        company_vat = company_vat[2:]
         issued_by = company_vat[:2]
+        company_vat = company_vat[2:]
+        print "NP ISSUED BY:",issued_by
 
         if len(wiz_data.period_code) != 6:
             raise osv.except_osv(_('Error!'), _('Period code is not valid.'))
