@@ -21,6 +21,7 @@
  
 from osv import osv, fields
 from tools.translate import _
+import time
 
 class res_partner(osv.osv):
 
@@ -287,6 +288,15 @@ class account_move(osv.osv):
             'context': context,
             'domain': [('object_id','in',object_id),('res_id','in',res_ids)]
         }
+
+    def copy(self, cr, uid, id, default=None, context=None):
+        """Set date and period"""
+        date = time.strftime('%Y-%m-%d')
+        default['date'] = date
+
+        period = self.pool.get('account.period').find(cr, uid, date, context=context)
+        default['period_id'] = period[0]
+        return super(account_move, self).copy(cr, uid, id, default=default, context=context)
 
 account_move()
 
