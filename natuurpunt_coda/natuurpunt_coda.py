@@ -1116,6 +1116,11 @@ class account_coda_import(osv.osv_memory):
                 else:
                     account_nbr = '' 
 
+                #If account is 000000 set type as general
+                acc = self.pool.get('account.account').browse(cr, uid, account)
+                if acc.code == '000000':
+                    transaction_type = 'general'
+
                 stat_line_id = stat_line_obj.create(cr, uid, {
                       'ref': ref,
                       'statement_id': stat_id,
