@@ -295,6 +295,8 @@ class IBAN(str):
 
         Incomplete: can only work with valid BBAN now.
         '''
+        print "iban create"
+        
         if BIC:
             if not bankcode:
                 bankcode = BIC[:4]
@@ -324,6 +326,7 @@ class IBAN(str):
         '''
         Check if the string + check digits deliver a valid checksum
         '''
+        print "iban valid"
         _buffer = self[4:] + self[:4]
         return self.countrycode in self.countries and \
                 int(base36_to_base10str(_buffer)) % 97 == 1
