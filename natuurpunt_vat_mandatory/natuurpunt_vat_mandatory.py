@@ -26,9 +26,8 @@ class res_partner(osv.osv):
 
     def onchange_vat(self, cr, uid, ids, vat, context=None):
         res = {}
-        print "change_vat"
         res['vat_subjected'] = False
-        if upper(vat[:2]) == "BE":
+        if vat[:2].upper() == "BE":
             res['vat_subjected'] = True
         return {'value':res}
 
