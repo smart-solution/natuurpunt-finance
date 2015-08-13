@@ -52,12 +52,12 @@
     <record id="view_partner_form" model="ir.ui.view">
         <field name="name">res.partner.vat.inherit</field>
         <field name="model">res.partner</field>
-        <field name="inherit_id" ref="base_vat.view_partner_form"/>
+        <field name="inherit_id" ref="natuurpunt_account.view_np_partner_form"/>
         <field name="arch" type="xml">
             <xpath expr="//div[@name='vat_info']" position="replace" version="7.0">
 				<div name="vat_info">
-	                <field name="vat" on_change="onchange_vat(vat)" class="oe_inline"/>
-	            	<button colspan="2" name="button_check_vat" string="Check Validity" type="object" icon="gtk-execute" class="oe_inline"/>
+	                <field name="vat" on_change="onchange_vat(vat)" string="VAT TEST" class="oe_inline"/>
+	            	<button colspan="2" name="button_check_vat" string="Check Validity Test" type="object" icon="gtk-execute" class="oe_inline"/>
             	</div>
             	<field name="vat_subjected" class="oe_inline"/>
             </xpath>
