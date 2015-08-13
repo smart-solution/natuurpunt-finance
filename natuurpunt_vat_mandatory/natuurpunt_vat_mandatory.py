@@ -21,4 +21,17 @@
 
 from openerp.osv import fields, osv
 
+class res_partner(osv.osv):
+    _inherit = 'res.partner'
 
+    def onchange_vat(self, cr, uid, ids, vat, context=None):
+        res = {}
+        print "change_vat"
+        res['vat_subjected'] = False
+        if upper(vat[:2]) == "BE":
+            res['vat_subjected'] = True
+        return {'value':res}
+
+res_partner()
+
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

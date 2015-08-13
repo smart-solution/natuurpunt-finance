@@ -20,19 +20,19 @@
 ##############################################################################
 
 {
-    'name': 'Natuurpunt Activa Aanpassingen',
+    'name': 'Natuurpunt VAT Aanpassingen',
     'version': '1.0',
     'category': 'Accounting',
     'description': """
     Set VAT code to mandatory in invoices
     """,
-    'author': 'Smart Solotution',
+    'author': 'Smart Solution',
     'website': 'http://www.smartsolution.be',
     'depends': ['base','account','base_vat','natuurpunt_membership'],
     'data': [
 	'natuurpunt_vat_mandatory_view.xml'
     ],
    'installable': True,
-    'application': True,
+   'application': True,
 }
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
