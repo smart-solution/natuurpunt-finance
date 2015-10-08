@@ -186,7 +186,7 @@
       <font color="white"> </font>
     </para>
 <!--    <blockTable colWidths="132.50,132.50,132.50,132.50" style="Table_Invoice_General_Header">-->
-    <blockTable colWidths="106,106,106,106,106" style="Table_Invoice_General_Header">
+    <blockTable colWidths="146,96,96,96,96" style="Table_Invoice_General_Header">
       <tr>
         <td>
           <para style="terp_tblheader_General_Centre"><b>Description</b></para>
@@ -207,7 +207,7 @@
       </tr>
     </blockTable>
 <!--    <blockTable colWidths="132.50,132.50,132.50,132.50" style="Table_General_Detail_Content">-->
-    <blockTable colWidths="106,106,106,106,106" style="Table_Invoice_General_Header">
+    <blockTable colWidths="146,96,96,96,96" style="Table_Invoice_General_Header">
       <tr>
         <td>
           <para style="terp_default_Centre_9">[[ o.name or ' ' ]]</para>
