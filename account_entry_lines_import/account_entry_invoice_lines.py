@@ -54,6 +54,10 @@ class account_move_lines_import_wizard(osv.TransientModel):
             # Find the company
             company = self.pool.get('res.users').browse(cr, uid, uid).company_id.id             
 
+# 422
+            if row[0] == "":
+                raise osv.except_osv(_('No name found !'), _('No name could be found for the line %s'%(str(reader.line_num))))
+# 422
             # Find the partner
             partner = False
             if row[2] != "":
