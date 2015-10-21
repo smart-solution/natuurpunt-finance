@@ -334,6 +334,41 @@ class account_coda_det2(osv.osv):
         'det3_ids': fields.one2many('account.coda.det3', 'det2_id', 'Item Informations', ondelete='cascade'),
                 }
     
+    def name_search(self, cr, uid, name, args=None, operator='ilike',
+                    context=None, limit=100):
+        if not args:
+            args = []
+        args = args[:]
+        ids = []
+        if name:
+            ids = self.search(cr, uid,
+                              [('t21_bank_ref', '=like', name + "%")] + args,
+                              limit=limit)
+            if not ids:
+                ids = self.search(cr, uid,
+                                  [('t21_struct_comm', '=like', name + "%")] + args,
+                                  limit=limit)
+            if not ids:
+                ids = self.search(cr, uid,
+                                  [('t21_code', '=like', name + "%")] + args,
+                                  limit=limit)
+            if not ids:
+                ids = self.search(cr, uid,
+                                  [('t21_free_comm', operator, name)] + args,
+                                  limit=limit)
+            if not ids:
+                ids = self.search(cr, uid,
+                                  [('t22_free_comm', operator, name)] + args,
+                                  limit=limit)
+            if not ids:
+                ids = self.search(cr, uid,
+                                  [('t22_ref_cust', operator, name)] + args,
+                                  limit=limit)
+        else:
+            ids = self.search(cr, uid, args, context=context, limit=limit)
+        
+        return self.name_get(cr, uid, ids, context=context) 
+       
 account_coda_det2()
 
 class account_coda_det3(osv.osv):
@@ -354,6 +389,36 @@ class account_coda_det3(osv.osv):
         't32_free_comm': fields.char('Communication', size=105),
         't33_free_comm': fields.char('Communication', size=90),
                 }
+
+    def name_search(self, cr, uid, name, args=None, operator='ilike',
+                    context=None, limit=100):
+        if not args:
+            args = []
+        args = args[:]
+        ids = []
+        if name:
+            ids = self.search(cr, uid,
+                              [('t31_code', '=like', name + "%")] + args,
+                              limit=limit)
+            if not ids:
+                ids = self.search(cr, uid,
+                                  [('t31_struct_comm', operator, name)] + args,
+                                  limit=limit)
+            if not ids:
+                ids = self.search(cr, uid,
+                                  [('t31_free_comm', operator, name)] + args,
+                                  limit=limit)
+            if not ids:
+                ids = self.search(cr, uid,
+                                  [('t32_free_comm', operator, name)] + args,
+                                  limit=limit)
+            if not ids:
+                ids = self.search(cr, uid,
+                                  [('t33_free_comm', operator, name)] + args,
+                                  limit=limit)
+        else:
+            ids = self.search(cr, uid, args, context=context, limit=limit)
+        return self.name_get(cr, uid, ids, context=context) 
     
 account_coda_det3()
 

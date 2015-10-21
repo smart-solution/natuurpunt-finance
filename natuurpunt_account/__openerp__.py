@@ -27,7 +27,7 @@
     "category" : "Generic Modules/Base",
     "description": """
 """,
-    "depends" : ["account_payment","hr","account_report_company","natuurpunt_followup"],
+    "depends" : ["account_payment","hr","account_report_company","natuurpunt_followup","partner_inactive",],
     "init_xml" : [
         ],
     "update_xml" : [
