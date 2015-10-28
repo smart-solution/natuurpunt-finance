@@ -27,7 +27,7 @@
     'category': 'Analytic Accounting',
     'description': """Multi analytical accounting concept.
     """,
-    'depends': ['product', 'sale', 'purchase', 'account_accountant', 'natuurpunt_account', 'base_vat', 'natuurpunt_activa', 'natuurpunt_purchase'],
+    'depends': ['product', 'sale', 'purchase', 'account_accountant', 'natuurpunt_account', 'base_vat', 'natuurpunt_activa', 'natuurpunt_purchase','l10n_be_coda',],
     'data': [
         'security/multi_analytic_dimension_security.xml',
         'analytic/wizard/analytic_dimention_wizard_view.xml',
