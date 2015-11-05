@@ -409,10 +409,6 @@
                 <field name="phone" position="replace">
 					<field name="phone" invisible="1"/>
 					<field name="vat"/>
-					<field name="customer"/>
-					<field name="supplier"/>
-					<field name="active"/>
-					<field name="active_partner_id"/>
                 </field>
             </field>
         </record>
