@@ -20,9 +20,62 @@
 ##############################################################################
 from openerp.osv import fields, osv
 from openerp.tools.translate import _
+import openerp.addons.decimal_precision as dp
 
 class account_analytic_account(osv.osv):
     _inherit = 'account.analytic.account'
+
+    def _np_debit_credit_bal_qtty(self, cr, uid, ids, fields, arg, context=None):
+        res = {}
+        if context is None:
+            context = {}
+        if ids and not(self.read(cr, uid, ids, ['active'])[0]['active']):
+            child_ids = tuple(self.search(cr, uid, [('parent_id', 'child_of', ids)],context={'active_test': False,}))
+        else:
+            child_ids = tuple(self.search(cr, uid, [('parent_id', 'child_of', ids)]))
+        for i in child_ids:
+            res[i] =  {}
+            for n in fields:
+                res[i][n] = 0.0
+
+        if not child_ids:
+            return res
+
+        where_date = ''
+        where_clause_args = [tuple(child_ids)]
+        if context.get('from_date', False):
+            where_date += " AND l.date >= %s"
+            where_clause_args  += [context['from_date']]
+        if context.get('to_date', False):
+            where_date += " AND l.date <= %s"
+            where_clause_args += [context['to_date']]
+        cr.execute("""
+              SELECT a.id,
+                     sum(
+                         CASE WHEN l.amount > 0
+                         THEN l.amount
+                         ELSE 0.0
+                         END
+                          ) as debit,
+                     sum(
+                         CASE WHEN l.amount < 0
+                         THEN -l.amount
+                         ELSE 0.0
+                         END
+                          ) as credit,
+                     COALESCE(SUM(l.amount),0) AS balance,
+                     COALESCE(SUM(l.unit_amount),0) AS quantity
+              FROM account_analytic_account a
+                  LEFT JOIN account_analytic_line l ON (a.id = l.account_id)
+              WHERE a.id IN %s
+              """ + where_date + """
+              GROUP BY a.id""", where_clause_args)
+        for row in cr.dictfetchall():
+            res[row['id']] = {}
+            for field in fields:
+                res[row['id']][field] = row[field]
+        return self._compute_level_tree(cr, uid, ids, child_ids, res, fields, context)
+
     _columns = {
         'dimension_id': fields.many2one('account.analytic.dimension', 'Analytical Dimension'),
         'allowed_account_ids': fields.many2many('account.analytic.account', 'account_analytic_account_allowed_rel', 'account_id', 'allowed_account_id', 'Allowed Analytic Accounts'),
@@ -33,6 +86,21 @@ class account_analytic_account(osv.osv):
         'default_dimension_3_id': fields.many2one('account.analytic.account', 'Default Analytic Account for Dimension 3'),
         'dimension_sequence': fields.related('dimension_id', 'sequence', type="integer", string="Dimension Sequence", store=True),
         'old_code': fields.char('Old Code', size=64),
+        'balance': fields.function(_np_debit_credit_bal_qtty, type='float',
+                                   string='Balance',
+                                   multi='debit_credit_bal_qtty',
+                                   digits_compute=dp.get_precision('Account')),
+        'debit': fields.function(_np_debit_credit_bal_qtty, type='float',
+                                 string='Debit',
+                                 multi='debit_credit_bal_qtty',
+                                 digits_compute=dp.get_precision('Account')),
+        'credit': fields.function(_np_debit_credit_bal_qtty, type='float',
+                                  string='Credit',
+                                  multi='debit_credit_bal_qtty',
+                                  digits_compute=dp.get_precision('Account')),
+        'quantity': fields.function(_np_debit_credit_bal_qtty,
+                                    type='float', string='Quantity',
+                                    multi='debit_credit_bal_qtty'),
     }
 
     _order = 'code'
