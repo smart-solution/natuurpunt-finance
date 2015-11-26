@@ -327,7 +327,7 @@ class account_invoice(osv.osv):
         gp_users = [x.id for x in dim_group.users]
         for mod_field in vals:
             # TODO fix reference
-            if uid in gp_users and mod_field not in ('invoice_line','dimension_user_id','reference'):
+            if uid in gp_users and mod_field not in ('invoice_line','dimension_user_id','reference','state'):
                 raise osv.except_osv(_('Error'),_("You can only modify the following: analytic assignment, number plate, employee as well as responsible (tab ‘Other info’)"))
 
         return res
