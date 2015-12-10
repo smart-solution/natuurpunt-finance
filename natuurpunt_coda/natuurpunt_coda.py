@@ -1126,6 +1126,7 @@ class account_coda_import(osv.osv_memory):
                             date = lines2.t21_date_booking,
                             context = context
                         )['value'])
+
                         line_drs = []
                         for line_dr in voucher_vals['line_dr_ids']:
                             line_drs.append((0, 0, line_dr))
@@ -1184,6 +1185,10 @@ class account_coda_import(osv.osv_memory):
                 #If account is 000000 set type as general
                 acc = self.pool.get('account.account').browse(cr, uid, account)
                 if acc.code == '000000':
+                    transaction_type = 'general'
+
+                journal = self.pool.get('account.journal').browse(cr, uid, journal_id)
+                if journal.membership_journal:
                     transaction_type = 'general'
 
                 stat_line_id = stat_line_obj.create(cr, uid, {
@@ -1361,5 +1366,17 @@ class account_move_line(osv.osv):
         'ref': fields.char('Reference', size=64),
                }
 account_move_line()
+
+
+class account_journal(osv.osv):
+
+    _inherit = 'account.journal'
+
+    _columns = {
+            'membership_journal': fields.boolean('Lidmaatschappen Journaal'),
+    }
+
+
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:# -*- coding: utf-8 -*-
 
