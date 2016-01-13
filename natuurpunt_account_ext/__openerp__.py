@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Smart Solution bvba
-#    Copyright (C) 2010-Today Smart Solution BVBA (<http://www.smartsolution.be>).
-#
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
 #    published by the Free Software Foundation, either version 3 of the
@@ -20,22 +17,18 @@
 ############################################################################## 
 
 {
-    "name" : "natuurpunt_account",
+    "name" : "Natuurpunt Account Extension",
     "version" : "1.0",
-    "author" : "Smart Solution (fabian.semal@smartsolution.be)",
+    "author" : "Fabian Semal",
     "website" : "www.smartsolution.be",
-    "category" : "Generic Modules/Base",
+    "category" : "accountancy",
     "description": """
+    Extend supplier - customer list view
 """,
-    "depends" : ["account_payment","hr","account_report_company","natuurpunt_followup",],
-    "init_xml" : [
-        ],
-    "update_xml" : [
-        'natuurpunt_account_view.xml',
-        'natuurpunt_account_report.xml',
-        'natuurpunt_account_data.xml',
-#        'security/ir.model.access.csv'
-        ],
+    "depends" : ["natuurpunt_account",],
+    "data" : ["natuurpunt_account_ext_view.xml",],
+    "init_xml" : [],
+    "update_xml" : [],
     "active": False,
     "installable": True
 }

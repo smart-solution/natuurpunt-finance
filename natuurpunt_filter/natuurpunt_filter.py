@@ -1,8 +1,8 @@
-# -*- coding: utf-8 -*-
+# -*- encoding: utf-8 -*-
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2012-Today Smart Solution BVBA
+#    Copyright (C) 2004-2009 Tiny SPRL (<http://tiny.be>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -19,27 +19,14 @@
 #
 ##############################################################################
 
-{
-    'name': 'Multi Analytical Account',
-    'version': '1.1',
-    'author': 'Smart Solution (fabian.semal@smartsolution.be)',
-    'website': 'www.acespritech.com',
-    'category': 'Analytic Accounting',
-    'description': """Multi analytical accounting concept.
-    """,
-    'depends': ['product', 'sale', 'purchase', 'account_accountant', 'natuurpunt_account', 'base_vat', 'natuurpunt_activa', 'natuurpunt_purchase','l10n_be_coda',],
-    'data': [
-        'security/multi_analytic_dimension_security.xml',
-        'analytic/wizard/analytic_dimention_wizard_view.xml',
-        'base/res_company_view.xml',
-        'account/account_view.xml',
-        'analytic/analytic_view.xml',
-        'sale/sale_view.xml',
-        'purchase/purchase_view.xml',
-#        'security/ir.model.access.csv',
+from openerp.osv import fields, osv
 
-    ],
-    'installable': True,
-    'auto_install': False
-}
+class account_invoice(osv.osv):
+    _inherit = 'account.invoice'
+
+    _columns = {
+        'partner_active': fields.related('partner_id', 'active', type='boolean', string="Partner Active", store=True),
+    }
+
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

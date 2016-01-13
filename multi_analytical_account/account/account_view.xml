@@ -262,10 +262,15 @@
         <record id="view_account_bank_statement_line_np_tree" model="ir.ui.view">
             <field name="name">account.bank.statement.line.np.tree</field>
             <field name="model">account.bank.statement.line</field>
-	    <field name="inherit_id" ref="l10n_be_coda.view_account_bank_statement_line_coda_tree"/>
+	    	<field name="inherit_id" ref="l10n_be_coda.view_account_bank_statement_line_coda_tree"/>
             <field name="arch" type="xml">
-                <field name="analytic_account_id" position="replace">
-		    <field name="analytic_account_id" invisible="1"/>
+<!-- 	            <xpath expr="//tree[@string='Statement lines']" position="attributes">
+	                <attribute name="create">0</attribute>
+	                <attribute name="delete">0</attribute>
+	                <attribute name="edit">0</attribute>
+	            </xpath>
+ -->                <field name="analytic_account_id" position="replace">
+		    		<field name="analytic_account_id" invisible="1"/>
                     <field name="analytic_dimension_1_id" context="{'statement_line_id':active_id,'account_id':account_id,'dimension':1,'dimension2':analytic_dimension_2_id,'dimension3':analytic_dimension_3_id, 'search_default_dimension1':1}" attrs="{'required':[('analytic_dimension_1_required','=',True)]}"/>
                     <field name="analytic_dimension_2_id" context="{'statement_line_id':active_id,'account_id':account_id,'dimension':2,'dimension1':analytic_dimension_1_id,'dimension3':analytic_dimension_3_id, 'search_default_dimension2':1}" attrs="{'required':[('analytic_dimension_2_required','=',True)]}"/>
                     <field name="analytic_dimension_3_id" context="{'statement_line_id':active_id,'account_id':account_id,'dimension':3,'dimension1':analytic_dimension_1_id,'dimension2':analytic_dimension_2_id, 'search_default_dimension3':1}" attrs="{'required':[('analytic_dimension_3_required','=',True)]}"/>
@@ -275,10 +280,6 @@
                     <field name="partner_mandatory" invisible="1"/>
                     <field name="employee_mandatory" invisible="1"/>
                     <field name="employee_id" attrs="{'required':[('employee_mandatory','=',True)]}" on_change="onchange_employee(employee_id)"/>
-                    <!--
-                    <field name="fleet_mandatory" invisible="1"/>
-                    <field name="fleet_id" attrs="{'required':[('fleet_mandatory','=',True)]}"/>
--->
 	        </field>
             </field>
         </record>
@@ -288,6 +289,11 @@
             <field name="model">account.bank.statement.line</field>
 	        <field name="inherit_id" ref="l10n_be_coda.view_bank_statement_line_coda_form"/>
             <field name="arch" type="xml">
+            	<xpath expr="//form[@string='CODA Statement Line']" position="attributes">
+	                <attribute name="create">0</attribute>
+	                <attribute name="delete">0</attribute>
+	                <attribute name="edit">0</attribute>
+	            </xpath>
                 <field name="sequence" position="after">
                   <newline/>
                   <group colspan="2" col="2">
@@ -300,10 +306,6 @@
                     <field name="partner_mandatory" invisible="1"/>
                     <field name="employee_mandatory" invisible="1"/>
                     <field name="employee_id" attrs="{'required':[('employee_mandatory','=',True)]}" on_change="onchange_employee(employee_id)"/>
-                    <!--
-                    <field name="fleet_mandatory" invisible="1"/>
-                    <field name="fleet_id" attrs="{'required':[('fleet_mandatory','=',True)]}"/>
--->
                   </group>
 	            </field>
             </field>
@@ -336,6 +338,75 @@
             </field>
         </record>
 
+        <record id="view_account_bank_statement_lines_tree" model="ir.ui.view">
+            <field name="name">view.account.bank.statement.lines.tree</field>
+            <field name="model">account.bank.statement.line</field>
+            <field name="priority">10</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom" string="Statement lines" create="0" edit="0" delete="0">
+                    <field name="sequence" readonly="1" invisible="1"/>
+                    <field name="statement_id" readonly="1" />
+                    <field name="date"/>
+                    <field name="name"/>
+                    <field name="ref"/>
+                    <field name="partner_id"/>
+                    <field name="type"/>
+                    <field name="account_id" options='{"no_open":True}' domain="[('type', '&lt;&gt;', 'view')]"/>
+		    		<field name="analytic_account_id" invisible="1"/>
+                    <field name="analytic_dimension_1_id" context="{'statement_line_id':active_id,'account_id':account_id,'dimension':1,'dimension2':analytic_dimension_2_id,'dimension3':analytic_dimension_3_id, 'search_default_dimension1':1}" attrs="{'required':[('analytic_dimension_1_required','=',True)]}"/>
+                    <field name="analytic_dimension_2_id" context="{'statement_line_id':active_id,'account_id':account_id,'dimension':2,'dimension1':analytic_dimension_1_id,'dimension3':analytic_dimension_3_id, 'search_default_dimension2':1}" attrs="{'required':[('analytic_dimension_2_required','=',True)]}"/>
+                    <field name="analytic_dimension_3_id" context="{'statement_line_id':active_id,'account_id':account_id,'dimension':3,'dimension1':analytic_dimension_1_id,'dimension2':analytic_dimension_2_id, 'search_default_dimension3':1}" attrs="{'required':[('analytic_dimension_3_required','=',True)]}"/>
+                    <field name="analytic_dimension_1_required" invisible="1"/>
+                    <field name="analytic_dimension_2_required" invisible="1"/>
+                    <field name="analytic_dimension_3_required" invisible="1"/>
+                    <field name="partner_mandatory" invisible="1"/>
+                    <field name="employee_mandatory" invisible="1"/>
+                    <field name="employee_id" attrs="{'required':[('employee_mandatory','=',True)]}"/>
+                    <field name="amount"/>
+                    <field name="note"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        
+		<record id="view_bank_statement_lines_filter" model="ir.ui.view">
+			<field name="name">bank.statement.lines.filter</field>
+			<field name="model">account.bank.statement.line</field>
+			<field name="arch" type="xml">
+			<search string="Search Bank Transactions">
+				<field name="name" filter_domain="['|', ('name','ilike',self), ('ref','ilike',self)]" string="Bank Transaction"/>
+				<filter name="debit" string="Debit" domain="[('amount','&gt;',0)]" icon="terp-folder-green" help="Debit Transactions."/>
+				<filter name="credit" string="Credit" domain="[('amount','&lt;',0)]" icon="terp-folder-orange" help="Credit Transactions."/>
+				<field name="statement_id"/>
+				<group expand="0" string="Extended Filters...">
+					<field name="account_id"/>
+					<field name="partner_id"/>
+					<field name="amount"/>
+					<field name="type"/>
+					<field name="note"/>
+				</group>
+				<newline/>
+				<group string="Group By..." expand="0">
+					<filter string="Partner" context="{'group_by':'partner_id'}" icon="terp-folder-green"/>
+					<filter string="Statement" context="{'group_by':'statement_id'}" icon="terp-folder-orange"/>
+					<filter string="Fin.Account" context="{'group_by':'account_id'}" icon="terp-folder-yellow"/>
+				</group>
+			</search>
+			</field>
+		</record>
+
+		<record id="action_account_bank_statement_lines" model="ir.actions.act_window">
+			<field name="name">Bank Statement Lines</field>
+			<field name="res_model">account.bank.statement.line</field>
+			<field name="view_type">tree</field>
+			<field name="view_mode">tree</field>
+			<field name="context">{'block_statement_line_delete' : 1}</field>
+			<field name="search_view_id" ref="view_bank_statement_lines_filter"/>
+			<field name="view_id" ref="view_account_bank_statement_lines_tree"/>
+		</record>
+
+        <menuitem name="Bank Statement Lines" parent="account.menu_finance_bank_and_cash" id="menu_account_bank_statement_lines" action="action_account_bank_statement_lines" sequence="8"/>
+ 
         <record id="account.view_account_move_line_filter" model="ir.ui.view">
             <field name="name">Journal Items</field>
             <field name="model">account.move.line</field>

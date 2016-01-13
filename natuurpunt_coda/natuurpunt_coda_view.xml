@@ -90,6 +90,18 @@
 <!--             </field> -->
 <!--         </record> -->
 
+        <record id="account_journal_form_view" model="ir.ui.view">
+            <field name="name">account.journal.view.form</field>
+            <field name="model">account.journal</field>
+            <field name="inherit_id" ref="account.view_account_journal_form"/>
+            <field name="arch" type="xml">
+                <field name='entry_posted' position='after'>
+                    <field name="membership_journal"/>
+                </field>
+            </field>
+        </record>
+
+
     </data>
 </openerp>
 

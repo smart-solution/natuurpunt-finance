@@ -300,6 +300,8 @@ class account_move(osv.osv):
     def copy(self, cr, uid, id, default=None, context=None):
         """Set date and period"""
         date = time.strftime('%Y-%m-%d')
+        if default is None:
+            default = {}
         default['date'] = date
 
         period = self.pool.get('account.period').find(cr, uid, date, context=context)

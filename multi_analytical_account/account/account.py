@@ -327,7 +327,7 @@ class account_invoice(osv.osv):
         gp_users = [x.id for x in dim_group.users]
         for mod_field in vals:
             # TODO fix reference
-            if uid in gp_users and mod_field not in ('invoice_line','dimension_user_id','reference'):
+            if uid in gp_users and mod_field not in ('invoice_line','dimension_user_id','reference','state'):
                 raise osv.except_osv(_('Error'),_("You can only modify the following: analytic assignment, number plate, employee as well as responsible (tab ‘Other info’)"))
 
         return res
@@ -673,7 +673,7 @@ class account_move(osv.osv):
 
                 for dim_id in dim_ids:
                     if dim_id not in allowed_accounts:
-                        raise osv.except_osv(_('Error'),_('A non-authorized analytic account is set for the line %s'%(line.name)))
+                        raise osv.except_osv(_('Error'),_('A non-authorized analytic account is set for the line %s (%s)'%(line.name, dim_id)))
 
 
                  

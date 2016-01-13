@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+    <record model="ir.ui.view" id="account_partner_tree_form">
+        <field name="name">account.partner.tree.form</field>
+        <field name="model">res.partner</field>
+            <field name="inherit_id" ref="natuurpunt_account.view_np_partner_tree"/>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <field name="ref" position="replace">
+                <field name="id"/>
+            </field>
+            <field name="name" position="after">
+                <field name="street"/>
+                <field name="zip"/>
+                <field name="city"/>
+            </field>
+            <field name="vat" position="after">
+                <field name="customer"/>
+                <field name="supplier"/>
+                <field name="active"/>
+                <field name="active_partner_id"/>
+            </field>
+        </field>
+    </record>
+
+    </data>
+</openerp>
+

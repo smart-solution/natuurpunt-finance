@@ -111,7 +111,7 @@ class partner_vat_intra(osv.osv_memory):
             raise osv.except_osv(_('Insufficient Data!'),_('No VAT number associated with your company.'))
         company_vat = company_vat.replace(' ','').upper()
         issued_by = company_vat[:2]
-        company_vat = company_vat[2:]
+#        company_vat = company_vat[2:]
 
         if len(wiz_data.period_code) != 6:
             raise osv.except_osv(_('Error!'), _('Period code is not valid.'))
@@ -227,7 +227,7 @@ class partner_vat_intra(osv.osv_memory):
         data_head = """<?xml version="1.0" encoding="ISO-8859-1"?>
 <ns2:IntraConsignment xmlns="http://www.minfin.fgov.be/InputCommon" xmlns:ns2="http://www.minfin.fgov.be/IntraConsignment" IntraListingsNbr="1">
     <ns2:Representative>
-        <RepresentativeID identificationType="NVAT" issuedBy="%(issued_by)s">%(company_vat)s</RepresentativeID>
+        <RepresentativeID identificationType="NVAT" issuedBy="%(issued_by)s">%(vatnum)s</RepresentativeID>
         <Name>%(company_name)s</Name>
         <Street>%(street)s</Street>
         <PostCode>%(post_code)s</PostCode>

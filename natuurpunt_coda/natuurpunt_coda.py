@@ -334,6 +334,41 @@ class account_coda_det2(osv.osv):
         'det3_ids': fields.one2many('account.coda.det3', 'det2_id', 'Item Informations', ondelete='cascade'),
                 }
     
+    def name_search(self, cr, uid, name, args=None, operator='ilike',
+                    context=None, limit=100):
+        if not args:
+            args = []
+        args = args[:]
+        ids = []
+        if name:
+            ids = self.search(cr, uid,
+                              [('t21_bank_ref', '=like', name + "%")] + args,
+                              limit=limit)
+            if not ids:
+                ids = self.search(cr, uid,
+                                  [('t21_struct_comm', '=like', name + "%")] + args,
+                                  limit=limit)
+            if not ids:
+                ids = self.search(cr, uid,
+                                  [('t21_code', '=like', name + "%")] + args,
+                                  limit=limit)
+            if not ids:
+                ids = self.search(cr, uid,
+                                  [('t21_free_comm', operator, name)] + args,
+                                  limit=limit)
+            if not ids:
+                ids = self.search(cr, uid,
+                                  [('t22_free_comm', operator, name)] + args,
+                                  limit=limit)
+            if not ids:
+                ids = self.search(cr, uid,
+                                  [('t22_ref_cust', operator, name)] + args,
+                                  limit=limit)
+        else:
+            ids = self.search(cr, uid, args, context=context, limit=limit)
+        
+        return self.name_get(cr, uid, ids, context=context) 
+       
 account_coda_det2()
 
 class account_coda_det3(osv.osv):
@@ -354,6 +389,36 @@ class account_coda_det3(osv.osv):
         't32_free_comm': fields.char('Communication', size=105),
         't33_free_comm': fields.char('Communication', size=90),
                 }
+
+    def name_search(self, cr, uid, name, args=None, operator='ilike',
+                    context=None, limit=100):
+        if not args:
+            args = []
+        args = args[:]
+        ids = []
+        if name:
+            ids = self.search(cr, uid,
+                              [('t31_code', '=like', name + "%")] + args,
+                              limit=limit)
+            if not ids:
+                ids = self.search(cr, uid,
+                                  [('t31_struct_comm', operator, name)] + args,
+                                  limit=limit)
+            if not ids:
+                ids = self.search(cr, uid,
+                                  [('t31_free_comm', operator, name)] + args,
+                                  limit=limit)
+            if not ids:
+                ids = self.search(cr, uid,
+                                  [('t32_free_comm', operator, name)] + args,
+                                  limit=limit)
+            if not ids:
+                ids = self.search(cr, uid,
+                                  [('t33_free_comm', operator, name)] + args,
+                                  limit=limit)
+        else:
+            ids = self.search(cr, uid, args, context=context, limit=limit)
+        return self.name_get(cr, uid, ids, context=context) 
     
 account_coda_det3()
 
@@ -1061,6 +1126,7 @@ class account_coda_import(osv.osv_memory):
                             date = lines2.t21_date_booking,
                             context = context
                         )['value'])
+
                         line_drs = []
                         for line_dr in voucher_vals['line_dr_ids']:
                             line_drs.append((0, 0, line_dr))
@@ -1119,6 +1185,10 @@ class account_coda_import(osv.osv_memory):
                 #If account is 000000 set type as general
                 acc = self.pool.get('account.account').browse(cr, uid, account)
                 if acc.code == '000000':
+                    transaction_type = 'general'
+
+                journal = self.pool.get('account.journal').browse(cr, uid, journal_id)
+                if journal.membership_journal:
                     transaction_type = 'general'
 
                 stat_line_id = stat_line_obj.create(cr, uid, {
@@ -1296,5 +1366,17 @@ class account_move_line(osv.osv):
         'ref': fields.char('Reference', size=64),
                }
 account_move_line()
+
+
+class account_journal(osv.osv):
+
+    _inherit = 'account.journal'
+
+    _columns = {
+            'membership_journal': fields.boolean('Lidmaatschappen Journaal'),
+    }
+
+
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:# -*- coding: utf-8 -*-
 

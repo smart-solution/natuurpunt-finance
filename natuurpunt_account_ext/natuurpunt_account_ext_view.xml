@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+    <record model="ir.ui.view" id="viaw_account_invoice_ext_tree">
+        <field name="name">view.account.invoice.ext.tree</field>
+        <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_tree"/>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <field name="amount_total" position="after">
+                <field name="amount_total_signed" sum="Total Signed Amount"/>
+            </field>
+        </field>
+    </record>
+
+    </data>
+</openerp>
+

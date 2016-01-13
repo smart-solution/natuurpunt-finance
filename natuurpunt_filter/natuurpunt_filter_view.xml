@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+        <record id="view_np_account_invoice_filter" model="ir.ui.view">
+            <field name="name">account.np.invoice.select</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+            <field name="arch" type="xml">
+                    <filter name="unpaid" position="after">
+                        <!--<filter name="partner_active" string="Actieve+inactieve partners" domain="['|',('partner_active','=',False),('partner_active','=',True)]" help="Actieve+inactive partners"/>-->
+                        <filter name="partner_active" string="Inactieve partners" domain="[('partner_active','=',False)]" help="Actieve+inactive partners"/>
+                    </filter>
+            </field>
+        </record>
+
+    </data>
+</openerp>
+

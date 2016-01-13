@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Smart Solution bvba
-#    Copyright (C) 2010-Today Smart Solution BVBA (<http://www.smartsolution.be>).
+#    OpenERP, Open Source Management Solution
+#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -17,25 +17,22 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-############################################################################## 
+##############################################################################
 
 {
-    "name" : "natuurpunt_account",
-    "version" : "1.0",
-    "author" : "Smart Solution (fabian.semal@smartsolution.be)",
-    "website" : "www.smartsolution.be",
-    "category" : "Generic Modules/Base",
-    "description": """
-""",
-    "depends" : ["account_payment","hr","account_report_company","natuurpunt_followup",],
-    "init_xml" : [
-        ],
-    "update_xml" : [
-        'natuurpunt_account_view.xml',
-        'natuurpunt_account_report.xml',
-        'natuurpunt_account_data.xml',
-#        'security/ir.model.access.csv'
-        ],
-    "active": False,
-    "installable": True
+    'name': 'Natuurpunt Filters',
+    'version': '1.0',
+    'category': 'Accounting',
+    'description': """
+    Set VAT code to mandatory in invoices
+    """,
+    'author': 'Smart Solution',
+    'website': 'http://www.smartsolution.be',
+    'depends': ['natuurpunt_account','natuurpunt_membership'],
+    'data': [
+	'natuurpunt_filter_view.xml'
+    ],
+   'installable': True,
+   'application': True,
 }
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

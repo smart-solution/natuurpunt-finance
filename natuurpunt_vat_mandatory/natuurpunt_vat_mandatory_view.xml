@@ -23,7 +23,8 @@
             <data>
 				<field name="partner_id" position="replace">
 	                  <field string="Supplier" name="partner_id"
-	                    on_change="onchange_partner_id(type,partner_id,date_invoice,payment_term, partner_bank_id,company_id)"/>
+	                    on_change="onchange_partner_id(type,partner_id,date_invoice,payment_term, partner_bank_id,company_id)"
+	                    context="{'search_default_alle_partners': 1}"/>
 				</field>
                 <field name="invoice_line_tax_id" position="attributes">
                     <attribute name="required">True</attribute>
@@ -40,6 +41,7 @@
 				<field name="partner_id" position="replace">
 	                 <field string="Customer" name="partner_id"
 	                      on_change="onchange_partner_id(type,partner_id,date_invoice,payment_term, partner_bank_id,company_id)"
+	                      context="{'search_default_alle_partners': 1}"
 	                      groups="base.group_user"/>
 				</field>
                 <field name="invoice_line_tax_id" position="attributes">
@@ -63,6 +65,19 @@
             </xpath>
         </field>
     </record>
+
+    <record id="view_np_partner_search" model="ir.ui.view">
+        <field name="name">view.np.partner.search.crm</field>
+        <field name="model">res.partner</field>
+        <field name="context">{{"search_default_alle_partners":1}</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+        	<filter string="Suppliers" position="after">
+        		<filter string="Alle" name="alle_partners" domain="['|', ['active', '=', True], ['active', '!=', True]]"/>
+        	</filter>
+        </field>
+    </record>
+
 
     </data>
 </openerp>
