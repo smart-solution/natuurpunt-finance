@@ -27,9 +27,9 @@ class res_partner(osv.osv):
 
     _inherit = 'res.partner'
 
-    _sql_constraints = [
-        ('vat_uniq', 'unique(vat)', 'Error! The VAT number already exists!'),
-    ]
+#    _sql_constraints = [
+#        ('vat_uniq', 'unique(vat)', 'Error! The VAT number already exists!'),
+#    ]
 
     def name_get(self, cr, uid, ids, context=None):
         if context is None:
