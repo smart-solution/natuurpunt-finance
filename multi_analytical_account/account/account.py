@@ -673,7 +673,7 @@ class account_move(osv.osv):
 
                 for dim_id in dim_ids:
                     if dim_id not in allowed_accounts:
-                        raise osv.except_osv(_('Error'),_('A non-authorized analytic account is set for the line %s'%(line.name)))
+                        raise osv.except_osv(_('Error'),_('A non-authorized analytic account is set for the line %s (%s)'%(line.name, dim_id)))
 
 
                  
