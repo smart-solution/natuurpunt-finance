@@ -126,10 +126,16 @@ class account_invoice(osv.osv):
         """ Fill the note with supplier invoice number"""
         if 'supplier_invoice_number' in vals and vals['supplier_invoice_number'] and ('reference' not in vals or not vals['reference']):
             vals['reference'] = vals['supplier_invoice_number']
+        if 'name' in vals and vals['name']:
+            vals['name'] = vals['name'].replace('/', ' /')
+            print "NAME:",vals['name']
         return super(account_invoice, self).create(cr, uid, vals, context=context)
 
     def write(self, cr, uid, ids, vals, context=None):
         """ Fill the note with supplier invoice number"""
+        if 'name' in vals and vals['name']:
+            vals['name'] = vals['name'].replace('/', ' /')
+            print "NAME:",vals['name']
         res = super(account_invoice, self).write(cr, uid, ids, vals, context=context)
         if 'supplier_invoice_number' in vals and vals['supplier_invoice_number']:
             # Slight improvement: only write once instead of per invoice
