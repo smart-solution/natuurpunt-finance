@@ -37,8 +37,12 @@ class account_move_lines_import_wizard(osv.TransientModel):
         """Import journal items from a file"""
         obj = self.browse(cr, uid, ids)[0]
 
+        move = self.pool.get('account.move').browse(cr, uid, context['active_id'])
 
-	#TODO: Replace by tempfile for Windows compatibility
+        # Find the company
+        company = self.pool.get('res.users').browse(cr, uid, uid).company_id.id
+
+        #TODO: Replace by tempfile for Windows compatibility
         fname = '/tmp/csv_temp_' + datetime.today().strftime('%Y%m%d%H%M%S') + '.csv'
         fp = open(fname,'w+')
         fp.write(base64.decodestring(obj.lines_file))
@@ -50,9 +54,6 @@ class account_move_lines_import_wizard(osv.TransientModel):
         for row in reader:
             if reader.line_num <= 1:
                 continue
-
-            # Find the company
-            company = self.pool.get('res.users').browse(cr, uid, uid).company_id.id             
 
 # 422
             if row[0] == "":
@@ -169,7 +170,6 @@ class account_move_lines_import_wizard(osv.TransientModel):
                     tax_amount = float(row[16])
 
             vals = {
-                'company_id': company,
                 'move_id': context['active_id'],
                 'name': row[0],
                 'ref': row[1],
@@ -191,13 +191,13 @@ class account_move_lines_import_wizard(osv.TransientModel):
             }
             entry_vals.append(vals)
 
-        print "ENTRYVALS:",entry_vals
+        print "ENTRYVALS:",vals
 
-        move = self.pool.get('account.move').browse(cr, uid, context['active_id'])
-
+        context['novalidate'] = True
+        journal_id = move.journal_id.id
         for line_vals in entry_vals:
-            line_id = self.pool.get('account.move.line').create(cr, uid, line_vals)
-            self.pool.get('account.move.line').natuurpunt_account_id_change(cr, uid, [line_id], line_vals['account_id'], line_vals['partner_id'], move.journal_id.id, context=context)
+            line_id = self.pool.get('account.move.line').create(cr, uid, line_vals, context=context)
+            self.pool.get('account.move.line').natuurpunt_account_id_change(cr, uid, [line_id], line_vals['account_id'], line_vals['partner_id'], journal_id, context=context)
 
         return True
 
