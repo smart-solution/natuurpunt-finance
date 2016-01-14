@@ -843,16 +843,16 @@ class account_move(osv.osv):
             'domain': [('move_id','in',ids)]
         }
 
-    def unlink(self, cr, uid, ids, context=None):
-        """Update the existing dimenson entries"""
-        if context is None:
-            context = {}
-        for move in self.browse(cr, uid, ids):
-            if move.name != '/' and 'allow_delete' not in context:
-                 raise osv.except_osv(_('Error'),_('You cannot delete a journal item with an assigned number'))
-        dims = self.pool.get('wizard.data').search(cr, uid, [('wiz_move_id','in',ids)])
-        self.pool.get('wizard.data').write(cr, uid, dims, {'move_id':False})
-        return super(account_move, self).unlink(cr, uid, ids, context=context)
+#    def unlink(self, cr, uid, ids, context=None):
+#        """Update the existing dimenson entries"""
+#        if context is None:
+#            context = {}
+#        for move in self.browse(cr, uid, ids):
+#            if move.name != '/' and 'allow_delete' not in context:
+#                 raise osv.except_osv(_('Error'),_('You cannot delete a journal item with an assigned number'))
+#        dims = self.pool.get('wizard.data').search(cr, uid, [('wiz_move_id','in',ids)])
+#        self.pool.get('wizard.data').write(cr, uid, dims, {'move_id':False})
+#        return super(account_move, self).unlink(cr, uid, ids, context=context)
 
     def create(self, cr, uid, vals, context=None):
         if context is None:
