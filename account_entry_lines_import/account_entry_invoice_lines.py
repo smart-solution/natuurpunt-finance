@@ -25,6 +25,22 @@ import csv
 import base64
 from tools.translate import _
 
+def lookahead(iterable):
+    """Pass through all values from the given iterable, augmented by the
+    information if there are more values to come after the current one
+    (True), or if it is the last value (False).
+    """
+    # Get an iterator and pull the first value.
+    it = iter(iterable)
+    last = next(it)
+    # Run the iterator to exhaustion (starting from the second value).
+    for val in it:
+        # Report the *previous* value (more to come).
+        yield last, True
+        last = val
+    # Report the last value.
+    yield last, False
+
 class account_move_lines_import_wizard(osv.TransientModel):
 
     _name = "account.move.lines.import.wizard"
@@ -193,9 +209,9 @@ class account_move_lines_import_wizard(osv.TransientModel):
 
         print "ENTRYVALS:",vals
 
-        context['novalidate'] = True
         journal_id = move.journal_id.id
-        for line_vals in entry_vals:
+        """loop entry_vals and validate at last entry"""
+        for line_vals, context['novalidate'] in lookahead(entry_vals):
             line_id = self.pool.get('account.move.line').create(cr, uid, line_vals, context=context)
             self.pool.get('account.move.line').natuurpunt_account_id_change(cr, uid, [line_id], line_vals['account_id'], line_vals['partner_id'], journal_id, context=context)
 
