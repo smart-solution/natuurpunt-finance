@@ -177,7 +177,7 @@ class partner_vat_intra(osv.osv_memory):
                             WHEN t.code = '48s46L' THEN '46L'
                             WHEN t.code = '48s46T' THEN '46T'
                        ELSE t.code END) AS intra_code,
-                      SUM(CASE WHEN t.code in ('48s44','48s46L','48s46T') THEN -l.tax_amount ELSE l.tax_amount END) AS amount
+                      SUM(CASE WHEN t.code in ('48','48s44','48s46L','48s46T') THEN -l.tax_amount ELSE l.tax_amount END) AS amount
                       FROM account_move_line l
                       LEFT JOIN account_tax_code t ON (l.tax_code_id = t.id)
                       LEFT JOIN res_partner p ON (l.partner_id = p.id)
