@@ -8,9 +8,11 @@
             <field name="inherit_id" ref="natuurpunt_account.view_np_partner_tree"/>
         <field name="type">form</field>
         <field name="arch" type="xml">
+            <!--
             <field name="ref" position="replace">
                 <field name="id"/>
             </field>
+            -->
             <field name="name" position="after">
                 <field name="street"/>
                 <field name="zip"/>
