@@ -14,6 +14,31 @@
         </field>
     </record>
 
+       <record id="view_payment_order_tree" model="ir.ui.view">
+            <field name="name">payment.order.tree</field>
+            <field name="model">payment.order</field>
+            <field eval="4" name="priority"/>
+            <field name="arch" type="xml">
+                <tree colors="blue:state == 'draft';gray:state in ('cancel','done');black:state == 'open'" string="Payment order">
+                    <field name="reference"/>
+                    <field name="mode"/>
+                    <field name="user_id"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="date_created"/>
+                    <field name="date_done"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        <record id="account_direct_debit.action_debit_order_tree" model="ir.actions.act_window">
+            <field name="name">Direct Debit Orders</field>
+            <field name="res_model">payment.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_payment_order_tree"/>
+        </record>
+
+
     </data>
 </openerp>
 
