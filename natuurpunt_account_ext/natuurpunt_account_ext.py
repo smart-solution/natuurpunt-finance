@@ -27,37 +27,30 @@ import openerp.addons.decimal_precision as dp
 class account_invoice(osv.osv):
 
     _inherit = 'account.invoice'
-    
 
-    def _signed_amount_total(self, cr, uid, ids, name, args, context=None):
-        res = {} 
+    def _amount_all(self, cr, uid, ids, name, args, context=None):
+        res = {}
         for invoice in self.browse(cr, uid, ids, context=context):
             res[invoice.id] = {
+                'amount_untaxed': 0.0,
+                'amount_tax': 0.0,
+                'amount_total': 0.0
                 'amount_total_signed': 0.0
             }
-
             if invoice.type in ['in_refund','out_refund']:
                 res[invoice.id]['amount_total_signed'] = -invoice.amount_total
             else:
                 res[invoice.id]['amount_total_signed'] = invoice.amount_total
-        print "RES:",res
+
+            for line in invoice.invoice_line:
+                res[invoice.id]['amount_untaxed'] += line.price_subtotal
+            for line in invoice.tax_line:
+                res[invoice.id]['amount_tax'] += line.amount
+            res[invoice.id]['amount_total'] = res[invoice.id]['amount_tax'] + res[invoice.id]['amount_untaxed']
         return res
 
-    def _get_invoice_line(self, cr, uid, ids, context=None):
-        result = {}
-        for line in self.pool.get('account.invoice.line').browse(cr, uid, ids, context=context):
-            result[line.invoice_id.id] = True
-        return result.keys()
-
-    def _get_invoice_tax(self, cr, uid, ids, context=None):
-        result = {}
-        for tax in self.pool.get('account.invoice.tax').browse(cr, uid, ids, context=context):
-            result[tax.invoice_id.id] = True
-        return result.keys()
-
-
     _columns = {
-        'amount_total_signed': fields.function(_signed_amount_total, digits_compute=dp.get_precision('Account'), string='Totaal (+/-)',
+        'amount_total_signed': fields.function(_amount_all, digits_compute=dp.get_precision('Account'), string='Totaal (+/-)',
             store={
                 'account.invoice': (lambda self, cr, uid, ids, c={}: ids, ['invoice_line'], 20),
                 'account.invoice.tax': (_get_invoice_tax, None, 20),
