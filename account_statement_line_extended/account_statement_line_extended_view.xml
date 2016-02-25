@@ -38,9 +38,9 @@
         <record id="multi_analytical_account.action_account_bank_statement_lines" model="ir.actions.act_window">
             <field name="name">Bank Statement Lines</field>
             <field name="res_model">account.bank.statement.line</field>
-            <field name="view_type">tree</field>
+            <field name="view_type">form</field>
             <field name="view_mode">tree</field>
-            <field name="view_id" ref="multi_analytical_account.view_bank_statement_line_standalone"/>
+            <field name="view_id" ref="view_bank_statement_line_standalone"/>
         </record>
 
     </data>
