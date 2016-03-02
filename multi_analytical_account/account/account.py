@@ -67,6 +67,7 @@ class account_invoice(osv.osv):
         result['date_invoice'] = datetime.now().strftime('%Y-%m-%d')
         period = self.pool.get('account.period').find(cr, uid)
         result['period_id'] = period and period[0]
+        result['user_id'] = uid
         return result
 
     def button_reset_taxes(self, cr, uid, ids, context=None):
