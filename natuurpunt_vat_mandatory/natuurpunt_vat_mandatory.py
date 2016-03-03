@@ -24,11 +24,16 @@ from openerp.osv import fields, osv
 class res_partner(osv.osv):
     _inherit = 'res.partner'
 
+    _columns = {
+        'company_registration_number': fields.char('company registration number', len=10),
+    }
+
     def onchange_vat(self, cr, uid, ids, vat, context=None):
         res = {}
         res['vat_subjected'] = False
-        if vat[:2].upper() == "BE":
+        if isinstance(vat, basestring) and vat[:2].upper() == "BE":
             res['vat_subjected'] = True
+            res['company_registration_number'] = vat[2:]
         return {'value':res}
 
 res_partner()
