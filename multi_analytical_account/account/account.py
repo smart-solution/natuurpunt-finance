@@ -1893,9 +1893,9 @@ class payment_order_create(osv.osv_memory):
         else:
             for line in line_obj.browse(cr, uid, line_ids):
                 inv_id = self.pool.get('account.invoice').search(cr, uid, [('move_id','=',line.move_id.id)]) 
-                # If the move doesnt come from an invoice add it
-                if not inv_id:
-                    dom_line_ids.append(line.id)
+#                # If the move doesnt come from an invoice add it
+#                if not inv_id:
+#                    dom_line_ids.append(line.id)
                 if inv_id:
                     # If the invoice is approved
                     inv = self.pool.get('account.invoice').browse(cr, uid, inv_id[0])
