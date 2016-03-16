@@ -58,10 +58,11 @@
         <field name="arch" type="xml">
             <xpath expr="//div[@name='vat_info']" position="replace" version="7.0">
 				<div name="vat_info">
-	                <field name="vat" on_change="onchange_vat(vat)" string="VAT TEST" class="oe_inline"/>
+	                <field name="vat" on_change="onchange_vat(vat)" string="VAT" class="oe_inline"/>
 	            	<button colspan="2" name="button_check_vat" string="Check Validity Test" type="object" icon="gtk-execute" class="oe_inline"/>
             	</div>
             	<field name="vat_subjected" class="oe_inline"/>
+				<field name="company_registration_number" string="Company registration number" on_change="onchange_vat(vat)"/>
             </xpath>
         </field>
     </record>

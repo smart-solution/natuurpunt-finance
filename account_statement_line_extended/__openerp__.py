@@ -11,7 +11,7 @@
     "category" : "Generic Modules/Base",
     "description": """
 """,
-    "depends" : ["base","account","l10n_be_coda"],
+    "depends" : ["base","account","l10n_be_coda","multi_analytical_account"],
     "update_xml" : [
         'account_statement_line_extended_view.xml',
         ],
