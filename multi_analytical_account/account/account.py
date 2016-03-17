@@ -55,6 +55,7 @@ class account_invoice(osv.osv):
     } 
 
     def copy(self, cr, uid, id, default=None, context=None):
+        default['user_id'] = uid
         res = super(account_invoice, self).copy(cr, uid, id, default=default, context=context)
         self.button_reset_taxes(cr, uid, [res], context=context)
         return res
