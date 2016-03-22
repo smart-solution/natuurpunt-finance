@@ -175,7 +175,7 @@ class account_invoice(osv.osv):
         if context is None:
             context = {}
         account_move_obj = self.pool.get('account.move')
-        invoices = self.read(cr, uid, ids, ['move_id', 'payment_ids'])
+        invoices = [self.read(cr, uid, ids, ['move_id', 'payment_ids'])]
         move_ids = [] # ones that we will need to remove
         for i in invoices:
             if i['move_id']:
