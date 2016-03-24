@@ -835,3 +835,8 @@ msgstr "Verantw aanvraag"
 msgid "You can only modify the following: analytic assignment, number plate, employee as well as responsible (tab ‘Other info’)"
 msgstr "U kan enkel volgende veranderen: analytische toewijzing, nummerplaat, werknemer evenals verantw. voor analytische toewijzing"
 
+#. module: multi_analytical_account
+#: model:ir.ui.menu,name:multi_analytical_account.menu_account_bank_statement_lines
+msgid "Bank Statement Lines"
+msgstr "Rekeninguittreksel Lijnen"
+
