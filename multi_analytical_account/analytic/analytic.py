@@ -288,8 +288,14 @@ class account_analytic_account(osv.osv):
             code = False,
             line_ids = False,
             name = _("%s (copy)") % (analytic['name']))
-        return super(account_analytic_account, self).copy(cr, uid, id, default, context=context)
+        res =  super(account_analytic_account, self).copy(cr, uid, id, default, context=context)
 
+        # Insure that the allowed dimentions are correct
+        context['no_loop_write'] = True
+        for allowacc in analytic.allowed_account_ids:
+            self.write(cr, uid, [allowacc.id], {'allowed_account_ids':[(4,res)]}, context=context)
+
+        return res
 
 account_analytic_account()
 
