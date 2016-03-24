@@ -80,4 +80,38 @@ class account_invoice(osv.osv):
 
 account_invoice()
 
+class payment_order(osv.osv):
+
+    _inherit = 'payment.order'
+
+    def _default_mode(self, cr, uid, context=None):
+        modes = self.pool.get('payment.mode').search(cr, uid, [], context=context)
+        mode = False
+        if len(modes) == 1:
+            mode= modes[0]
+
+        return mode
+
+    def default_get(self, cr, uid, fields, context=None):
+        """Check for required dimension"""
+        if context is None:
+            context = {}
+        result = super(payment_order, self).default_get(cr, uid, fields, context=context)
+
+        if result['payment_order_type'] == 'payment':
+            result['mode'] = self._default_mode(cr, uid, context=context)
+
+        return result
+
+
+class res_partner_bank(osv.osv):
+
+    _inherit = 'res.partner.bank'
+
+    _defaults = {
+        'state': 'iban',
+        'sequence': 1,
+    }
+
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
