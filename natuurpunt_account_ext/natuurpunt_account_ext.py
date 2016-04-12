@@ -85,7 +85,7 @@ class payment_order(osv.osv):
     _inherit = 'payment.order'
 
     def _default_mode(self, cr, uid, context=None):
-        modes = self.pool.get('payment.mode').search(cr, uid, [], context=context)
+        modes = self.pool.get('payment.mode').search(cr, uid, [('type','=',4)], context=context)
         mode = False
         if len(modes) == 1:
             mode= modes[0]
