@@ -9,7 +9,7 @@
             <field name="arch" type="xml">
                     <filter name="unpaid" position="after">
                         <!--<filter name="partner_active" string="Actieve+inactieve partners" domain="['|',('partner_active','=',False),('partner_active','=',True)]" help="Actieve+inactive partners"/>-->
-                        <filter name="partner_active" string="Inactieve partners" domain="[('partner_active','=',False)]" help="Actieve+inactive partners"/>
+                        <filter name="partner_active" string="Inactieve partners" domain="[('partner_active','=',False)]" help="Inactive partners"/>
                     </filter>
             </field>
         </record>
