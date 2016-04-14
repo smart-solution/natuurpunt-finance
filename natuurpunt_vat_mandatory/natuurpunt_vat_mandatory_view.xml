@@ -74,7 +74,7 @@
         <field name="inherit_id" ref="base.view_res_partner_filter"/>
         <field name="arch" type="xml">
         	<filter string="Suppliers" position="after">
-        		<filter string="Alle" name="alle_partners" domain="['|', ['active', '=', True], ['active', '!=', True]]"/>
+                <filter string="actief+inactief" name="alle_partners" domain="['|', ['active', '=', True], ['active', '!=', True]]"/>
         	</filter>
         </field>
     </record>
