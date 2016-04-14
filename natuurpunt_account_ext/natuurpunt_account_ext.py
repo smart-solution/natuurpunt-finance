@@ -77,11 +77,22 @@ class account_invoice(osv.osv):
             multi='all'),
     }
 
+    def create(self, cr, uid, vals, context=None):
+        """Do not allow to create an invoice for an unactive partner"""
+        if 'partner_id' in vals and vals['partner_id']:
+            partner = self.pool.get('res.partner').browse(cr, uid, vals['partner_id'])
+            print "ACTIVE:",partner.active
+            if not partner.active:
+                raise osv.except_osv(_('Error!'), _('You cannot create an invoice for an unactive partner.'))
+    
+        return super(account_invoice, self).create(cr, uid, vals, context=context)
+
     def write(self, cr, uid, ids, vals, context=None):
-        """Do not allow to validate an invoice for an unactive partner"""
-        for inv in self.browse(cr, uid, ids):
-            if not inv.partner_id.active:
-                raise osv.except_osv(_('Error!'), _('You cannot make an invoice for an unactive partner.'))
+        """Do not allow to create an invoice for an unactive partner"""
+        if 'partner_id' in vals and vals['partner_id']:
+            partner = self.pool.get('res.partner').browse(cr, uid, vals['partner_id'])
+            if not partner.active:
+                raise osv.except_osv(_('Error!'), _('You cannot create an invoice for an unactive partner.'))
     
         return super(account_invoice, self).write(cr, uid, ids, vals, context=context)
 
