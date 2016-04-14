@@ -81,7 +81,7 @@ class account_invoice(osv.osv):
         """Do not allow to validate an invoice for an unactive partner"""
         for inv in self.browse(cr, uid, ids):
             if not inv.partner_id.active:
-                raise osv.except_osv(_('Error!'), _('You cannot validate an invoice for an unactive partner.'))
+                raise osv.except_osv(_('Error!'), _('You cannot make an invoice for an unactive partner.'))
     
         return super(self, account_invoice).write(cr, uid, ids, vals, context=context)
 
