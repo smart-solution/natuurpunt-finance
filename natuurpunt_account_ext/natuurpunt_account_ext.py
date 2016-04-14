@@ -83,7 +83,7 @@ class account_invoice(osv.osv):
             if not inv.partner_id.active:
                 raise osv.except_osv(_('Error!'), _('You cannot make an invoice for an unactive partner.'))
     
-        return super(self, account_invoice).write(cr, uid, ids, vals, context=context)
+        return super(account_invoice, self).write(cr, uid, ids, vals, context=context)
 
 account_invoice()
 
