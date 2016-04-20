@@ -19,6 +19,6 @@ msgstr ""
 #. module: natuurpunt_account_ext
 #: code:addons/natuurpunt_account_ext/natuurpunt_account_ext.py:84
 #, python-format
-msgid "You cannot validate an invoice for an unactive partner."
-msgstr "Factuur met inactieve partner kan niet gevalideerd worden."
+msgid "You caanot create an invoice for an unactive partner."
+msgstr "Factuur met inactieve partner kan niet aangemaakt worden."
 
