@@ -75,9 +75,61 @@ class account_invoice(osv.osv):
                 'account.invoice.line': (_get_invoice_line, ['price_unit','invoice_line_tax_id','quantity','discount','invoice_id'], 20),
             },
             multi='all'),
-
     }
 
+    def create(self, cr, uid, vals, context=None):
+        """Do not allow to create an invoice for an unactive partner"""
+        if 'partner_id' in vals and vals['partner_id']:
+            partner = self.pool.get('res.partner').browse(cr, uid, vals['partner_id'])
+            print "ACTIVE:",partner.active
+            if not partner.active:
+                raise osv.except_osv(_('Error!'), _('You cannot create an invoice for an unactive partner.'))
+    
+        return super(account_invoice, self).create(cr, uid, vals, context=context)
+
+    def write(self, cr, uid, ids, vals, context=None):
+        """Do not allow to create an invoice for an unactive partner"""
+        if 'partner_id' in vals and vals['partner_id']:
+            partner = self.pool.get('res.partner').browse(cr, uid, vals['partner_id'])
+            if not partner.active:
+                raise osv.except_osv(_('Error!'), _('You cannot create an invoice for an unactive partner.'))
+    
+        return super(account_invoice, self).write(cr, uid, ids, vals, context=context)
+
 account_invoice()
+
+class payment_order(osv.osv):
+
+    _inherit = 'payment.order'
+
+    def _default_mode(self, cr, uid, context=None):
+        modes = self.pool.get('payment.mode').search(cr, uid, [('type','=',4)], context=context)
+        mode = False
+        if len(modes) == 1:
+            mode= modes[0]
+
+        return mode
+
+    def default_get(self, cr, uid, fields, context=None):
+        """Check for required dimension"""
+        if context is None:
+            context = {}
+        result = super(payment_order, self).default_get(cr, uid, fields, context=context)
+
+        if result['payment_order_type'] == 'payment':
+            result['mode'] = self._default_mode(cr, uid, context=context)
+
+        return result
+
+
+class res_partner_bank(osv.osv):
+
+    _inherit = 'res.partner.bank'
+
+    _defaults = {
+        'state': 'iban',
+        'sequence': 1,
+    }
+
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

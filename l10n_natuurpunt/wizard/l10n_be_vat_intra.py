@@ -197,7 +197,7 @@ class partner_vat_intra(osv.osv_memory):
             amt = row['amount'] or 0.0
             amount_sum += amt
 
-            intra_code = row['intra_code'] == '44' and 'S' or row['intra_code'] == '46' and 'L' or (row['intra_code'] == '46L' and 'L' or (row['intra_code'] == '46T' and 'T' or ''))
+            intra_code = row['intra_code'] == '44' and 'S' or row['intra_code'] == '46' and 'L' or row['intra_code'] == '48' and 'L' or (row['intra_code'] == '46L' and 'L' or (row['intra_code'] == '46T' and 'T' or ''))
 
             xmldict['clientlist'].append({
                                         'partner_name': row['partner_name'],
