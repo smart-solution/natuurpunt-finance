@@ -116,7 +116,7 @@ class payment_order(osv.osv):
             context = {}
         result = super(payment_order, self).default_get(cr, uid, fields, context=context)
 
-        if result['payment_order_type'] == 'payment':
+        if 'payment_order_type' in result and result['payment_order_type'] == 'payment':
             result['mode'] = self._default_mode(cr, uid, context=context)
 
         return result
