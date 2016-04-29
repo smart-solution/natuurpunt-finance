@@ -24,7 +24,7 @@ from tools.translate import _
 import time
 
 class res_partner(osv.osv):
-"""comm"""
+
     _inherit = 'res.partner'
 
 #    _sql_constraints = [
