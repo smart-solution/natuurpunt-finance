@@ -236,7 +236,7 @@ class account_invoice(osv.osv):
 
     def _prepare_refund(self, cr, uid, invoice, date=None, period_id=None, description=None, journal_id=None, context=None):
         invoice_data = super(account_invoice, self)._prepare_refund(cr, uid, invoice, date=date, period_id=period_id, description=description, journal_id=journal_id, context=context)
-        invoice_data['supplier_invoice_number'] = invoice.supplier_invoice_number or False
+        invoice_data['supplier_invoice_number'] = invoice.supplier_invoice_number or "/"
         return invoice_data
 
 account_invoice()
