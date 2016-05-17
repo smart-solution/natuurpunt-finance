@@ -44,20 +44,24 @@
         <field name="inherit_id" ref="base.view_partner_bank_form"/>
         <field name="type">form</field>
         <field name="arch" type="xml">
+            <field name="acc_number" position="after">
+                <field name="organisation_type_id"/>
+            </field>
             <field name="owner_name" position="attributes">
                 <attribute name="required">True</attribute>
             </field>
-            <field name="street" position="attributes">
-                <attribute name="required">True</attribute>
+
+            <field name="street" position="replace">
+                <field name="street" attrs="{'required': [('organisation_type_id','=',False)]}"/>
             </field>
-            <field name="zip" position="attributes">
-                <attribute name="required">True</attribute>
+            <field name="zip" position="replace">
+                <field name="zip" attrs="{'required': [('organisation_type_id','=',False)]}"/>
             </field>
-            <field name="city" position="attributes">
-                <attribute name="required">True</attribute>
+            <field name="city" position="replace">
+                <field name="city" attrs="{'required': [('organisation_type_id','=',False)]}"/>
             </field>
-            <field name="country_id" position="attributes">
-                <attribute name="required">True</attribute>
+            <field name="country_id" position="replace">
+                <field name="country_id" attrs="{'required': [('organisation_type_id','=',False)]}"/>
             </field>
             <field name="bank" position="attributes">
                 <attribute name="required">True</attribute>

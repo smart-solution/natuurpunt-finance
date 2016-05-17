@@ -126,6 +126,10 @@ class res_partner_bank(osv.osv):
 
     _inherit = 'res.partner.bank'
 
+    _columns = {
+            'organisation_type_id': fields.related('partner_id', 'organisation_type_id',  type='many2one', relation='res.organisation.type', string='Organisation Type', readonly=False),
+    }
+
     _defaults = {
         'state': 'iban',
         'sequence': 1,
