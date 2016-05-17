@@ -45,7 +45,7 @@
         <field name="type">form</field>
         <field name="arch" type="xml">
             <field name="acc_number" position="after">
-                <field name="organisation_type_id"/>
+                <field name="organisation_type_id" invisible="1"/>
             </field>
             <field name="owner_name" position="attributes">
                 <attribute name="required">True</attribute>
