@@ -1024,6 +1024,27 @@ class account_move_line(osv.osv):
             data['analytic_dimension_3_id'] = line.analytic_dimension_3_id.id
             return super(account_move_line, self).create(cr, uid, data, context=context)
 
+        # automatic setting required event_invoice dimension
+        inv = context.get('invoice', False)
+        if inv and inv.event_invoice:
+            product_obj = self.pool.get('product.product')
+            event_product_id = product_obj.search(cr, uid, [('event_product', '=', True)])
+            assert(len(event_product_id) == 1)    
+            product = self.pool.get('product.product').read(cr, uid, event_product_id, 
+               ['analytic_dimension_1_id',
+                'analytic_dimension_2_id',
+                'analytic_dimension_3_id'], 
+                context=context)
+            if product:
+               data['analytic_dimension_1_id'] = product[0].get('analytic_dimension_1_id',False)[0] if product[0].get('analytic_dimension_1_id',False) else False
+               data['analytic_dimension_2_id'] = product[0].get('analytic_dimension_2_id',False)[0] if product[0].get('analytic_dimension_2_id',False) else False
+               data['analytic_dimension_3_id'] = product[0].get('analytic_dimension_3_id',False)[0] if product[0].get('analytic_dimension_3_id',False) else False
+            else:
+               data['analytic_dimension_1_id'] = False
+               data['analytic_dimension_2_id'] = False
+               data['analytic_dimension_3_id'] = False
+            return super(account_move_line, self).create(cr, uid, data, context=context)
+
         result = super(account_move_line, self).create(cr, uid, data, context=context)
 
         line = self.browse(cr, uid, result)
