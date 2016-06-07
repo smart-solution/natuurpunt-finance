@@ -133,7 +133,7 @@ class res_partner_bank(osv.osv):
     _defaults = {
         'state': 'iban',
         'sequence': 1,
-        'organisation_type_id': lambda self, cr, uid, c: self.pool.get('res.partner').browse(cr, uid, c['default_partner_id'], c).organisation_type_id.id,
+        'organisation_type_id': lambda self, cr, uid, c: self.pool.get('res.partner').browse(cr, uid, c['default_partner_id'], c).organisation_type_id.id if 'default_partner_id' in c and c['default_partner_id'] else False,
     }
 
 
