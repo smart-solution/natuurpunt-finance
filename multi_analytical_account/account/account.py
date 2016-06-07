@@ -183,7 +183,7 @@ class account_invoice(osv.osv):
                 for line in invoice.move_id.line_id:
                     if line.date_maturity:
                         update_ids.append(line.id)
-                self.pool.get('account.move.line').write(cr, uid, update_ids, {'date_maturity':invoice.date_due})
+                self.pool.get('account.move.line').write(cr, uid, update_ids, {'date_maturity':invoice.date_due}, check=False, context=context)
 
 
         # Restarting the for-loop
@@ -611,6 +611,8 @@ class account_invoice_line(osv.osv):
             if employee.analytic_account_id:
                 result['value']['analytic_dimension_1_id'] = employee.analytic_account_id.id
         return result
+
+
 
 account_invoice_line()
 
