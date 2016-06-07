@@ -228,10 +228,9 @@ class account_analytic_account(osv.osv):
 
     def create(self, cr, uid, vals, context=None):
         """Doesn't allow 2 acccounts with same code for the same company"""
-        print 'VALS:',vals
+        user = self.pool.get('res.users').browse(cr, uid, uid)
         if 'code' in vals and vals['code']:
-            acc_ids = self.search(cr, uid, [('code','=',vals['code']),('company_id','=',vals['company_id']),'|',('active','=',True),('active','=',False)])
-            print "ACCIDS:",acc_ids
+            acc_ids = self.search(cr, uid, [('code','=',vals['code']),('company_id','=',user.company_id.id),'|',('active','=',True),('active','=',False)])
             if acc_ids:
                 raise osv.except_osv(_('Error!'), _('An analytic account already exist for that reference in the same company'))
 
