@@ -183,7 +183,7 @@ class account_invoice(osv.osv):
                 for line in invoice.move_id.line_id:
                     if line.date_maturity:
                         update_ids.append(line.id)
-                self.pool.get('account.move.line').write(cr, uid, update_ids, {'date_maturity':invoice.date_due}, check=False, context=context)
+                self.pool.get('account.move.line').write(cr, uid, update_ids, {'date_maturity':invoice.date_due}, check=False, update_check=False, context=context)
 
 
         # Restarting the for-loop
@@ -1077,7 +1077,7 @@ class account_move_line(osv.osv):
             if line.period_id.fiscalyear_id.analytic_state == "closed" and \
                 ('analytic_dimension_1_id' in vals or 'analytic_dimension_2_id' in vals or 'analytic_dimensiin_3_id' in vals):
                     raise osv.except_osv(_('Error'),_("You don't have the right to modify a posted journal item for an analytically closed fiscal year"))
-            if line.move_id.state != 'draft' and not line.move_id.modified:
+            if update_check and line.move_id.state != 'draft' and not line.move_id.modified:
                 self.pool.get('account.move').write(cr, uid, [line.move_id.id], {'modified':True})
         
 
