@@ -1,0 +1,5 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+access_natuurpunt_account_pm_user_detailline,Natuurpunt Account Project Manager Detailline,account_budget_detailline.model_account_budget_detailline,project.group_project_manager,1,1,1,1
+access_natuurpunt_account_pm_user_budget,Natuurpunt Account Project Manager Budget,account_budget.model_crossovered_budget,project.group_project_manager,1,1,1,1
+access_natuurpunt_account_pm_user_budget_post,Natuurpunt Account Project Manager Budget Post,account_budget.model_account_budget_post,project.group_project_manager,1,1,1,1
+access_natuurpunt_account_pm_user_budget_type,Natuurpunt Account Project Manager Budget Type,natuurpunt_budget.model_account_budget_type,project.group_project_manager,1,1,1,1
