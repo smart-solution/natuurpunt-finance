@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<openerp>
+<data>
+
+    <!-- Top menu item -->
+    <menuitem name="Project Budget"
+		id="natuurpunt_account_project_manager.menu_account_pm"
+	        groups="project.group_project_manager"
+	        sequence="100"/>
+
+    <record model="ir.actions.act_window" id="action_all_account_budget_detailline">
+        <field name="name">All Budget Detail lines</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">account.budget.detailline</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+	<field name="view_id" ref="account_budget_detailline.view_account_budget_detailline_tree"/>
+    </record> 
+
+    <record model="ir.actions.act_window" id="action_account_budget_detailline">
+        <field name="name">Budget Detail lines</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">account.budget.detailline</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('responsible_id','=',uid)]</field>
+	<field name="view_id" ref="account_budget_detailline.view_account_budget_detailline_tree"/>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_budget_detailline_import">
+        <field name="name">Import Budget Detail Lines</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">wizard.account.budget.lines.import</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field> 
+	<field name="view_id" ref="account_budget_detailline.view_account_budget_detailline_tree"/>
+    </record>
+    
+    <record model="ir.actions.act_window" id="act_crossovered_budget_view">
+        <field name="name">Budgets</field>
+        <field name="res_model">crossovered.budget</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="account_budget.crossovered_budget_view_tree"/>
+        <field name="search_view_id" ref="account_budget.view_crossovered_budget_search"/>
+        <field name="help" type="html">
+           <p class="oe_view_nocontent_create">
+             Click to create a new budget.              
+           </p><p>
+             A budget is a forecast of your company's income and/or expenses
+             expected for a period in the future. A budget is defined on some
+             financial accounts and/or analytic accounts (that may represent
+             projects, departments, categories of products, etc.)
+           </p><p>
+             By keeping track of where your money goes, you may be less
+             likely to overspend, and more likely to meet your financial
+             goals. Forecast a budget by detailing the expected revenue per
+             analytic account and monitor its evolution based on the actuals
+             realised during that period.
+           </p>
+         </field>
+
+     </record>
+
+     <menuitem name="Budgets" parent="natuurpunt_account_project_manager.menu_account_pm" id="menu_budgets" sequence="30"/>
+     <menuitem name="Budgets" parent="menu_budgets" id="menu_sub_budgets" sequence="1" action="act_crossovered_budget_view"/>
+     <menuitem name="All Budget Detail Lines" parent="menu_budgets" id="menu_all_budget_detail_lines" sequence="2" action="action_all_account_budget_detailline"/>
+     <menuitem name="Budget Detail Lines" parent="menu_budgets" id="menu_detail" sequence="3" action="action_account_budget_detailline"/>
+     <menuitem name="Import Budget Detail Lines" parent="menu_budgets" id="menu_import_detail" sequence="4" action="action_budget_detailline_import"/>
+</data>
+</openerp>
+

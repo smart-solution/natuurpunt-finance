@@ -1,0 +1,64 @@
+# Dutch translation for a Natuurpunt module
+# Copyright (c) 2016-Natuurpunt
+# FIRST AUTHOR <mattias.vanopstal@natuurpunt.be>
+#
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2016-06-29 19:37+0000\n"
+"PO-Revision-Date: 2016-06-29 22:42+0000\n"
+"Last-Translator: Mattias Van Opstal <mattias.vanopstal@natuurpunt.be>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. module: natuurpunt_account_project_manager
+#: model:ir.ui.menu,name:natuurpunt_account_project_manager.menu_account_pm
+msgid "Invoicing (Project Managers)"
+msgstr "Boekhouding (Project Managers)"
+
+#. module: natuurpunt_account_project_manager
+#: model:ir.ui.menu,name:natuurpunt_account_project_manager.menu_detail
+msgid "Budget Detail Lines"
+msgstr "Budget detail-lijnen"
+
+#. module: natuurpunt_account_project_manager
+#: model:ir.ui.menu,name:natuurpunt_account_project_manager.menu_all_budget_detail_lines
+msgid "All Budget Detail Lines"
+msgstr "Alle budget detail-lijnen"
+
+#. module: natuurpunt_account_project_manager
+#: model:ir.ui.menu,name:natuurpunt_account_project_manager.menu_analytic_accounts
+msgid "Analytic Accounts"
+msgstr "Analytische rekeningen"
+
+#. module: natuurpunt_account_project_manager
+#: model:ir.ui.menu,name:natuurpunt_account_project_manager.menu_sub_budgets
+#: model:ir.actions.act_window,name:natuurpunt_account_project_manager.act_crossovered_budget_view
+#: model:ir.ui.menu,name:natuurpunt_account_project_manager.menu_budgets
+msgid "Budgets"
+msgstr "Budgetten"
+
+#. module: natuurpunt_account_project_manager
+#: model:ir.ui.menu,name:natuurpunt_account_project_manager.menu_import_detail
+msgid "Import Budget Detail Lines"
+msgstr "Importeer budget detail-lijnen"
+
+#. module: natuurpunt_account_project_manager
+#: model:ir.actions.act_window,help:natuurpunt_account_project_manager.act_crossovered_budget_view
+msgid ""
+"<p class=\"oe_view_nocontent_create\">\n"
+"                Click to create a new budget.\n"
+"              </p><p>\n"
+"                A budget is a forecast of your company's income and/or expenses\n"
+"                expected for a period in the future. A budget is defined on some\n"
+"                financial accounts and/or analytic accounts (that may represent\n"
+"                projects, departments, categories of products, etc.)\n"
+"              </p><p>\n"
+"                By keeping track of where your money goes, you may be less\n"
+"                likely to overspend, and more likely to meet your financial\n"
+"                goals. Forecast a budget by detailing the expected revenue per\n"
+"                analytic account and monitor its evolution based on the actuals\n"
+"                realised during that period.\n"
+"              </p>\n"
+"            "
+msgstr "<p class=\"oe_view_nocontent_create\">\n                Klik voor het aanmaken van een nieuw budget.\n              </p><p>\n                Een begroting is een raming van de inkomsten en uitgaven verwacht\n                voor een periode in de toekomst van uw bedrijf. Een budget wordt aangemaakt\n                op een aantal grootboekrekeningen en/of kostenplaatsen (welke op hun buurt weer\n                projecten, afdelingen, product categorieën, etc. vertegenwoordigen)\n              </p><p>\n                Door bij te houden waar uw geld heen gaat, heeft u minder kans op overschrijding\n                en meer kans om uw financiële doelstellingen te behalen. Raam een begroting\n                middels het invoeren van de verwachte inkomsten en uitgaven per kostenplaats\n                en houd toezicht op de voortgang op basis van de werkelijke gerealiseerd\n                resultaten tijdens die periode.\n              </p>\n            "
