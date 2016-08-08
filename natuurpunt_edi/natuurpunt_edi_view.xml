@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+        <record id="view_np_edi_form" model="ir.ui.view">
+            <field name='name'>view.np.edi.form</field>
+            <field name='model'>res.edi.xml</field>
+            <field name="type">form</field>
+			<field name='arch' type='xml'>
+				 <form string="EDI xml types">
+                    <field name="document_type"/>
+                    <field name="name"/>
+                    <field name="xml" width="250" height="500" nolabel="1" colspan="2" placeholder="xml template"/>
+                    <field name="xslt" width="250" height="500" nolabel="1" colspan="2" placeholder="xslt stylesheet"/>
+                </form>
+            </field>
+		</record>
+
+        <record id="view_np_edi_tree" model="ir.ui.view">
+            <field name='name'>view.np.edi.form</field>
+            <field name='model'>res.edi.xml</field>
+            <field name="type">tree</field>
+            <field name='arch' type='xml'>
+				<tree string="EDI xml Types">
+                        <field name="document_type"/>
+                        <field name="name"/>
+                </tree>
+            </field>
+		</record>
+
+        <record model="ir.ui.view" id="view_natuurpunt_edi_xml_partner_form">
+            <field name="name">view.natuurpunt.edi.xml.partner.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<page string="Accounting" position="after">
+					<page string="EDI" groups="account.group_account_user">
+						<field name="edi_xml_ids"/>
+					</page>
+				</page>
+			</field>
+		</record>
+
+        <record model="ir.actions.act_window" id="action_np_edi_form">
+            <field name="name">Natuurpunt EDI</field>
+            <field name="res_model">res.edi.xml</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_type">form</field>
+        </record>
+
+        <menuitem name="Natuurpunt EDI" parent="base.menu_custom" id="base.config_np_edi" sequence="15" action="action_np_edi_form"/>
+
+    </data>
+</openerp>
+
