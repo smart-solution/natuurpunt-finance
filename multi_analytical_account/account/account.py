@@ -1077,8 +1077,8 @@ class account_move_line(osv.osv):
             if line.period_id.fiscalyear_id.analytic_state == "closed" and \
                 ('analytic_dimension_1_id' in vals or 'analytic_dimension_2_id' in vals or 'analytic_dimensiin_3_id' in vals):
                     raise osv.except_osv(_('Error'),_("You don't have the right to modify a posted journal item for an analytically closed fiscal year"))
-            if update_check and line.move_id.state != 'draft' and not line.move_id.modified:
-                self.pool.get('account.move').write(cr, uid, [line.move_id.id], {'modified':True})
+#            if update_check and line.move_id.state != 'draft' and not line.move_id.modified:
+#                self.pool.get('account.move').write(cr, uid, [line.move_id.id], {'modified':True})
         
 
         wiz_data_obj = self.pool.get('wizard.data')
