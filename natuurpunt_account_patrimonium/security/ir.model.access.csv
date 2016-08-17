@@ -1,0 +1,3 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+access_natuurpunt_account_pat_analytic_accounts,Natuurpunt Account Patrimonium  Analytic Accounts,analytic.model_account_analytic_account,multi_analytical_account.group_patrimonium_user,1,1,1,1
+access_natuurpunt_account_pat_supplier_invoices,Natuurpunt Account Patrimonium Supplier Invoices,natuurpunt_account.model_account_invoice,multi_analytical_account.group_patrimonium_user,1,1,1,1

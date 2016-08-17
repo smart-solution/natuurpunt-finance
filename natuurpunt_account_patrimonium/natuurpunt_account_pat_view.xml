@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<openerp>
+<data>
+
+    <!-- Top menu item -->
+    <menuitem name="Invoicing (Patrimonium)"
+		id="natuurpunt_account_patrimonium.menu_account_pat"
+	        groups="multi_analytical_account.group_patrimonium_user"
+		sequence="100"/>
+		
+	<record model="ir.actions.act_window" id="act_analytic_accounts">
+		<field name="name">Analytic Accounts</field>
+	        <field name="res_model">account.analytic.account</field>
+		<field name="view_type">form</field>
+	        <field name="view_mode">tree,form</field>
+        	<field name="view_id" ref="multi_analytical_account.view_np_account_analytic_account_tree"/>
+    		<field name="search_view_id" ref="multi_analytical_account.view_np_account_analytic_account_search"/>
+    	    	<field name="context">{'search_default_dimension_id':1, 'search_default_parent':1}</field>
+        </record>
+
+
+    	<record model="ir.actions.act_window" id="act_supplier_invoices">
+        	<field name="name">Supplier Invoices</field>
+            	<field name="res_model">account.invoice</field>
+            	<field name="view_type">form</field>
+		<field name="view_mode">tree,form,calendar,graph</field>
+		<field eval="False" name="view_id"/>
+		<field name="domain">[('type','=','in_invoice')]</field>
+		<field name="context">{'default_type': 'in_invoice', 'type': 'in_invoice', 'journal_type': 'purchase'}</field>
+		<field name="search_view_id" ref="account.view_account_invoice_filter"/>
+		<field name="help" type="html">
+              		<p class="oe_view_nocontent_create">
+                	Click to record a new supplier invoice.
+              		</p><p>
+                	You can control the invoice from your supplier according to
+               		what you purchased or received. OpenERP can also generate
+                	draft invoices automatically from purchase orders or receipts.
+              		</p>
+            	</field>
+		<field name="view_id" ref="account.invoice_tree"/>
+        </record>
+
+     <menuitem name="Suppliers and Journal Entries" parent="natuurpunt_account_patrimonium.menu_account_pat" id="menu_main1" sequence="30"/>
+     <menuitem name="Analytic Accounts" parent="menu_main1" id="menu_act_analytic_accounts" sequence="1" action="act_analytic_accounts"/>
+     <menuitem name="Supplier Invoices" parent="menu_main1" id="menu_act_supplier_invoices" sequence="2" action="act_supplier_invoices"/>
+</data>
+</openerp>
+

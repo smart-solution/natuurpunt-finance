@@ -23,6 +23,9 @@ from osv import osv, fields
 from openerp.tools.translate import _
 from openerp.tools import float_compare
 import openerp.addons.decimal_precision as dp
+from natuurpunt_tools import create_xml, create_node, transform
+from natuurpunt_tools import sum_groupby
+from itertools import groupby
 
 class account_invoice(osv.osv):
 
@@ -95,6 +98,110 @@ class account_invoice(osv.osv):
                 raise osv.except_osv(_('Error!'), _('You cannot create an invoice for an unactive partner.'))
     
         return super(account_invoice, self).write(cr, uid, ids, vals, context=context)
+
+    def toxml(self, cr, uid, ids, context=None):
+        """
+        xml-ifies account.invoice
+        put here the bussiness logic to get all the invoice data
+        into a dict per node.
+        """
+
+        def taxes(invoice_id):
+            tax_per_line = []
+            tax_lines = self.pool.get('account.invoice.tax').search(cr, uid, [('invoice_id','=',invoice_id)])
+            if not tax_lines:
+                return tax_per_line
+            for line in self.pool.get('account.invoice.tax').browse(cr, uid, tax_lines):
+                tax_per_line.append(
+                    {'line_id':line.invoice_line_id.id,
+                     'name':line.name,
+                     'amount':line.amount,
+                     'base':line.base,
+                     'percent':line.tax_id.amount*100})
+            return tax_per_line
+
+        for invoice in self.browse(cr, uid, ids, context=context):
+            vzw = self.pool.get('res.partner').browse(cr, uid, invoice.company_id.id)
+            partner = self.pool.get('res.partner').browse(cr, uid, invoice.partner_id.id)
+            edi_xml = filter(None,map(lambda x: x if x.document_type == invoice.type else None,partner.edi_xml_ids))
+            if not edi_xml:
+                raise osv.except_osv(_('Error!'), _('partner has no EDI configured for this document type.'))
+            invoice_node = {
+                'ID':invoice.internal_number,
+                'IssueDate':invoice.date_invoice,
+                'StartDate':invoice.date_invoice,
+                'EndDate':invoice.date_invoice,
+                'OrderReference':invoice.name if invoice.name else '',
+                'PaymentDueDate':invoice.date_due,
+                'InstructionNote':invoice.reference,
+                'TaxAmount':invoice.amount_untaxed,
+                'LineExtensionAmount':invoice.amount_untaxed,
+                'TaxExclusiveAmount':invoice.amount_untaxed,
+                'TaxInclusiveAmount':invoice.amount_total,
+                'PayableAmount':invoice.amount_total,
+            }
+            accounting_supplier_party_node = {
+                'ID':invoice.company_id.company_registry,
+                'Name':vzw.name,
+                'StreetName':vzw.street,
+                'CityName':vzw.city,
+                'PostalZone':vzw.zip,
+                'RegistrationName':vzw.name,
+                'CompanyID':vzw.vat,
+                'Telephone':vzw.phone if vzw.phone else '',
+                'ElectronicMail':vzw.email if vzw.email else '',
+            }
+            accounting_customer_party_node = {
+                'ID':partner.company_registration_number,
+                'Name':partner.name,
+                'StreetName':partner.street,
+                'CityName':partner.city,
+                'PostalZone':partner.zip,
+                'Country':partner.country_id.code,
+                'CompanyID':partner.vat,
+                'Telephone':partner.phone if partner.phone else '',
+                'ElectronicMail':partner.email if partner.email else '',
+            }
+            delivery_node = {
+                'StreetName':accounting_customer_party_node['StreetName'],
+                'CityName':accounting_customer_party_node['CityName'],
+                'PostalZone':accounting_customer_party_node['PostalZone'],
+                'Country':accounting_customer_party_node['Country'],
+            }
+            def invoiceline_node(line):
+                line_tax = next((item for item in tax_per_line if item.get('line_id') and item['line_id'] == line.id),None)
+                return {
+                    'InvoicedQuantity':line.quantity,
+                    'LineExtensionAmount':line.price_subtotal,
+                    'Description':line.name,
+                    'Name':line.name,
+                    'ClassifiedTaxCategoryID':'A',
+                    'Percent':line_tax['percent'] if 'percent' in line_tax else 0,
+                    'PriceAmount':line.price_unit,
+                }
+            def tax_node(tax_name, tax):
+                line_tax = next((item for item in tax_per_line if item.get('name') and item['name'] == tax_name),None)
+                return {
+                    'TaxableAmount':tax['base'],
+                    'TaxAmount':tax['amount'],
+                    'Percent':line_tax['percent'] if 'percent' in line_tax else 0,
+                }
+
+            tax_per_line = taxes(invoice.id)
+            name_key = lambda x: x['name']
+            tax_grouped_per_tax_name = groupby(sorted(tax_per_line,key=name_key),name_key)
+            tax_summarized_per_tax_name = sum_groupby(tax_grouped_per_tax_name,['base','amount'])
+
+            xml_data = create_xml(
+                          create_node('Invoice',invoice_node,
+                             create_node('AccountingSupplierParty',accounting_supplier_party_node),
+                             create_node('AccountingCustomerParty',accounting_customer_party_node),
+                             create_node('Delivery',delivery_node)),
+                          [create_node('Tax',tax_node(tax_name, tax)) for tax_name, tax in tax_summarized_per_tax_name],
+                          [create_node('InvoiceLine',invoiceline_node(line)) for line in invoice.invoice_line])
+            res_xml = transform(edi_xml[0].xml, edi_xml[0].xslt, xml_data)
+            print res_xml
+        return True
 
 account_invoice()
 

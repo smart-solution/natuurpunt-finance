@@ -13,8 +13,8 @@ msgstr ""
 
 #. module: natuurpunt_account_project_manager
 #: model:ir.ui.menu,name:natuurpunt_account_project_manager.menu_account_pm
-msgid "Invoicing (Project Managers)"
-msgstr "Boekhouding (Project Managers)"
+msgid "Project Budget"
+msgstr "Projectbudget"
 
 #. module: natuurpunt_account_project_manager
 #: model:ir.ui.menu,name:natuurpunt_account_project_manager.menu_detail

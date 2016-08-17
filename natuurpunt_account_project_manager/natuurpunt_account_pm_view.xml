@@ -63,11 +63,11 @@
 
      </record>
 
-     <menuitem name="Budgets" parent="natuurpunt_account_project_manager.menu_account_pm" id="menu_budgets" sequence="30"/>
-     <menuitem name="Budgets" parent="menu_budgets" id="menu_sub_budgets" sequence="1" action="act_crossovered_budget_view"/>
-     <menuitem name="All Budget Detail Lines" parent="menu_budgets" id="menu_all_budget_detail_lines" sequence="2" action="action_all_account_budget_detailline"/>
-     <menuitem name="Budget Detail Lines" parent="menu_budgets" id="menu_detail" sequence="3" action="action_account_budget_detailline"/>
-     <menuitem name="Import Budget Detail Lines" parent="menu_budgets" id="menu_import_detail" sequence="4" action="action_budget_detailline_import"/>
+     <menuitem name="Budgets" parent="natuurpunt_account_project_manager.menu_account_pm" id="menu_budgets1" sequence="30"/>
+     <menuitem name="Budgets" parent="menu_budgets1" id="menu_sub_budgets1" sequence="1" action="act_crossovered_budget_view"/>
+     <menuitem name="All Budget Detail Lines" parent="menu_budgets1" id="menu_all_budget_detail_lines1" sequence="2" action="action_all_account_budget_detailline"/>
+     <menuitem name="Budget Detail Lines" parent="menu_budgets1" id="menu_detail1" sequence="3" action="action_account_budget_detailline"/>
+     <menuitem name="Import Budget Detail Lines" parent="menu_budgets1" id="menu_import_detail1" sequence="4" action="action_budget_detailline_import"/>
 </data>
 </openerp>
 

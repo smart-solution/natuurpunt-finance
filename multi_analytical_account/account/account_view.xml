@@ -744,11 +744,11 @@
        <!-- Top menu item -->
         <menuitem name="Invoicing"
             id="account.menu_finance"
-            groups="account.group_account_user,account.group_account_manager,account.group_account_invoice,group_patrimonium_user"
+            groups="account.group_account_user,account.group_account_manager,account.group_account_invoice"
             sequence="50"/>
 
         <menuitem action="account.action_invoice_tree2" id="account.menu_action_invoice_tree2"
-            groups="account.group_account_user,account.group_account_manager,account.group_account_invoice,group_patrimonium_user"
+            groups="account.group_account_user,account.group_account_manager,account.group_account_invoice"
             parent="account.menu_finance_payables"/>
 
       <menuitem name="Human Resources"

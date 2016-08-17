@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Invoice xsi:schemaLocation="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2 UBL-Invoice-2.0.xsd" 
+xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" 
+xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" 
+xmlns:ext="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionBasicComponents-2">
+
+<cbc:UBLVersionID>2.0</cbc:UBLVersionID>
+
+<cbc:CustomizationID>urn:oasis:names:specification:ubl:xpath:Invoice-2.0:sbs-1.0-draft</cbc:CustomizationID>
+
+<cbc:ProfileID>urn:www.cenbii.eu:profile:bii04:ver1.0</cbc:ProfileID>
+<cbc:ID>$ID</cbc:ID>
+<cbc:IssueDate>$IssueDate</cbc:IssueDate>
+<cbc:InvoiceTypeCode listID="UN/ECE 1001 Subset" listAgencyID="6">380</cbc:InvoiceTypeCode>
+<cbc:Note>$Note</cbc:Note>
+<cbc:DocumentCurrencyCode listID="ISO 4217 norm" listAgencyID="6">EUR</cbc:DocumentCurrencyCode>
+
+<cac:InvoicePeriod>
+    <cbc:StartDate>$StartDate</cbc:StartDate>
+    <cbc:EndDate>$EndDate</cbc:EndDate>
+</cac:InvoicePeriod>
+
+<cac:OrderReference>
+    <cbc:ID>$OrderReference</cbc:ID>
+</cac:OrderReference>
+
+<cac:AccountingSupplierParty>
+    <cac:Party>
+        <cac:PartyIdentification>
+            <cbc:ID schemeID="BE:VAT">$ID</cbc:ID>
+        </cac:PartyIdentification>
+        <cac:PartyName>
+            <cbc:Name>$Name</cbc:Name>
+        </cac:PartyName>
+        <cac:PostalAddress>
+           <cbc:StreetName>$StreetName</cbc:StreetName>
+           <cbc:CityName>$CityName</cbc:CityName>
+           <cbc:PostalZone>$PostalZone</cbc:PostalZone>
+             <cac:Country>
+                <cbc:IdentificationCode>BE</cbc:IdentificationCode>
+             </cac:Country>
+       </cac:PostalAddress>
+       <cac:PartyTaxScheme>
+          <cbc:RegistrationName>$RegistrationName</cbc:RegistrationName>
+          <cbc:CompanyID schemeID="BE:VAT">$CompanyID</cbc:CompanyID>
+          <cac:TaxScheme>
+              <cbc:ID schemeID="UN/ECE 5153" schemeAgencyID="6">VAT</cbc:ID>
+              <cbc:Name>Value Added Tax</cbc:Name>
+          </cac:TaxScheme>
+       </cac:PartyTaxScheme>
+       <cac:Contact>
+          <cbc:Telephone>$Telephone</cbc:Telephone>
+          <cbc:ElectronicMail>$ElectronicMail</cbc:ElectronicMail>
+       </cac:Contact>
+   </cac:Party>
+</cac:AccountingSupplierParty>
+
+<cac:AccountingCustomerParty>
+     <cac:Party>
+       <cac:PartyIdentification>
+	  <cbc:ID schemeID="BE:VAT">$ID</cbc:ID>
+       </cac:PartyIdentification>
+        <cac:PartyName>
+           <cbc:Name>$Name</cbc:Name>
+       </cac:PartyName>
+       <cac:PostalAddress>
+          <cbc:StreetName>$StreetName</cbc:StreetName>
+          <cbc:CityName>$CityName</cbc:CityName>
+          <cbc:PostalZone>$PostalZone</cbc:PostalZone> 
+             <cac:Country>
+                 <cbc:IdentificationCode>$Country</cbc:IdentificationCode>
+             </cac:Country>
+        </cac:PostalAddress>
+       <cac:PartyTaxScheme>
+          <cbc:RegistrationName>$RegistrationName</cbc:RegistrationName>
+          <cbc:CompanyID schemeID="BE:VAT">$CompanyID</cbc:CompanyID>
+          <cac:TaxScheme>
+              <cbc:ID schemeID="UN/ECE 5153" schemeAgencyID="6">VAT</cbc:ID>
+              <cbc:Name>Value Added Tax</cbc:Name>
+          </cac:TaxScheme>
+       </cac:PartyTaxScheme>
+       <cac:Contact>
+          <cbc:Telephone>$Telephone</cbc:Telephone>
+          <cbc:ElectronicMail>$ElectronicMail</cbc:ElectronicMail>
+       </cac:Contact>
+        </cac:Party>
+</cac:AccountingCustomerParty>
+
+<cac:Delivery>
+    <cbc:ActualDeliveryDate>$ActualDeliveryDate</cbc:ActualDeliveryDate>
+    <cac:DeliveryLocation>
+        <cac:Address>
+            <cbc:StreetName>$StreetName</cbc:StreetName>
+            <cbc:CityName>$CityName</cbc:CityName>
+            <cbc:PostalZone>$PostalZone</cbc:PostalZone>
+            <cac:Country>
+                <cbc:IdentificationCode>$Country</cbc:IdentificationCode>
+            </cac:Country>
+        </cac:Address>
+     </cac:DeliveryLocation>
+</cac:Delivery>
+
+<cac:PaymentMeans>
+    <cbc:PaymentMeansCode listID="UN/ECE 4461 norm" listAgencyID="6">42</cbc:PaymentMeansCode>
+    <cbc:PaymentDueDate>$PaymentDueDate</cbc:PaymentDueDate>
+    <cbc:PaymentChannelCode>IBAN</cbc:PaymentChannelCode>
+    <cbc:InstructionNote>$InstructionNote</cbc:InstructionNote>
+    <cac:PayeeFinancialAccount>
+        <cbc:ID schemeID='IBAN'>$IBAN</cbc:ID>
+        <cac:FinancialInstitutionBranch>
+            <cac:FinancialInstitution>
+                <cbc:ID schemeID='BIC'>$BIC</cbc:ID>
+            </cac:FinancialInstitution>
+         </cac:FinancialInstitutionBranch>
+     </cac:PayeeFinancialAccount>
+</cac:PaymentMeans>
+
+<cac:PaymentTerms>
+          <cbc:Note>$PaymentNote</cbc:Note>
+</cac:PaymentTerms>
+
+<cac:TaxTotal>
+      <cbc:TaxAmount currencyID="EUR">$TaxAmount</cbc:TaxAmount>
+      <cac:TaxSubtotal>
+           <cbc:TaxableAmount currencyID="EUR">$TaxableAmount</cbc:TaxableAmount>
+           <cbc:TaxAmount currencyID="EUR">$TaxAmount</cbc:TaxAmount>
+                <cac:TaxCategory>
+                     <cbc:ID schemeID="UN/ECE 5305" schemeAgencyID="6">$ID</cbc:ID>
+                     <cbc:Percent>$Percent</cbc:Percent>
+                     <cac:TaxScheme>
+                           <cbc:ID schemeID="UN/ECE 5153" schemeAgencyID="6">BTW</cbc:ID>
+                     </cac:TaxScheme>
+                </cac:TaxCategory>
+      </cac:TaxSubtotal>
+ </cac:TaxTotal>
+ 
+<cac:LegalMonetaryTotal>
+    <cbc:LineExtensionAmount currencyID="EUR">$LineExtensionAmount</cbc:LineExtensionAmount>
+    <cbc:TaxExclusiveAmount currencyID="EUR">$TaxExclusiveAmount</cbc:TaxExclusiveAmount>
+    <cbc:TaxInclusiveAmount currencyID="EUR">$TaxInclusiveAmount</cbc:TaxInclusiveAmount>
+    <cbc:PayableAmount currencyID="EUR">$PayableAmount</cbc:PayableAmount>
+</cac:LegalMonetaryTotal>
+
+<cac:InvoiceLine>
+    <cbc:ID>$ID</cbc:ID>
+    <cbc:InvoicedQuantity unitCode="ZZ">$InvoicedQuantity</cbc:InvoicedQuantity>
+    <cbc:LineExtensionAmount currencyID="EUR">$LineExtensionAmount</cbc:LineExtensionAmount>
+    <cac:Item>
+         <cbc:Description>$Description</cbc:Description>
+         <cbc:Name>$Name</cbc:Name>
+         <cac:ClassifiedTaxCategory>
+              <cbc:ID schemeID="UN/ECE 5305" schemeAgencyID="6">$ClassifiedTaxCategoryID</cbc:ID>
+              <cbc:Percent>$Percent</cbc:Percent>
+              <cac:TaxScheme>
+                   <cbc:ID schemeID="UN/ECE 5153" schemeAgencyID="6">BTW</cbc:ID>
+              </cac:TaxScheme>
+         </cac:ClassifiedTaxCategory>
+    </cac:Item>
+    <cac:Price>
+         <cbc:PriceAmount currencyID="EUR">$PriceAmount</cbc:PriceAmount>
+    </cac:Price>
+</cac:InvoiceLine>
+
+</Invoice>
