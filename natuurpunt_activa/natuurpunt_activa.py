@@ -104,6 +104,7 @@ account_asset_category()
 class account_asset_asset(osv.osv):
 
     _inherit = 'account.asset.asset'
+    _order = "code desc"
     
     def copy(self, cr, uid, ids, vals, context=None):
         vals['account_move_line_ids'] = False
