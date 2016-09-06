@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+        <record id="view_account_move_line_invoices" model="ir.ui.view">
+            <field name="name">view.account.move.line.invoices</field>
+            <field name="model">wizard.account.move.line.invoices</field>
+            <field name="arch" type="xml">
+                <form string="Find Invoices" version="7.0">
+                    <p class="oe_grey">
+                    Search for all invoices for the selected journal items
+                    </p>
+                    <footer>
+                        <button string="Find Invoices" name="invoices_find" type="object" default_focus="1" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window id="action_journal_time_to_invoices"
+            name="Find Invoices"
+            res_model="wizard.account.move.line.invoices" 
+            src_model="account.move.line" 
+            view_mode="form" 
+            view_type="form"
+            view_id="view_account_move_line_invoices"
+            target="new" 
+            multi="True"
+            key2="client_action_multi"
+        />
+
+    </data>
+</openerp>
