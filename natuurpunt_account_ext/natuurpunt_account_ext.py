@@ -244,4 +244,15 @@ class res_partner_bank(osv.osv):
     }
 
 
+class res_partner(osv.osv):
+
+    _inherit = 'res.partner'
+
+    def has_something_to_reconcile(self, cr, uid, partner_id, context=None):
+        '''
+        Always update the last_reconciliation_date 
+        '''
+        return False
+
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
