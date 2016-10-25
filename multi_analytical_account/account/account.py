@@ -880,7 +880,7 @@ class account_move_line(osv.osv):
     _inherit = 'account.move.line'
 
     _columns = {
-        'invoice_line_id': fields.many2one('account.invoice.line', 'Invoice Line'),
+        'invoice_line_id': fields.many2one('account.invoice.line', 'Invoice Line', select=True),
         'invoice_tax_id': fields.many2one('account.invoice.tax', 'Invoice Tax Line'),
         'statement_line_id': fields.many2one('account.bank.statement.line', 'Bank Statement Line'),
         'analytic_dimension_1_id': fields.many2one('account.analytic.account', 'Dimension 1', domain=[('type','!=','view')]),
