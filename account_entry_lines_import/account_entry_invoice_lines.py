@@ -241,7 +241,7 @@ class account_move_line(osv.osv):
         res = super(account_move_line, self).create(cr, uid, vals, context=context, check=check)
         if 'invoice' in context and context['invoice']:
             ref = context['invoice'].reference or context['invoice'].number or False
-            self.write(cr, uid, [res], {'ref':ref})
+            self.write(cr, uid, [res], {'ref':ref}, check=False, update_check=False, context=context)
         return res
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
