@@ -21,7 +21,7 @@
 							<field name="report_name" string="Attachment" readonly="True" class="oe_inline"/> (
 							<field name="report_size" nolabel="1" readonly="True" class="oe_inline"/> )
 						</div>
-						<field name="store_id" string="Attachment" placeholder="store_id..." widget="natuurp:unt_attachments" />
+						<field name="store_id" string="Attachment" placeholder="store_id..." widget="natuurpunt_attachments" />
                     </group>
                     <field name="body"/>
                     <footer>
