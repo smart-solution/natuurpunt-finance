@@ -31,7 +31,7 @@ class account_invoice_mail_compose_message(osv.TransientModel):
 
     _columns = {
         'customer_id': fields.many2one('res.partner', string='email to customer', required=True, ),
-        'cc': fields.many2many('res.partner', 'res_partner_cc_rel', 'message_id', 'partner_id', 'Carbon Copy'),
+        'cc': fields.many2many('res.partner','res_partner_mail_wizard_rel','wizard_id', 'partner_id', 'Additional contacts'),
         'report_name': fields.char('report', help="account invoice report attachment"),
         'report_size': fields.char('file size', help="account invoice report attachment"),
         'report_data': fields.binary('binary report data'),
