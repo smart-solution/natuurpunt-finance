@@ -31,9 +31,11 @@ class account_invoice_mail_compose_message(osv.TransientModel):
 
     _columns = {
         'customer_id': fields.many2one('res.partner', string='email to customer', required=True, ),
+        'cc': fields.many2many('res.partner', 'res_partner_cc_rel', 'message_id', 'partner_id', 'Carbon Copy'),
         'report_name': fields.char('report', help="account invoice report attachment"),
         'report_size': fields.char('file size', help="account invoice report attachment"),
         'report_data': fields.binary('binary report data'),
+        'store_id' : fields.char('store_id'),
     }
 
     def sizeof_fmt(self, num, suffix='B'):
@@ -80,6 +82,9 @@ class account_invoice_mail_compose_message(osv.TransientModel):
             recipient_ids.append(values['customer_id'].id)
             values.pop('customer_id')
 
+            for cc in wizard.cc:
+                recipient_ids.append(cc.id)
+
             if recipient_ids:
                 warning = self.check_partners_email(cr, uid, recipient_ids, context=context)
                 if warning:
@@ -106,6 +111,20 @@ class account_invoice_mail_compose_message(osv.TransientModel):
                     ctx = dict(context)
                     ctx.update({'bypass_cmis':True})
                     attachment_ids.append(ir_attachment.create(cr, uid, attachment_data, context=ctx))
+
+                    # get the external memory attachments 
+                    if wizard['store_id']:
+                        ext_att_ids = self.pool.get('memory.ir.attachment').search(cr, uid, [('store_id', '=', wizard['store_id'])])
+                        for ext_att in self.pool.get('memory.ir.attachment').browse(cr, uid, ext_att_ids, context=context):
+                            attachment_data = {
+                                'name': ext_att.filename,
+                                'datas_fname': ext_att.filename,
+                                'db_datas': ext_att.data,
+                                'res_model': 'mail.message',
+                                'res_id': mail.mail_message_id.id,
+                                'partner_id': recipient_ids[0],
+                            }
+                            attachment_ids.append(ir_attachment.create(cr, uid, attachment_data, context=ctx))
 
                     if attachment_ids:
                         values['attachment_ids'] = [(6, 0, attachment_ids)]

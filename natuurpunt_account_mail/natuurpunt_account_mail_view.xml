@@ -14,12 +14,14 @@
                         <field name="parent_id" invisible="1"/>
                         <!-- visible wizard -->
 						<field name="customer_id" string="Customer" readonly="True" context="{'force_email':True, 'show_email':True}"/>
+						<field name="cc" string="CC" context="{'force_email':True, 'show_email':True}"/>
 						<field name="subject" placeholder="Subject..."/>
 						<label for="Attachment" class="oe_edit_only"/>
 						<div>
 							<field name="report_name" string="Attachment" readonly="True" class="oe_inline"/> (
 							<field name="report_size" nolabel="1" readonly="True" class="oe_inline"/> )
 						</div>
+						<field name="store_id" string="Attachment" placeholder="store_id..." widget="natuurp:unt_attachments" />
                     </group>
                     <field name="body"/>
                     <footer>
