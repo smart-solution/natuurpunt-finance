@@ -1109,6 +1109,28 @@ class account_move_line(osv.osv):
 #
             acc_line = False
             #acc_line = self.pool.get('account.analytic.line').search(cr, uid, [('move_id','=',line.id)])
+            
+            if 'account_id' in vals:
+                for line in self.browse(cr, uid, ids):
+                    
+                    dimension = self.pool.get('account.analytic.dimension').search(cr, uid, [('name','=','Interne Dimensie')])
+                    acc_line = self.pool.get('account.analytic.line').search(cr, uid, [('move_id','=',line.id),('dimension_id','in',dimension)])
+                    if acc_line:
+                        # If an analytic entry exists modify it
+                        self.pool.get('account.analytic.line').write(cr, uid, acc_line, {'general_account_id':vals['account_id']})                    
+                        
+                    dimension = self.pool.get('account.analytic.dimension').search(cr, uid, [('name','=','Netwerk Dimensie')])
+                    acc_line = self.pool.get('account.analytic.line').search(cr, uid, [('move_id','=',line.id),('dimension_id','in',dimension)])
+                    if acc_line:
+                        # If an analytic entry exists modify it
+                        self.pool.get('account.analytic.line').write(cr, uid, acc_line, {'general_account_id':vals['account_id']})
+                    
+                    dimension = self.pool.get('account.analytic.dimension').search(cr, uid, [('name','=','Projecten, Contracten, Fondsen')])
+                    acc_line = self.pool.get('account.analytic.line').search(cr, uid, [('move_id','=',line.id),('dimension_id','in',dimension)])
+                    if acc_line:
+                        # If an analytic entry exists modify it
+                        self.pool.get('account.analytic.line').write(cr, uid, acc_line, {'general_account_id':vals['account_id']})
+                        
             if 'analytic_dimension_1_id' in vals and vals['analytic_dimension_1_id']:
                 # Check if the analytic account is from the righ dimension
                 dimension = self.pool.get('account.analytic.dimension').search(cr, uid, [('name','=','Interne Dimensie')])
