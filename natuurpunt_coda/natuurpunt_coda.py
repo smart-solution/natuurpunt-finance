@@ -8,6 +8,7 @@ import datetime, time
 
 from openerp.osv import fields, osv
 from openerp.tools.translate import _
+from openerp import SUPERUSER_ID
 from openerp import tools
 from md5 import md5
 
@@ -1064,9 +1065,13 @@ class account_coda_import(osv.osv_memory):
                             move_line = move_line_obj.browse(cr, uid, payment_line.move_line_id.id)
                 if lines2.t21_struct and lines2.t21_struct_type in ('101','102') and not(move_line):
 #                     print structcomm_message
-                    ids = move_line_obj.search(cr, uid, [('ref'.replace('%','').replace(' ',''), '=', structcomm_message), ('reconcile_id', '=', False), ('account_id.reconcile', '=', True)])
-                    if ids:
-                        move_line = move_line_obj.browse(cr, uid, ids[0])
+                    invoice_ids = invoice_obj.search(cr, uid, [('reference','=',structcomm_message),('state','=','open')])
+                    _logger.info("processing reference: {}".format(structcomm_message))
+                    if len(invoice_ids) == 1:
+                        for invoice in invoice_obj.browse(cr, uid, invoice_ids):
+                            ids = move_line_obj.search(cr, uid, [('move_id','=', invoice.move_id.id),('reconcile_id', '=', False),('account_id.reconcile', '=', True)])
+                            if ids:
+                                move_line = move_line_obj.browse(cr, uid, ids[0])
 # 		print datetime.datetime.now() , 'move gezocht '
                     
                 if move_line:
@@ -1117,7 +1122,7 @@ class account_coda_import(osv.osv_memory):
 #                         'invoice_id': invoice_id,
                         }
                         context['invoice_id'] = invoice_id
-                        voucher_vals.update(self.pool.get('account.voucher').onchange_partner_id(cr, uid, [],
+                        voucher_vals.update(self.pool.get('account.voucher').onchange_partner_id(cr, SUPERUSER_ID, [],
                             partner_id = partner_id,
                             journal_id = journal_id,
                             amount = abs(lines2.t21_amount),
