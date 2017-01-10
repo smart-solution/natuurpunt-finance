@@ -441,7 +441,8 @@ class account_coda_sdd_refused(osv.osv):
         'comm': fields.char('Communicatie'),
         'type_R': fields.char('Type R', size=1),
         'reason': fields.char('Reden'),
-                }
+        'name': fields.char('Name', size=64),
+    }
 
 account_coda_sdd_refused()
 
@@ -1250,6 +1251,7 @@ class account_coda_import(osv.osv_memory):
                       'comm': sdd_struct[79:141],
                       'type_R': sdd_struct[141:142],
                       'reason': sdd_struct[142:146],
+                      'name': ''.join(filter(None, lines2.t22_ref_cust)),
                       }, context=context)
                 if lines2.t21_struct_type == '107' and lines2.t21_struct_comm[48:49] != '0':
                     sdd_struct = ''.join(filter(None, [lines2.t21_struct_comm, lines2.t22_free_comm, lines2.t23_free_comm]))
@@ -1272,6 +1274,7 @@ class account_coda_import(osv.osv_memory):
                       'comm': sdd_struct[18:48],
 #                       'type_R': ,
 #                       'reason': ,
+                      'name': ''.join(filter(None, lines2.t22_ref_cust)),
                       }, context=context)
                  
 #                 print lines2.det2_ids
@@ -1304,6 +1307,7 @@ class account_coda_import(osv.osv_memory):
                           'comm': sdd_struct[79:141],
                           'type_R': sdd_struct[141:142],
                           'reason': sdd_struct[142:146],
+                          'name': ''.join(filter(None, det2.t22_ref_cust)),
                           }, context=context)
                     if det2.t21_struct_type == '107' and det2.t21_struct_comm[48:49] != '0':
                         sdd_struct = ''.join(filter(None, [det2.t21_struct_comm, det2.t22_free_comm, det2.t23_free_comm]))
@@ -1326,6 +1330,7 @@ class account_coda_import(osv.osv_memory):
                           'comm': sdd_struct[18:48],
     #                       'type_R': ,
     #                       'reason': ,
+                          'name': ''.join(filter(None, det2.t22_ref_cust)),
                           }, context=context)
                     
                     
