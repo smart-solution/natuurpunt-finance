@@ -106,6 +106,25 @@
         </field>
     </record>
 
+	<record model="ir.ui.view" id="view_vendor_receipt_extended_form">
+        <field name="name">account.voucher.receipt.extended.form</field>
+        <field name="model">account.voucher</field>
+		<field name="inherit_id" ref="account_voucher.view_vendor_receipt_form"/>
+		<field name="arch" type="xml">
+            <xpath expr="//page[@string='Journal Items']" position="replace">
+            </xpath>
+		</field>
+	</record>
+
+    <record model="ir.ui.view" id="view_vendor_payment_extended_form">
+        <field name="name">account.voucher.payment.extended.form</field>
+        <field name="model">account.voucher</field>
+        <field name="inherit_id" ref="account_voucher.view_vendor_payment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@string='Journal Items']" position="replace">
+            </xpath>
+        </field>
+    </record>
 
     <record model="ir.ui.view" id="view_account_voucher_line_extended_form">
         <field name="name">view.account_voucher_line_extended.form</field>
