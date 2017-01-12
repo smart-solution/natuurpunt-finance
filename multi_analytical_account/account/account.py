@@ -1585,11 +1585,110 @@ class account_bank_statement(osv.osv):
 
     _inherit = 'account.bank.statement'
 
+    _columns = {
+        'validated': fields.boolean('Gevalideerd'),
+        'process_log': fields.text('Log'),
+        'state': fields.selection([('draft', 'New'),
+                                   ('open','Open'), # used by cash statements
+                                   ('processing','Verwerken'), 
+                                   ('error','Fout'), 
+                                   ('confirm', 'Closed')],
+                                   'Status', required=True, readonly="1",
+                                   help='When new statement is created the status will be \'Draft\'.\n'
+                                        'And after getting confirmation from the bank it will be in \'Confirmed\' status.'),
+
+    }
+
     def _prepare_bank_move_line(self, cr, uid, st_line, move_id, amount, company_currency_id,context=None):
         """Add the statement_line_id in the account move line"""        
         res = super(account_bank_statement, self)._prepare_bank_move_line(cr, uid, st_line, move_id, amount, company_currency_id, context=context)
         res['statement_line_id'] = st_line.id
         return res
+
+    def button_validate_bank(self, cr, uid, ids, context=None):
+        """Create the anaytic entries for the dimensions"""
+        data_obj = self.pool.get('wizard.data')
+        statement_obj = self.pool.get('account.bank.statement')
+        statement_line_obj = self.pool.get('account.bank.statement.line')
+        move_line_obj = self.pool.get('account.move.line')
+        analytic_obj = self.pool.get('account.analytic.line')
+
+        has_errors = False
+
+        for statement in self.browse(cr, uid, ids):
+
+           errors = ""
+          
+           try: 
+                   # Check if all required analytic entries are filled
+#                  for line in statement.line_ids:
+#                      for dimension in line.account_id.dimension_ids:
+#                          if dimension.analytic_account_required:
+#                              recs = self.pool.get('wizard.data').search(cr, uid, [('statement_line_id','=',line.id)])
+#                              if not recs:
+#                                  errors += "#####################################################################" + "\n"
+#                                  errors += '%s - Een afhankelijke analytische rekening is niet ingegeven voor dimensie : %s'%(line.ref, dimension.dimension_id.name) + '\n'
+       
+                   # Check for required dependent dimensions
+                   for line in statement.line_ids:
+                       for dimension in line.account_id.dimension_ids:
+                           if dimension.analytic_account_required:
+                               recs = self.pool.get('wizard.data').search(cr, uid, [('statement_line_id','=',line.id)])
+                               if not recs:
+                                   errors += '%s - Een afhankelijke analytische rekening is niet ingegeven voor dimensie : %s'%(line.ref, dimension.dimension_id.name) + '\n'
+
+                       dim_recs = self.pool.get('wizard.data').search(cr, uid, [('statement_line_id','=',line.id),('analytic_account_id','!=',False)])
+                       for dim_rec in self.pool.get('wizard.data').browse(cr, uid, dim_recs):
+                           if not dim_rec.analytic_account_id.dimensions_mandatory:
+                               continue
+                           # Get the required dimensions type
+                           required_dims = []
+                           for ana_dim in dim_rec.analytic_account_id.allowed_account_ids:
+                               required_dims.append(ana_dim.dimension_id.id)
+                               required_dims = list(set(required_dims))
+                               for rdim in required_dims:
+                                   dim_check = self.pool.get('wizard.data').search(cr, uid, [('statement_line_id','=',line.id),
+                                       ('distribution_id','=',rdim),('analytic_account_id','!=',False)])
+                                   if not dim_check:
+                                       errors += '%s - Een afhankelijke analytische rekening werd niet ingegeven voor lijn'%(line.ref) + "\n"
+       
+#                      for accdim in line.account_id.dimension_ids:
+#                          if accdim.dimension_id.sequence == 1 and accdim.analytic_account_required and not line.analytic_dimension_1_id:
+#                              errors += "#####################################################################" + "\n"
+#                              errors += '%s - The analytic account 1 is required but not set'%(line.ref) + "\n"
+#                          if accdim.dimension_id.sequence == 2 and accdim.analytic_account_required and not line.analytic_dimension_2_id:
+#                              errors += "#####################################################################" + "\n"
+#                              errors += '%s - The analytic account 2 is required but not set'%(line.ref) + "\n"
+#                          if accdim.dimension_id.sequence == 3 and accdim.analytic_account_required and not line.analytic_dimension_3_id:
+#                              errors += "#####################################################################" + "\n"
+#                              errors += '%s - The analytic account 3 is required but not set'%(line.ref) + "\n"
+       
+                       if line.account_id.partner_mandatory and not line.partner_id:
+                           errors += '%s - A required partner is not present'%(line.ref) + "\n"
+                       if line.account_id.employee_mandatory and not line.employee_id:
+                           errors += "%s - A required employee is not present" + "\n"
+
+           except ValueError, e:
+               
+                       print "####### system error:",e
+                       errors += "################### SYSTEM ERROR ########################" + '\n'
+                       errors += line.ref + "\n"  + e + "\n" + "#####################################################################" + "\n"
+
+           # Out of except to refresh the Logs if no errors
+           statement_obj.write(cr, uid, [statement.id], {'process_log': errors})
+
+           if errors:
+                statement_obj.write(cr, uid, [statement.id], {'state':'error'})
+           else:
+                statement_obj.write(cr, uid, [statement.id], {'validated':True,'state':'draft'})
+       
+        return {
+           'type': 'ir.actions.client',
+           'tag': 'reload',
+        }       
+
+    def button_retry_bank(self, cr, uid, ids, context=None):
+        return self.button_validate_bank(cr, uid, ids, context=context)
 
     def button_confirm_bank(self, cr, uid, ids, context=None):
         """Create the anaytic entries for the dimensions"""
@@ -1600,49 +1699,6 @@ class account_bank_statement(osv.osv):
         analytic_obj = self.pool.get('account.analytic.line')
 
         for statement in self.browse(cr, uid, ids):
-           
-            # Check if all required analytic entries are filled
-            for line in statement.line_ids:
-                for dimension in line.account_id.dimension_ids:
-                    if dimension.analytic_account_required:
-                        recs = self.pool.get('wizard.data').search(cr, uid, [('statement_line_id','=',line.id)])
-                        if not recs:
-                            raise osv.except_osv(_('Error'),_('A required analytic account is not set for the dimension %s'%(dimension.dimension_id.name)))
-
-            # Check for required dependent dimensions
-            for line in statement.line_ids:
-                dim_recs = self.pool.get('wizard.data').search(cr, uid, [('statement_line_id','=',line.id),('analytic_account_id','!=',False)])
-                for dim_rec in self.pool.get('wizard.data').browse(cr, uid, dim_recs):
-                    if not dim_rec.analytic_account_id.dimensions_mandatory:
-                        continue
-                    # Get the required dimensions type
-                    required_dims = []
-                    for ana_dim in dim_rec.analytic_account_id.allowed_account_ids:
-                        required_dims.append(ana_dim.dimension_id.id)
-                        required_dims = list(set(required_dims))
-                        for rdim in required_dims:
-                            dim_check = self.pool.get('wizard.data').search(cr, uid, [('statement_line_id','=',line.id),
-                                ('distribution_id','=',rdim),('analytic_account_id','!=',False)])
-                            if not dim_check:
-                                raise osv.except_osv(_('Error'),_('A dependent analytic account is not set for the statement line: %s'%(line.ref)))
-
-                for accdim in line.account_id.dimension_ids:
-                    if accdim.dimension_id.sequence == 1 and accdim.analytic_account_required and not line.analytic_dimension_1_id:
-                        raise osv.except_osv(_('Error'),_('The analytic account 1 is required but not set for the statement line: %s'%(line.ref)))
-                    if accdim.dimension_id.sequence == 2 and accdim.analytic_account_required and not line.analytic_dimension_2_id:
-                        raise osv.except_osv(_('Error'),_('The analytic account 2 is required but not set for the statement line: %s'%(line.ref)))
-                    if accdim.dimension_id.sequence == 3 and accdim.analytic_account_required and not line.analytic_dimension_3_id:
-                        raise osv.except_osv(_('Error'),_('The analytic account 3 is required but not set for the statement line: %s'%(line.ref)))
-
-                if line.account_id.partner_mandatory and not line.partner_id:
-                    raise osv.except_osv(_('Error'),_('A required partner is not present on the line %s'%(line.ref)))
-                if line.account_id.employee_mandatory and not line.employee_id:
-                    raise osv.except_osv(_('Error'),_('A required employee is not present on the line %s'%(line.ref)))
-
-#                if line.account_id.fleet_mandatory and not line.fleet_id:
-#                    raise osv.except_osv(_('Error'),_('A required plate number is not present on the line %s'%(line.ref)))
-#                if line.account_id.asset_mandatory and not line.asset_id:
-#                    raise osv.except_osv(_('Error'),_('A required asset is not present on the line %s'%(line.ref)))
 
             res = super(account_bank_statement, self).button_confirm_bank(cr, uid, [statement.id], context=context)
 
@@ -1667,21 +1723,6 @@ class account_bank_statement(osv.osv):
                         if move_ids:
                              move_id = move_ids[0]
                         data_obj.write(cr, uid, [wiz_data.id], {'move_line_id':move_id})
-
-#                        vals = {
-#                            'name': statement_line.name,
-#                            'date': statement_line.date,
-#                            'account_id': wiz_data.analytic_account_id.id,
-#                            'journal_id': statement.journal_id.analytic_journal_id.id or None,
-#                            'amount': statement_line.amount,
-#                            'ref': statement_line.name,
-#                            'unit_amount': 1,
-#                            'general_account_id': statement_line.account_id.id,
-#                            'move_id': move_id,
-#                            'user_id': uid,
-#                            'period_id': statement.period_id.id
-#                        }
-#                        analine_res = analytic_obj.create(cr, uid, vals, context=context)
 
         return True
 
