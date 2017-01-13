@@ -948,7 +948,9 @@ class account_coda_import(osv.osv_memory):
                         break
             if not bank_account:
                 raise osv.except_osv(_('Error') + ' R1004', _("No matching Bank Account (with Account Journal) found.\n\nPlease set-up a Bank Account with as Account Number '%s' and as Currency '%s' and an Account Journal.") % (cfile.t1_account_nbr, cfile.t1_currency))
-            
+            if bank_account.state != 'iban':
+                raise osv.except_osv(_('Error'), _("Please set-up Bank Account as IBAN."))
+
             journal = journal_obj.browse(cr, uid, journal_id)
             company_id = journal.company_id.id
             currency_id = journal.company_id.currency_id.id
@@ -960,7 +962,7 @@ class account_coda_import(osv.osv_memory):
             if not period_id:
                 raise osv.except_osv(_('Error') + 'R0002', _("The CODA Statement New Balance date doesn't fall within a defined Accounting Period! Please create the Accounting Period for date %s for the company %s.") % (cfile.t8_end_date, journal.company_id.name))
 
-            statName = cfile.t0_date[2:4] + '-' + cfile.t1_account_nbr[4:5] + cfile.t1_account_nbr[14:16] + '-' + cfile.t1_paper_seq_nbr
+            statName = cfile.t0_date[2:4] + '-' + bank_account.acc_number[4:5] + bank_account.acc_number[14:16] + '-' + cfile.t1_paper_seq_nbr
             coda_note = ''
 
             balance_start_check_date = cfile.t0_date
