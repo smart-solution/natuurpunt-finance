@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="0">
+
+        <record id="bank_statetement_processed_template" model="email.template">
+		<field name="name">bank_statetement_processed_template</field>
+		<field name="model_id" ref="account.model_account_bank_statement"/>
+		<field name="email_from">noreply@natuurpunt.be</field>
+		<field name="email_to" >${user.email|safe}</field>
+                <field name="auto_delete" eval="True" />
+		<field name="subject">Het rekeninguittreksel wordt verwerkt</field>
+		<field name="body_html"><![CDATA[
+		<p>Beste,</p>
+		<p>Het rekeninguittreksel is verwerkt.</p>
+		<p></p>]]></field>
+        </record>
+
+    </data>
+</openerp>
