@@ -38,7 +38,6 @@ def job_confirm_bank_statement(session, ids, context):
     """
 
     try:
-        print "IN confirm_bank_statement_async"
         BankStatement = session.pool.get('account.bank.statement')
         res = BankStatement.button_confirm_bank(session.cr, session.uid, ids, context=context)
 	session.pool.get('account.bank.statement').write(session.cr, session.uid, ids, {'state':'confirm'})
@@ -48,27 +47,51 @@ def job_confirm_bank_statement(session, ids, context):
     
         data_obj = session.pool.get('ir.model.data')
         template = data_obj.get_object(session.cr, session.uid, 'account_bank_statement_async', 'bank_statetement_processed_template')
-        print "BSTMT TEMPLATE:",template
     
         context['subject']   = "Het rekeninguittreksel %s s verwerkt"%(ids)
         context['email_to']  = user.email
         context['body_html'] = "<p>Het rekeninguittreksel %s wordt verwerkt</p>"%(ids)
-        #context['model'] = 'account.bank.statement'
-        #context['res_id']    = ids[0]
-        mail_res = session.pool.get('email.template').send_mail(session.cr, SUPERUSER_ID, template.id, False, force_send=True, context=context)
-    
-        print "MAIL RES:",mail_res
-        print "RES:",res
+        mail_res = session.pool.get('account.bank.statement').send_processed_mail(session.cr, SUPERUSER_ID, template.id, ids[0], context=context)
     
     except ValueError, e:
 	session.pool.get('account.bank.statement').write(session.cr, session.uid, ids, {'process_log':e, 'state':'error'})
-        print "ERROR"
     
     return res
 
 class account_bank_statement(osv.osv):
 
     _inherit = 'account.bank.statement'
+
+    def send_processed_mail(self, cr, uid, template_id, res_id, context=None):
+	"""
+	Generate an email for the async notification of bank statement processing
+	"""
+        if context is None:
+            context = {}
+        mail_mail = self.pool.get('mail.mail')
+        ir_attachment = self.pool.get('ir.attachment')
+
+        user = self.pool.get('res.users').browse(cr, uid, context['recipient'])
+	stmt = self.pool.get('account.bank.statement').browse(cr, uid, res_id)
+
+        values = {}
+        values['subject']   = "Het rekeninguittreksel %s s verwerkt"%(stmt.name)
+        values['email_to']  = user.email
+        values['email_from']  = "no_reply@natuurpunt.be"
+        values['body_html'] = "<p>Het rekeninguittreksel %s wordt verwerkt</p>"%(stmt.name)
+	
+        if not values.get('email_from'):
+            raise osv.except_osv(_('Warning!'),_("Sender email is missing or empty after template rendering. Specify one to deliver your message"))
+        recipient_ids = []
+	recipient_ids.append(user.partner_id.id)
+
+        msg_id = mail_mail.create(cr, uid, values, context=context)
+        mail = mail_mail.browse(cr, uid, msg_id, context=context)
+
+        mail_mail.send(cr, uid, [msg_id], recipient_ids=recipient_ids, context=context)
+
+        return msg_id
+
 
     def test_send_email(self, cr, uid, ids, context=None):
 
@@ -77,17 +100,11 @@ class account_bank_statement(osv.osv):
     
         data_obj = self.pool.get('ir.model.data')
         template = data_obj.get_object(cr, uid, 'account_bank_statement_async', 'bank_statetement_processed_template')
-        print "BSTMT TEMPLATE:",template
     
         context['subject']   = "Het rekeninguittreksel %s s verwerkt"%(ids)
         context['email_to']  = user.email
         context['body_html'] = "<p>Het rekeninguittreksel %s wordt verwerkt</p>"%(ids)
-        #context['model'] = 'account.bank.statement'
-        #context['res_id']    = ids[0]
         mail_res = self.pool.get('email.template').send_mail(cr, SUPERUSER_ID, template.id, False, force_send=True, context=context)
-    
-        print "MAIL RES:",mail_res
-
 	
 
     def button_confirm_bank_async(self, cr, uid, ids, context=None):
@@ -96,6 +113,7 @@ class account_bank_statement(osv.osv):
 	"""
         session = ConnectorSession(cr, uid, context)
 	
+	context['recipient'] = uid
 	res = job_confirm_bank_statement.delay(session, ids, context)
 
 	self.pool.get('account.bank.statement').write(cr, uid, ids, {'state':'processing'})
