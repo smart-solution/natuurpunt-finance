@@ -11,8 +11,11 @@
             <field name="inherit_id" ref="account.view_bank_statement_form"/>
             <field name="arch" type="xml">
                 <button name="button_confirm_bank" position="replace">
-		    <button name="button_confirm_bank" invisible="1"/>
+					<!--<button name="button_confirm_bank" invisible="1"/>
                     <button name="button_confirm_bank_async" string="Bevestigen"
+							type="object" class="oe_highlight"  attrs="{'invisible':['|',('validated','=',False),('state','!=','draft')]}"/>
+					-->
+					<button name="button_confirm_bank" string="Bevestigen"
                             type="object" class="oe_highlight"  attrs="{'invisible':['|',('validated','=',False),('state','!=','draft')]}"/>
                 </button>
             </field>
