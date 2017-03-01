@@ -169,6 +169,10 @@ class account_bank_statement_line(osv.osv):
                     vals['analytic_dimension_2_id'] = sql_res['analytic_dimension_2_id']
                     vals['analytic_dimension_3_id'] = sql_res['analytic_dimension_3_id']
 
+        dims_required = self.onchange_account_id(cr, uid, 0, vals['account_id'], context=context)
+        vals['analytic_dimension_1_required'] = dims_required['value']['analytic_dimension_1_required']
+        vals['analytic_dimension_2_required'] = dims_required['value']['analytic_dimension_2_required']
+        vals['analytic_dimension_3_required'] = dims_required['value']['analytic_dimension_3_required']
         res = super(account_bank_statement_line, self).create(cr, uid, vals, context=context)
         return res
 
