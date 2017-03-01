@@ -85,15 +85,22 @@ class account_bank_statement(osv.osv):
                }
     
     def unlink(self, cr, uid, ids, context=None):
+        """base override unlink"""
         for this in self.browse(cr, uid, ids, context):
             if this.fys_file_id:
                 this.fys_file_id.write(
                         {'filename': this.fys_file_id.id,
                         })
                 this.fys_file_id.refresh()
-        return super(account_bank_statement, self).unlink(
-                cr, uid, ids, context=context)
-
+        stat = self.read(cr, uid, ids, ['state'], context=context)
+        unlink_ids = []
+        for t in stat:
+            if t['state'] in ('draft','error'):
+                unlink_ids.append(t['id'])
+            else:
+                raise osv.except_osv(_('Invalid Action!'), _('In order to delete a bank statement, you must first cancel it to delete related journal items.'))
+        osv.osv.unlink(self, cr, uid, unlink_ids, context=context)
+        return True
     
 account_bank_statement()
     
