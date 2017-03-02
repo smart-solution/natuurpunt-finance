@@ -1633,9 +1633,9 @@ class account_bank_statement(osv.osv):
                    for line in statement.line_ids:
                        for dimension in line.account_id.dimension_ids:
                            if dimension.analytic_account_required:
-                               recs = self.pool.get('wizard.data').search(cr, uid, [('statement_line_id','=',line.id)])
+                               recs = self.pool.get('wizard.data').search(cr, uid, [('statement_line_id','=',line.id),('distribution_id','=',dimension.dimension_id.id)])
                                if not recs:
-                                   errors += '%s - Een afhankelijke analytische rekening is niet ingegeven voor dimensie : %s'%(line.ref, dimension.dimension_id.name) + '\n'
+                                   errors += '%s - Rekening %s heeft een verplichte analytische rekening voor dimensie : %s'%(line.ref, line.account_id.name, dimension.dimension_id.name) + '\n'
 
                        dim_recs = self.pool.get('wizard.data').search(cr, uid, [('statement_line_id','=',line.id),('analytic_account_id','!=',False)])
                        for dim_rec in self.pool.get('wizard.data').browse(cr, uid, dim_recs):
@@ -1644,13 +1644,13 @@ class account_bank_statement(osv.osv):
                            # Get the required dimensions type
                            required_dims = []
                            for ana_dim in dim_rec.analytic_account_id.allowed_account_ids:
-                               required_dims.append(ana_dim.dimension_id.id)
-                               required_dims = list(set(required_dims))
-                               for rdim in required_dims:
-                                   dim_check = self.pool.get('wizard.data').search(cr, uid, [('statement_line_id','=',line.id),
-                                       ('distribution_id','=',rdim),('analytic_account_id','!=',False)])
-                                   if not dim_check:
-                                       errors += '%s - Een afhankelijke analytische rekening werd niet ingegeven voor lijn'%(line.ref) + "\n"
+                               required_dims.append(ana_dim.dimension_id)
+                           required_dims = list(set(required_dims))
+                           for rdim in required_dims:
+                               dim_check = self.pool.get('wizard.data').search(cr, uid, [('statement_line_id','=',line.id),
+                                   ('distribution_id','=',rdim.id),('analytic_account_id','!=',False)])
+                               if not dim_check:
+                                  errors += '%s - Analytische rekening %s heeft verplichte afhankelijke dimensie : %s'%(line.ref,dim_rec.analytic_account_id.name,rdim.name) + "\n"
        
 #                      for accdim in line.account_id.dimension_ids:
 #                          if accdim.dimension_id.sequence == 1 and accdim.analytic_account_required and not line.analytic_dimension_1_id:
