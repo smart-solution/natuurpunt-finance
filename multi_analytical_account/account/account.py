@@ -1637,8 +1637,10 @@ class account_bank_statement(osv.osv):
                                if not recs:
                                    errors += '%s - Rekening %s heeft een verplichte analytische rekening voor dimensie : %s'%(line.ref, line.account_id.name, dimension.dimension_id.name) + '\n'
 
+                       dim_ids = []
                        dim_recs = self.pool.get('wizard.data').search(cr, uid, [('statement_line_id','=',line.id),('analytic_account_id','!=',False)])
                        for dim_rec in self.pool.get('wizard.data').browse(cr, uid, dim_recs):
+                           dim_ids.append(dim_rec.analytic_account_id.id)
                            if not dim_rec.analytic_account_id.dimensions_mandatory:
                                continue
                            # Get the required dimensions type
@@ -1651,6 +1653,26 @@ class account_bank_statement(osv.osv):
                                    ('distribution_id','=',rdim.id),('analytic_account_id','!=',False)])
                                if not dim_check:
                                   errors += '%s - Analytische rekening %s heeft verplichte afhankelijke dimensie : %s'%(line.ref,dim_rec.analytic_account_id.name,rdim.name) + "\n"
+
+                       if line.account_id.partner_mandatory and not line.partner_id:
+                           errors += '%s - A required partner is not present'%(line.ref) + "\n"
+                       if line.account_id.employee_mandatory and not line.employee_id:
+                           errors += "%s - A required employee is not present"%(line.ref) + "\n"
+
+                       # Get all allowed dimensions
+                       allowed_accounts = []
+                       for dim_id in dim_ids:
+                           allowed_accounts_search = self.pool.get('account.analytic.account').read(cr, uid, dim_id, ['allowed_account_ids'])
+                           if 'allowed_account_ids' in allowed_accounts_search:
+                               allowed_accounts += allowed_accounts_search['allowed_account_ids']
+
+                       if len(dim_ids) == 1:
+                           continue
+
+                       for dim_id in dim_ids:
+                           if dim_id not in allowed_accounts:
+                              analytic_acc = self.pool.get('account.analytic.account').browse(cr,uid,dim_id)
+                              errors += '%s - A non-authorized analytic account is set (%s)'%(line.ref, analytic_acc.name) + "\n"
        
 #                      for accdim in line.account_id.dimension_ids:
 #                          if accdim.dimension_id.sequence == 1 and accdim.analytic_account_required and not line.analytic_dimension_1_id:
@@ -1663,11 +1685,6 @@ class account_bank_statement(osv.osv):
 #                              errors += "#####################################################################" + "\n"
 #                              errors += '%s - The analytic account 3 is required but not set'%(line.ref) + "\n"
        
-                       if line.account_id.partner_mandatory and not line.partner_id:
-                           errors += '%s - A required partner is not present'%(line.ref) + "\n"
-                       if line.account_id.employee_mandatory and not line.employee_id:
-                           errors += "%s - A required employee is not present" + "\n"
-
            except ValueError, e:
                
                        print "####### system error:",e
