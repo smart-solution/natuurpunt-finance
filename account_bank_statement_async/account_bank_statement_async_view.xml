@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+   <!--
+       account_bank_statement_async Views 
+   -->
+
+        <record id="view_account_bank_statement_async" model="ir.ui.view">
+            <field name="name">view.account.bank.statement.async</field>
+            <field name="model">account.bank.statement</field>
+            <field name="inherit_id" ref="account.view_bank_statement_form"/>
+            <field name="arch" type="xml">
+                <button name="button_confirm_bank" position="replace">
+					<!--<button name="button_confirm_bank" invisible="1"/>
+                    <button name="button_confirm_bank_async" string="Bevestigen"
+							type="object" class="oe_highlight"  attrs="{'invisible':['|',('validated','=',False),('state','!=','draft')]}"/>
+					-->
+					<button name="button_confirm_bank" string="Bevestigen"
+                            type="object" class="oe_highlight"  attrs="{'invisible':['|',('validated','=',False),('state','!=','draft')]}"/>
+                </button>
+            </field>
+        </record>
+
+    </data>
+</openerp>

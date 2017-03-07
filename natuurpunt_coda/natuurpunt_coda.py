@@ -8,6 +8,7 @@ import datetime, time
 
 from openerp.osv import fields, osv
 from openerp.tools.translate import _
+from openerp import SUPERUSER_ID
 from openerp import tools
 from md5 import md5
 
@@ -84,15 +85,22 @@ class account_bank_statement(osv.osv):
                }
     
     def unlink(self, cr, uid, ids, context=None):
+        """base override unlink"""
         for this in self.browse(cr, uid, ids, context):
             if this.fys_file_id:
                 this.fys_file_id.write(
                         {'filename': this.fys_file_id.id,
                         })
                 this.fys_file_id.refresh()
-        return super(account_bank_statement, self).unlink(
-                cr, uid, ids, context=context)
-
+        stat = self.read(cr, uid, ids, ['state'], context=context)
+        unlink_ids = []
+        for t in stat:
+            if t['state'] in ('draft','error'):
+                unlink_ids.append(t['id'])
+            else:
+                raise osv.except_osv(_('Invalid Action!'), _('In order to delete a bank statement, you must first cancel it to delete related journal items.'))
+        osv.osv.unlink(self, cr, uid, unlink_ids, context=context)
+        return True
     
 account_bank_statement()
     
@@ -168,6 +176,10 @@ class account_bank_statement_line(osv.osv):
                     vals['analytic_dimension_2_id'] = sql_res['analytic_dimension_2_id']
                     vals['analytic_dimension_3_id'] = sql_res['analytic_dimension_3_id']
 
+        dims_required = self.onchange_account_id(cr, uid, 0, vals['account_id'], context=context)
+        vals['analytic_dimension_1_required'] = dims_required['value']['analytic_dimension_1_required']
+        vals['analytic_dimension_2_required'] = dims_required['value']['analytic_dimension_2_required']
+        vals['analytic_dimension_3_required'] = dims_required['value']['analytic_dimension_3_required']
         res = super(account_bank_statement_line, self).create(cr, uid, vals, context=context)
         return res
 
@@ -440,7 +452,8 @@ class account_coda_sdd_refused(osv.osv):
         'comm': fields.char('Communicatie'),
         'type_R': fields.char('Type R', size=1),
         'reason': fields.char('Reden'),
-                }
+        'name': fields.char('Name', size=64),
+    }
 
 account_coda_sdd_refused()
 
@@ -946,7 +959,9 @@ class account_coda_import(osv.osv_memory):
                         break
             if not bank_account:
                 raise osv.except_osv(_('Error') + ' R1004', _("No matching Bank Account (with Account Journal) found.\n\nPlease set-up a Bank Account with as Account Number '%s' and as Currency '%s' and an Account Journal.") % (cfile.t1_account_nbr, cfile.t1_currency))
-            
+            if bank_account.state != 'iban':
+                raise osv.except_osv(_('Error'), _("Please set-up Bank Account as IBAN."))
+
             journal = journal_obj.browse(cr, uid, journal_id)
             company_id = journal.company_id.id
             currency_id = journal.company_id.currency_id.id
@@ -958,7 +973,7 @@ class account_coda_import(osv.osv_memory):
             if not period_id:
                 raise osv.except_osv(_('Error') + 'R0002', _("The CODA Statement New Balance date doesn't fall within a defined Accounting Period! Please create the Accounting Period for date %s for the company %s.") % (cfile.t8_end_date, journal.company_id.name))
 
-            statName = cfile.t0_date[2:4] + '-' + cfile.t1_account_nbr[4:5] + cfile.t1_account_nbr[14:16] + '-' + cfile.t1_paper_seq_nbr
+            statName = cfile.t0_date[2:4] + '-' + bank_account.acc_number[4:5] + bank_account.acc_number[14:16] + '-' + cfile.t1_paper_seq_nbr
             coda_note = ''
 
             balance_start_check_date = cfile.t0_date
@@ -1064,9 +1079,13 @@ class account_coda_import(osv.osv_memory):
                             move_line = move_line_obj.browse(cr, uid, payment_line.move_line_id.id)
                 if lines2.t21_struct and lines2.t21_struct_type in ('101','102') and not(move_line):
 #                     print structcomm_message
-                    ids = move_line_obj.search(cr, uid, [('ref'.replace('%','').replace(' ',''), '=', structcomm_message), ('reconcile_id', '=', False), ('account_id.reconcile', '=', True)])
-                    if ids:
-                        move_line = move_line_obj.browse(cr, uid, ids[0])
+                    invoice_ids = invoice_obj.search(cr, uid, [('reference','=',structcomm_message),('state','=','open')])
+                    _logger.info("processing reference: {}".format(structcomm_message))
+                    if len(invoice_ids) == 1:
+                        for invoice in invoice_obj.browse(cr, uid, invoice_ids):
+                            ids = move_line_obj.search(cr, uid, [('move_id','=', invoice.move_id.id),('reconcile_id', '=', False),('account_id.reconcile', '=', True)])
+                            if ids:
+                                move_line = move_line_obj.browse(cr, uid, ids[0])
 # 		print datetime.datetime.now() , 'move gezocht '
                     
                 if move_line:
@@ -1117,7 +1136,7 @@ class account_coda_import(osv.osv_memory):
 #                         'invoice_id': invoice_id,
                         }
                         context['invoice_id'] = invoice_id
-                        voucher_vals.update(self.pool.get('account.voucher').onchange_partner_id(cr, uid, [],
+                        voucher_vals.update(self.pool.get('account.voucher').onchange_partner_id(cr, SUPERUSER_ID, [],
                             partner_id = partner_id,
                             journal_id = journal_id,
                             amount = abs(lines2.t21_amount),
@@ -1245,6 +1264,7 @@ class account_coda_import(osv.osv_memory):
                       'comm': sdd_struct[79:141],
                       'type_R': sdd_struct[141:142],
                       'reason': sdd_struct[142:146],
+                      'name': ''.join(filter(None, lines2.t22_ref_cust)),
                       }, context=context)
                 if lines2.t21_struct_type == '107' and lines2.t21_struct_comm[48:49] != '0':
                     sdd_struct = ''.join(filter(None, [lines2.t21_struct_comm, lines2.t22_free_comm, lines2.t23_free_comm]))
@@ -1267,6 +1287,7 @@ class account_coda_import(osv.osv_memory):
                       'comm': sdd_struct[18:48],
 #                       'type_R': ,
 #                       'reason': ,
+                      'name': ''.join(filter(None, lines2.t22_ref_cust)),
                       }, context=context)
                  
 #                 print lines2.det2_ids
@@ -1299,6 +1320,7 @@ class account_coda_import(osv.osv_memory):
                           'comm': sdd_struct[79:141],
                           'type_R': sdd_struct[141:142],
                           'reason': sdd_struct[142:146],
+                          'name': ''.join(filter(None, det2.t22_ref_cust)),
                           }, context=context)
                     if det2.t21_struct_type == '107' and det2.t21_struct_comm[48:49] != '0':
                         sdd_struct = ''.join(filter(None, [det2.t21_struct_comm, det2.t22_free_comm, det2.t23_free_comm]))
@@ -1321,6 +1343,7 @@ class account_coda_import(osv.osv_memory):
                           'comm': sdd_struct[18:48],
     #                       'type_R': ,
     #                       'reason': ,
+                          'name': ''.join(filter(None, det2.t22_ref_cust)),
                           }, context=context)
                     
                     

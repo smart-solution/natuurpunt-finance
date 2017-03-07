@@ -28,10 +28,10 @@
 
     <record model="ir.ui.view" id="view_purchase_requisition_np2_form">
         <field name="name">purchase.requisition.np2.form</field>
-        <field name="inherit_id" ref="purchase_requisition.view_purchase_requisition_form"/>
+        <field name="inherit_id" ref="natuurpunt_purchase.view_purchase_requisition_noproduct_form"/>
         <field name="model">purchase.requisition</field>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='line_ids']/tree//field[@name='product_id']" position="after">
+            <xpath expr="//field[@name='line_ids']/tree//field[@name='name']" position="after">
 			    <field name="analytic_dimension_1_id" context="{'purchase_requisition_line_id':active_id,'dimension':1,'dimension2':analytic_dimension_2_id,'dimension3':analytic_dimension_3_id}" attrs="{'required':[('analytic_dimension_1_required','=',True)]}" required="True"/>
 			    <field name="analytic_dimension_2_id" context="{'purchase_requisition_line_id':active_id,'dimension':2,'dimension1':analytic_dimension_1_id,'dimension3':analytic_dimension_3_id}" attrs="{'required':[('analytic_dimension_2_required','=',True)]}"/>
 			    <field name="analytic_dimension_3_id" context="{'purchase_requisition_line_id':active_id,'dimension':3,'dimension1':analytic_dimension_1_id,'dimension2':analytic_dimension_2_id}" attrs="{'required':[('analytic_dimension_3_required','=',True)]}"/>

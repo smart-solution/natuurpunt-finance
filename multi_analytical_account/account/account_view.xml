@@ -292,7 +292,6 @@
             	<xpath expr="//form[@string='CODA Statement Line']" position="attributes">
 	                <attribute name="create">0</attribute>
 	                <attribute name="delete">0</attribute>
-	                <attribute name="edit">0</attribute>
 	            </xpath>
                 <field name="sequence" position="after">
                   <newline/>
@@ -756,6 +755,19 @@
             groups="base.group_hr_manager,account.group_account_user,account.group_account_manager"
             sequence="90"/>
 
+        <record id="view_account_bank_statement_validate" model="ir.ui.view">
+            <field name="name">view.account.bank.statement.validate</field>
+            <field name="model">account.bank.statement</field>
+            <field name="inherit_id" ref="account.view_bank_statement_form"/>
+            <field name="arch" type="xml">
+                <button name="button_confirm_bank" position="after">
+                    <button name="button_retry_bank" string="Opnieuw Proberen"
+                            type="object" class="oe_highlight" attrs="{'invisible':['|',('validated','=',True),('state','!=','error')]}"/>
+                    <button name="button_validate_bank" string="Verwerken"
+                            type="object" class="oe_highlight" attrs="{'invisible':['|',('validated','=',True),('state','!=','draft')]}"/>
+                </button>
+            </field>
+        </record>
 
     </data>
 </openerp>
