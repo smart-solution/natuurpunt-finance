@@ -85,6 +85,7 @@ class res_partner(osv.osv):
         'company_id': False,
     }
 
+
 res_partner()
 
 class account_invoice(osv.osv):

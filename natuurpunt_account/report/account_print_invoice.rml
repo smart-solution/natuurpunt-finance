@@ -400,7 +400,7 @@
     <para style="terp_default_8">
       <font color="white"> </font>
     </para>
-    <para style="terp_default_9">Betalingstermijn : [[ (o.payment_term and o.payment_term.note and format(o.payment_term and o.payment_term.note)) or removeParentNode('para') ]]</para>
+    <para style="terp_default_9">Betalingstermijn : [[(o.date_invoice ==o.date_due and removeParentNode('para')) or payment_term(o.date_invoice,o.date_due)]]</para>
     <para style="terp_default_9">
       <font color="white"> </font>
     </para>
