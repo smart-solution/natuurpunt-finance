@@ -39,7 +39,13 @@ class account_invoice(osv.osv):
             res[inv.id] = self.test_paid(cr, uid, [inv.id])
             if not res[inv.id] and inv.state == 'paid':
                 state = get_approval_state(self, cr, uid, inv, context = context)
-                self.write(cr, uid, ids, {'state': state}, context=context)
+                if state == 'waiting' or state == 'approved':
+                    if state == 'waiting':
+                        state = 'confirmed'
+                    self.write(cr, uid, ids, {'state': state}, context=context)
+                else:
+                    wf_service.trg_validate(uid, 'account.invoice', inv.id, 'open_test', cr)
+                
         return res
     
     def _get_invoice_from_reconcile(self, cr, uid, ids, context=None):
