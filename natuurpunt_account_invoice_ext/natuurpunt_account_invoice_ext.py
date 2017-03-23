@@ -104,19 +104,21 @@ class account_invoice(osv.osv):
         Rules for invoicing
         """
 
+        if type(ids) in not list:
+            ids = [ids]
         for invoice in self.browse(cr, uid, ids, context=context):
             print "VALS:",vals
           
             if 'customer_company_id' in vals and vals['customer_company_id']:
                 customer = self.pool.get('res.partner').browse(cr, uid, vals['customer_company_id']) 
  
-                #  If "Befrijf Klant" is a company with no contacts => "Befrijf Klant" is invoiced 
+                #  If "Bedrijf Klant" is a company with no contacts => "Bedrijf Klant" is invoiced 
                 if customer.is_company and not customer.child_ids:
                     vals['partner_id'] = customer.id
-                # If "Befrijf Klant" is a company with contacts but no contact ("Klant") is selected => "Befrijf Klant" is invoiced
+                # If "Bedrijf Klant" is a company with contacts but no contact ("Klant") is selected => "Bedrijf Klant" is invoiced
                 elif customer.is_company and customer.child_ids and 'customer_contact_ids' not in vals:
                     vals['partner_id'] = customer.id
-                # If "Befrijf Klant" is a contact => "Befrijf Klant" is invoiced with the contact name in the invoice report address
+                # If "Bedrijf Klant" is a contact => "Bedrijf Klant" is invoiced with the contact name in the invoice report address
                 elif not customer.is_company:
                     vals['partner_id'] = customer.id
                 else:
@@ -125,11 +127,11 @@ class account_invoice(osv.osv):
             if 'customer_contact_id' in vals and vals['customer_contact_id']:
                 contact = self.pool.get('res.partner').browse(cr, uid, vals['customer_contact_id']) 
 
-                #  If "Befrijf Klant" is a company with contacts, a "Klant" is selected and "Gebruik bedrijfsadres" is set => "Befrijf Klant" is invoiced with the bedrifadres
+                #  If "Bedrijf Klant" is a company with contacts, a "Klant" is selected and "Gebruik bedrijfsadres" is set => "Bedrijf Klant" is invoiced with the bedrifadres
                 if 'use_company_address' in vals and vals['use_company_address']:
                     vals['partner_id'] = contact.parent_id.id
 
-                # If "Befrijf Klant" is a company with contacts, a "Klant" is selected and "Gebruik bedrijfsadres" is not set => "Befrijf Klant" is invoiced with the contact name in the invoice report address
+                # If "Bedrijf Klant" is a company with contacts, a "Klant" is selected and "Gebruik bedrijfsadres" is not set => "Bedrijf Klant" is invoiced with the contact name in the invoice report address
                 elif ('use_company_address' in vals and not vals['use_company_address']) or 'use_company_address' not in vals:
                     vals['partner_id'] = vals['customer_contact_id']
                 else:
