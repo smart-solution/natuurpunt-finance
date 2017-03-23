@@ -104,7 +104,7 @@ class account_invoice(osv.osv):
         Rules for invoicing
         """
 
-        if type(ids) in not list:
+        if not(type(ids) is list):
             ids = [ids]
         for invoice in self.browse(cr, uid, ids, context=context):
             print "VALS:",vals
