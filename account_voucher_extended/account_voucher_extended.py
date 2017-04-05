@@ -303,14 +303,20 @@ class account_voucher(osv.osv):
             line_amount = context['default_line_amount']
         else:
             line_amount = price
-            
+
         if not context.get('move_line_ids', False):
             if line_amount >= 0:
                 context['move_line_ids'] = move_line_pool.search(cr, uid, [('account_id.type', 'in', ['receivable','payable']), ('state','=','valid'), ('account_id.reconcile','=',True), ('reconcile_id', '=', False), ('partner_id', '=', partner_id), ('debit','>',0)], context=context)
             else:
                 context['move_line_ids'] = move_line_pool.search(cr, uid, [('account_id.type', 'in', ['receivable','payable']), ('state','=','valid'), ('account_id.reconcile','=',True), ('reconcile_id', '=', False), ('partner_id', '=', partner_id), ('credit','>',0)], context=context)
-        
-        return super(account_voucher,self).recompute_voucher_lines(cr, uid, ids, partner_id, journal_id, line_amount, currency_id, ttype, date, context)
+
+        if not context.get('move_line_ids', False):
+            return super(account_voucher,self).recompute_voucher_lines(cr, uid, ids, partner_id, journal_id, line_amount, currency_id, ttype, date, context)
+        else:
+            default = {
+                 'value': {'line_dr_ids': [] ,'line_cr_ids': [] ,'pre_line': False,},
+            }
+            return default 
 
 class account_voucher_line(osv.osv):
 
