@@ -33,9 +33,18 @@ class account_move_line(osv.osv):
                 res[line.id] = str(line.reconcile_partial_id.name)
         return res
 
+#    _columns = {
+#        'reconcile': fields.function(_get_reconcile, type='char', string='Reconcile Ref', store=True),
+#     }
+    
     _columns = {
-        'reconcile': fields.function(_get_reconcile, type='char', string='Reconcile Ref', store=True),
+         'reconcile': fields.function(
+                     _get_reconcile, type='char', string='Reconcile Ref', store={
+             'account.move.line': (lambda self, cr, uid, ids, c={}: ids, ['reconcile_id'], 10),
+             }),
+
      }
+
 
 account_move_line()
 
