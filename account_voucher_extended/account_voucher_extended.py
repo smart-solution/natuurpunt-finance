@@ -306,9 +306,9 @@ class account_voucher(osv.osv):
 
         if not context.get('move_line_ids', False):
             if line_amount >= 0:
-                context['move_line_ids'] = move_line_pool.search(cr, uid, [('account_id.type', 'in', ['receivable','payable']), ('state','=','valid'), ('account_id.reconcile','=',True), ('reconcile_id', '=', False), ('partner_id', '=', partner_id), ('debit','>',0)], context=context)
+                context['move_line_ids'] = move_line_pool.search(cr, uid, [('account_id.type', 'in', ['receivable','payable']), ('state','=','valid'), ('account_id.reconcile','=',True), ('reconcile_id', '=', False), ('partner_id', '=', partner_id), ('debit','>',0),('debit','=',abs(line_amount))], context=context)
             else:
-                context['move_line_ids'] = move_line_pool.search(cr, uid, [('account_id.type', 'in', ['receivable','payable']), ('state','=','valid'), ('account_id.reconcile','=',True), ('reconcile_id', '=', False), ('partner_id', '=', partner_id), ('credit','>',0)], context=context)
+                context['move_line_ids'] = move_line_pool.search(cr, uid, [('account_id.type', 'in', ['receivable','payable']), ('state','=','valid'), ('account_id.reconcile','=',True), ('reconcile_id', '=', False), ('partner_id', '=', partner_id), ('credit','>',0),('credit','=',abs(line_amount))], context=context)
 
         if 'move_line_ids' in context and context['move_line_ids']:
             return super(account_voucher,self).recompute_voucher_lines(cr, uid, ids, partner_id, journal_id, line_amount, currency_id, ttype, date, context)
