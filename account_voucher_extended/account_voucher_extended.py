@@ -110,6 +110,10 @@ class account_bank_statement_line(osv.osv):
                 self.pool.get('account.voucher').unlink(cr, uid, [line.voucher_id.id])
         return super(account_bank_statement_line, self).unlink(cr, uid, ids, context=context)
 
+    _columns = {
+                'name': fields.text('OBI', required=True, help="Originator to Beneficiary Information"),
+    }
+
 class account_voucher(osv.osv):
 
     _inherit = "account.voucher" 
