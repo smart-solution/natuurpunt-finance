@@ -20,6 +20,7 @@
 ##############################################################################
 
 import time
+from datetime import datetime
 from openerp.report import report_sxw
 
 class account_invoice(report_sxw.rml_parse):
@@ -28,8 +29,23 @@ class account_invoice(report_sxw.rml_parse):
         super(account_invoice, self).__init__(cr, uid, name, context=context)
         self.localcontext.update({
             'time': time,
- 	    'tax_summarize': self._tax_summarize,
-        })
+ 	        'tax_summarize': self._tax_summarize,
+            'payment_term': self._payment_term,                                
+            'get_account_number': self._get_account_number,                                
+                                  })
+    def _get_account_number(self):
+        return  'IBAN BE69 0017 7905 5778'
+         
+    def _payment_term(self,date_invoice,date_due):
+        fmt = '%Y-%m-%d'
+        d1 = datetime.strptime(date_invoice, fmt)
+        d2 = datetime.strptime(date_due, fmt)
+        if (d2-d1).days == 1:
+            str_dagen = ' dag'
+        else: str_dagen = ' dagen'
+        return  str((d2-d1).days)+ str_dagen 
+
+    
 
     def _tax_summarize(self, invoice_id, context=None):
         cr = self.cr

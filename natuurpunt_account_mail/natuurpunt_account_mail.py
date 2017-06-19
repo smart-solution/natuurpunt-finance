@@ -35,6 +35,7 @@ class account_invoice_mail_compose_message(osv.TransientModel):
         'report_size': fields.char('file size', help="account invoice report attachment"),
         'report_data': fields.binary('binary report data'),
         'store_id' : fields.char('store_id'),
+        'json_object' : fields.char('json_object', help="additional emails"),
     }
     
     def sizeof_fmt(self, num, suffix='B'):
@@ -80,9 +81,11 @@ class account_invoice_mail_compose_message(osv.TransientModel):
             recipient_ids = []
             recipient_ids.append(values['customer_id'].id)
             values.pop('customer_id')
-            
-            for partner in wizard.partner_ids:
-                recipient_ids.append(partner.id)
+
+            json_string = wizard.json_object
+            email_cc = ''
+            for json_data in json.loads(json_string):
+                email_cc = email_cc + json_data['email'] + ','
 
             if recipient_ids:
                 warning = self.check_partners_email(cr, uid, recipient_ids, context=context)
@@ -91,6 +94,7 @@ class account_invoice_mail_compose_message(osv.TransientModel):
                     raise osv.except_osv(_("Warning"), _(message))
 
                 values['body_html'] = values['body']
+                values['email_cc'] = email_cc
 
                 msg_id = mail_mail.create(cr, uid, values, context=context)
                 mail = mail_mail.browse(cr, uid, msg_id, context=context)

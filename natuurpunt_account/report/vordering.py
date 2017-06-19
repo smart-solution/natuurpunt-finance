@@ -28,7 +28,11 @@ class account_vordering(report_sxw.rml_parse):
         super(account_vordering, self).__init__(cr, uid, name, context=context)
         self.localcontext.update({
             'time': time,
-        })
+            'get_account_number': self._get_account_number,                                
+                                  })
+         
+    def _get_account_number(self):
+        return  'IBAN BE56 2930 2120 7588'
 
 report_sxw.report_sxw(
     'report.account.vordering',

@@ -20,10 +20,11 @@
 ############################################################################## 
 
 from osv import osv, fields
+from openerp import netsvc
 from openerp.tools.translate import _
 from openerp.tools import float_compare
 import openerp.addons.decimal_precision as dp
-from natuurpunt_tools import create_xml, create_node, transform
+from natuurpunt_tools import create_xml, create_node, transform,get_approval_state
 from natuurpunt_tools import sum_groupby
 from itertools import groupby
 
@@ -31,6 +32,49 @@ class account_invoice(osv.osv):
 
     _inherit = 'account.invoice'
 
+    def _reconciled(self, cr, uid, ids, name, args, context=None):
+        res = {}
+        wf_service = netsvc.LocalService("workflow")
+        for inv in self.browse(cr, uid, ids, context=context):
+            res[inv.id] = self.test_paid(cr, uid, [inv.id])
+            if not res[inv.id] and inv.state == 'paid':
+                state = get_approval_state(self, cr, uid, inv, context = context)
+                if state == 'waiting' or state == 'approved':
+                    if state == 'waiting':
+                        state = 'confirmed'
+                    self.write(cr, uid, ids, {'state': state}, context=context)
+                else:
+                    wf_service.trg_validate(uid, 'account.invoice', inv.id, 'open_test', cr)
+                
+        return res
+    
+    def _get_invoice_from_reconcile(self, cr, uid, ids, context=None):
+        move = {}
+        for r in self.pool.get('account.move.reconcile').browse(cr, uid, ids, context=context):
+            for line in r.line_partial_ids:
+                move[line.move_id.id] = True
+            for line in r.line_id:
+                move[line.move_id.id] = True
+
+        invoice_ids = []
+        if move:
+            invoice_ids = self.pool.get('account.invoice').search(cr, uid, [('move_id','in',move.keys())], context=context)
+        return invoice_ids
+
+    def _get_invoice_from_line(self, cr, uid, ids, context=None):
+        move = {}
+        for line in self.pool.get('account.move.line').browse(cr, uid, ids, context=context):
+            if line.reconcile_partial_id:
+                for line2 in line.reconcile_partial_id.line_partial_ids:
+                    move[line2.move_id.id] = True
+            if line.reconcile_id:
+                for line2 in line.reconcile_id.line_id:
+                    move[line2.move_id.id] = True
+        invoice_ids = []
+        if move:
+            invoice_ids = self.pool.get('account.invoice').search(cr, uid, [('move_id','in',move.keys())], context=context)
+        return invoice_ids
+    
     def _store_set_values(self, cr, uid, ids, fields, context=None):
         """force multi function_field 'amount_total_signed' to use the _amount_all function
         of the inherited account_invoice class
@@ -78,6 +122,12 @@ class account_invoice(osv.osv):
                 'account.invoice.line': (_get_invoice_line, ['price_unit','invoice_line_tax_id','quantity','discount','invoice_id'], 20),
             },
             multi='all'),
+        'reconciled': fields.function(_reconciled, string='Paid/Reconciled', type='boolean',
+            store={
+                'account.invoice': (lambda self, cr, uid, ids, c={}: ids, None, 50), # Check if we can remove ?
+                'account.move.line': (_get_invoice_from_line, None, 50),
+                'account.move.reconcile': (_get_invoice_from_reconcile, None, 50),
+            }, help="It indicates that the invoice has been paid and the journal entry of the invoice has been reconciled with one or several journal entries of payment."),
     }
 
     def create(self, cr, uid, vals, context=None):

@@ -1598,6 +1598,9 @@ class account_bank_statement(osv.osv):
                                         'And after getting confirmation from the bank it will be in \'Confirmed\' status.'),
 
     }
+    
+    def get_next_st_line_number(self, cr, uid, st_number, st_line, context=None):
+        return st_number + '/' + str(st_line.sequence).zfill(6)
 
     def _prepare_bank_move_line(self, cr, uid, st_line, move_id, amount, company_currency_id,context=None):
         """Add the statement_line_id in the account move line"""        
