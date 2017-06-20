@@ -11,6 +11,8 @@ from openerp.tools.translate import _
 from openerp import SUPERUSER_ID
 from openerp import tools
 from md5 import md5
+import re
+from natuurpunt_tools import compose
 
 import logging
 
@@ -113,39 +115,74 @@ class account_bank_statement_line(osv.osv):
         if 'move_flag' not in vals or not vals['move_flag']:
 # New analytic code contract, fonds, project
             if 'name_zonder_adres' in vals and vals['name_zonder_adres']:
-                sql_stat = "select account_coda_account.id as coda_id, account_id, analytic_dimension_1_id, analytic_dimension_2_id,  account_analytic_account.id as analytic_dimension_3_id from account_coda_account, account_bank_statement, account_analytic_account where ('%s' like '%s' || account_analytic_account.code || '%s') and (account_analytic_account.code like 'P-%s' or account_analytic_account.code like 'C-%s' or account_analytic_account.code like 'F-%s') and account_coda_account.name = 'Giften-afleiding' and account_coda_account.company_id = (select company_id from account_account where account_account.id = %d) and account_analytic_account.company_id = (select company_id from account_account where account_account.id = %d) and account_bank_statement.id = %d and account_bank_statement.journal_id = account_coda_account.journal_id" % (vals['name_zonder_adres'].replace("'", ""), '%', '%', '%', '%', '%', vals['account_id'], vals['account_id'], vals['statement_id'], )
-                cr.execute(sql_stat)
-                for sql_res in cr.dictfetchall():
-                    vals['account_id'] = sql_res['account_id']
-                    vals['analytic_dimension_1_id'] = sql_res['analytic_dimension_1_id']
-                    vals['analytic_dimension_2_id'] = sql_res['analytic_dimension_2_id']
-                    vals['analytic_dimension_3_id'] = sql_res['analytic_dimension_3_id']
 
-# Old analytic code
-            if 'name_zonder_adres' in vals and vals['name_zonder_adres'] and 'structcomm_flag' in vals and not(vals['structcomm_flag']):
-                sql_stat = "select account_coda_account.id as coda_id, account_id, account_analytic_dimension.sequence, account_analytic_account.id as analytic_account_id, default_dimension_1_id, default_dimension_2_id, default_dimension_3_id from account_coda_account, account_bank_statement, account_analytic_account, account_analytic_dimension where ('%s' like '%s ' || account_analytic_account.old_code || '%s') and not(account_analytic_account.old_code IS NULL) and not(account_analytic_account.old_code = '') and account_coda_account.name = 'Giften-afleiding' and account_analytic_account.dimension_id = account_analytic_dimension.id and account_coda_account.company_id = (select company_id from account_account where account_account.id = %d) and account_analytic_account.company_id = (select company_id from account_account where account_account.id = %d) and account_bank_statement.id = %d and account_bank_statement.journal_id = account_coda_account.journal_id" % (vals['name_zonder_adres'].replace("'", ""), '%', '%', vals['account_id'], vals['account_id'], vals['statement_id'], )
-                cr.execute(sql_stat)
-                for sql_res in cr.dictfetchall():
-                    vals['account_id'] = sql_res['account_id']
-                    if sql_res['sequence'] == 1:
-                        vals['analytic_dimension_1_id'] = sql_res['analytic_account_id']
-                        vals['analytic_dimension_2_id'] = sql_res['default_dimension_2_id']
-                        vals['analytic_dimension_3_id'] = sql_res['default_dimension_3_id']
-                    if sql_res['sequence'] == 2:
-                        vals['analytic_dimension_2_id'] = sql_res['analytic_account_id']
-                        vals['analytic_dimension_1_id'] = sql_res['default_dimension_1_id']
-                        vals['analytic_dimension_3_id'] = sql_res['default_dimension_3_id']
-                    if sql_res['sequence'] == 3:
-                        vals['analytic_dimension_3_id'] = sql_res['analytic_account_id']
-                        vals['analytic_dimension_2_id'] = sql_res['default_dimension_2_id']
-                        vals['analytic_dimension_1_id'] = sql_res['default_dimension_1_id']
+                analytic_account_obj = self.pool.get('account.analytic.account')
+                acc_coda_acc_obj = self.pool.get('account.coda.account')
 
-# Description
-            if 'name_zonder_adres' in vals and vals['name_zonder_adres']:
-                sql_stat = "select account_coda_account.id as coda_id, account_id, analytic_dimension_1_id, analytic_dimension_2_id, analytic_dimension_3_id from account_coda_account, account_bank_statement where ('%s' like '%s' || communication_like || '%s') and not(communication_like IS NULL) and account_coda_account.company_id = (select company_id from account_account where account_account.id = %d) and account_bank_statement.id = %d and account_bank_statement.journal_id = account_coda_account.journal_id" % (vals['name_zonder_adres'].replace("'", ""), '%', '%', vals['account_id'], vals['statement_id'], )
-                cr.execute(sql_stat)
-                for sql_res in cr.dictfetchall():
-                    vals['account_id'] = sql_res['account_id']
+                # split omschrijving  
+                omschrijving = vals['name_zonder_adres'].upper().split()
+                patterns = [('^[A-Z]{3}-[0-9]{4}-[0-9]{4}',False), # kostenplaats
+                            ('^P-[0-9]{2}-[0-9]{6}$',True),        # project
+                            ('^F-[0-9]{5}$',True),                 # fonds  
+                            ('^C-[A-Z]{2}-',False),]               # contract
+
+                analytic_res = lambda dim1,dim2,dim3: {'dim1':dim1,'dim2':dim2,'dim3':dim3}
+
+                def apply_regex_to_omschrijving(pattern, use_group, field='code', operator='=', func=None):
+                    for word in omschrijving:
+                        match_obj = re.search(pattern,word)
+                        if match_obj:
+                            match = match_obj.group() if use_group else word
+                            if match:
+                                res = get_analytic_account(field,
+                                                           operator,
+                                                           func(match) if func else match)
+                                if res:
+                                    return res
+                    return False
+
+                def get_analytic_account(field, operator, match):
+                    ids = analytic_account_obj.search(cr, uid,[(field, operator, match)])
+                    for analytic_account in analytic_account_obj.browse(cr, uid, ids):
+                        if analytic_account.dimension_id.sequence == 1:
+                            return analytic_res(analytic_account.id,
+                                                analytic_account.default_dimension_2_id.id,
+                                                analytic_account.default_dimension_3_id.id)
+                        if analytic_account.dimension_id.sequence == 2:
+                            return analytic_res(analytic_account.default_dimension_1_id.id,
+                                                analytic_account.id,
+                                                analytic_account.default_dimension_3_id.id)
+                        if analytic_account.dimension_id.sequence == 3:
+                            return analytic_res(analytic_account.default_dimension_1_id.id,
+                                                analytic_account.default_dimension_2_id.id,
+                                                analytic_account.id)
+                    return False
+
+                for pattern_tuple in patterns:
+                    pattern,use_group = pattern_tuple
+                    res = apply_regex_to_omschrijving(pattern, use_group)
+                    if res:
+                        break
+
+                # fallback old_code
+                if not res:
+                    pattern = '^[0-9]{4}'
+                    res = apply_regex_to_omschrijving(pattern,False,'old_code')
+                if not res:
+                    pattern = '^[0-9]{4}'
+                    res = apply_regex_to_omschrijving(pattern,True,'old_code')
+                if not res: # Prefix string PROJECT4444, NR.4444, NR:3333
+                    pattern = '^[A-Z.:]*[0-9]{4}'
+                    func = lambda match : ''.join([i for i in match if i.isdigit()])
+                    res = apply_regex_to_omschrijving(pattern,True,'old_code','=ilike',func)
+
+                if res:
+                    ids = acc_coda_acc_obj.search(cr, uid,[('name', '=', 'Giften-afleiding')])
+                    for acc_coda_acc in acc_coda_acc_obj.browse(cr, uid, ids):
+                       vals['account_id'] = acc_coda_acc.account_id.id
+                    vals['analytic_dimension_1_id'] = res['dim1']
+                    vals['analytic_dimension_2_id'] = res['dim2']
+                    vals['analytic_dimension_3_id'] = res['dim3']
 
 # Amount
             sql_stat = 'select account_coda_account.id as coda_id, account_id, analytic_dimension_1_id, analytic_dimension_2_id, analytic_dimension_3_id  from account_coda_account, account_bank_statement where amount <> 0 and amount = %f and account_coda_account.company_id = (select company_id from account_account where account_account.id = %d) and account_bank_statement.id = %d and account_bank_statement.journal_id = account_coda_account.journal_id' % (vals['amount'], vals['account_id'], vals['statement_id'], )
