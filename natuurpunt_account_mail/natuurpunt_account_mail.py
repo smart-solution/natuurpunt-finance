@@ -21,6 +21,7 @@ import base64
 import logging
 from openerp import netsvc
 from openerp.tools.translate import _
+import json
 
 _logger = logging.getLogger('natuurpunt_account_mail')
 
