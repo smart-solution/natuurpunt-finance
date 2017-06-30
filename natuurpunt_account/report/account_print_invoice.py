@@ -31,7 +31,8 @@ class account_invoice(report_sxw.rml_parse):
             'time': time,
  	        'tax_summarize': self._tax_summarize,
             'payment_term': self._payment_term,                                
-            'get_account_number': self._get_account_number,                                
+            'get_account_number': self._get_account_number,
+            'display_address_contact': self._display_address_contact,
                                   })
     def _get_account_number(self):
         return  'IBAN BE69 0017 7905 5778'
@@ -45,7 +46,26 @@ class account_invoice(report_sxw.rml_parse):
         else: str_dagen = ' dagen'
         return  str((d2-d1).days)+ str_dagen 
 
-    
+    def _display_address_contact(self, partner_id, customer_contact_id, use_company_address=False, context=None):
+        cr = self.cr
+        uid = self.uid
+        if use_company_address:
+            address = self.pool.get('res.partner').search(cr, uid, [('id','=',partner_id)])
+        else:
+            address = self.pool.get('res.partner').search(cr, uid, [('id','=',customer_contact_id)])
+
+        address_format = address.country_id and address.country_id.address_format or \
+              "%(street)s\n%(street2)s\n%(city)s %(state_code)s %(zip)s\n%(country_name)s"
+        args = {
+            'state_code': address.state_id and address.state_id.code or '',
+            'state_name': address.state_id and address.state_id.name or '',
+            'country_code': address.country_id and address.country_id.code or '',
+            'country_name': address.country_id and address.country_id.name or '',
+            'company_name': address.parent_id and address.parent_name or '',
+        }
+        for field in address._address_fields(cr, uid, context=context):
+            args[field] = getattr(address, field) or ''
+        return address_format % args
 
     def _tax_summarize(self, invoice_id, context=None):
         cr = self.cr
