@@ -38,6 +38,19 @@
         </field>
     </record>
 
+    <record model="ir.ui.view" id="view_invoice_ext_partner_form">
+        <field name="name">view.invoice.ext.partner.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="natuurpunt_vat_mandatory.view_partner_form"/>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+           <field name="child_ids" position="attributes">
+             <attribute name="readonly">1</attribute>
+           </field>
+       </field>
+    </record>
+
+
     </data>
 </openerp>
 
