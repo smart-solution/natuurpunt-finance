@@ -52,7 +52,7 @@ class account_invoice(osv.osv):
         return result
 
     _columns = {
-        'customer_company_id': fields.many2one('res.partner', 'Bedrijf Klant', required=True),
+        'customer_company_id': fields.many2one('res.partner', 'Klant', required=True),
         'customer_contact_id': fields.many2one('res.partner', 'Contact'),
         'use_company_address': fields.boolean('Gebruik bedrijfsadres'),
         'is_company_with_contact': fields.boolean('Is company with contact'),
