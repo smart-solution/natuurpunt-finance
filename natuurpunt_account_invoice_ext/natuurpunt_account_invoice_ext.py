@@ -40,6 +40,7 @@ class account_invoice(osv.osv):
             result['value']['is_company_with_contact'] = True
         result['value']['customer_contact_id'] = False
         result['value']['use_company_address'] = False
+        result['value']['partner_id'] = False
         return result
 
     def onchange_customer_contact_id(self, cr, uid, ids, customer_company_id):
@@ -70,8 +71,12 @@ class account_invoice(osv.osv):
         """
         Rules for invoicing
         """
-
-        vals['partner_id'] = vals['customer_company_id']
+        
+        if 'customer_contact_id' in vals and vals['customer_contact_id']:
+            vals['partner_id'] = vals['customer_company_id']
+        
+        if 'customer_company_id' in vals and vals['customer_company_id']:
+            vals['partner_id'] = vals['customer_company_id']
 
         return super(account_invoice, self).write(cr, uid, ids, vals=vals, context=context)
 
