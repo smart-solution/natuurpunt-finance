@@ -45,8 +45,12 @@
         <field name="type">form</field>
         <field name="arch" type="xml">
            <field name="child_ids" position="attributes">
-             <attribute name="readonly">1</attribute>
+               <attribute name="readonly">1</attribute>
            </field>
+           <xpath expr="//kanban/templates//div[@t-if='record.phone.raw_value']" position="before">
+             <div>ID: <field name="id"/></div>
+           </xpath>
+           <xpath expr="//sheet/notebook/page/field/form[@string='Contact']" position="replace"/>
        </field>
     </record>
 
