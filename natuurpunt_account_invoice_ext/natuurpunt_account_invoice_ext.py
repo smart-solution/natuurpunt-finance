@@ -63,7 +63,8 @@ class account_invoice(osv.osv):
         Rules for invoicing
         """
 
-        vals['partner_id'] = vals['customer_company_id']
+        if 'customer_company_id' in vals and vals['customer_company_id']:
+            vals['partner_id'] = vals['customer_company_id']
 
         return super(account_invoice, self).create(cr, uid, vals=vals, context=context)
 
