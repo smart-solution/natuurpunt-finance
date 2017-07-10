@@ -25,7 +25,7 @@
     "description": """
     Natuurpunt Advanced Invoicing 
 """,
-    "depends" : ["natuurpunt_vat_mandatory",],
+    "depends" : ["natuurpunt_account",],
     "data" : ["natuurpunt_account_invoice_ext_view.xml",],
     "init_xml" : [],
     "update_xml" : [],

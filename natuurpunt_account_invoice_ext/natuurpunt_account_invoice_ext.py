@@ -26,21 +26,24 @@ class account_invoice(osv.osv):
 
     _inherit = 'account.invoice'
 
-    def onchange_customer_company_id(self, cr, uid, ids, customer_company_id):
-        """
-        Check if the partner is a company and has contacts
-        """
-        result = {'value':{}}
-        customer = self.pool.get('res.partner').browse(cr, uid, customer_company_id)
-        if customer_company_id and not customer.is_company:
-            result['value']['is_company_with_contact'] = False
-        if customer_company_id and customer.is_company and not customer.child_ids:
-            result['value']['is_company_with_contact'] = False
-        if customer_company_id and customer.is_company and customer.child_ids:
-            result['value']['is_company_with_contact'] = True
-        result['value']['customer_contact_id'] = False
-        result['value']['use_company_address'] = False
-        result['value']['partner_id'] = False
+    def onchange_partner_id(self, cr, uid, ids, type, partner_id,\
+                 date_invoice=False, payment_term=False, partner_bank_id=False, company_id=False):
+
+        result = super(account_invoice,self).onchange_partner_id(cr, uid, ids, type, partner_id,\
+                 date_invoice, payment_term, partner_bank_id, company_id)
+
+        if partner_id:
+            customer = self.pool.get('res.partner').browse(cr, uid, partner_id)
+            if not customer.is_company:
+                result['value']['is_company_with_contact'] = False
+            else:
+                if not customer.child_ids:
+                    result['value']['is_company_with_contact'] = False
+                else:
+                    result['value']['is_company_with_contact'] = True
+            result['value']['customer_contact_id'] = False
+            result['value']['use_company_address'] = False
+
         return result
 
     def onchange_customer_contact_id(self, cr, uid, ids, customer_company_id):
@@ -52,34 +55,9 @@ class account_invoice(osv.osv):
         return result
 
     _columns = {
-        'customer_company_id': fields.many2one('res.partner', 'Klant', required=True),
         'customer_contact_id': fields.many2one('res.partner', 'Contact'),
         'use_company_address': fields.boolean('Gebruik bedrijfsadres'),
         'is_company_with_contact': fields.boolean('Is company with contact'),
     }
-
-    def create(self, cr, uid, vals, context=None):
-        """
-        Rules for invoicing
-        """
-
-        if 'customer_company_id' in vals and vals['customer_company_id']:
-            vals['partner_id'] = vals['customer_company_id']
-
-        return super(account_invoice, self).create(cr, uid, vals=vals, context=context)
-
-    def write(self, cr, uid, ids, vals, context=None):
-        """
-        Rules for invoicing
-        """
-        
-        if 'customer_contact_id' in vals and vals['customer_contact_id']:
-            vals['partner_id'] = vals['customer_company_id']
-        
-        if 'customer_company_id' in vals and vals['customer_company_id']:
-            vals['partner_id'] = vals['customer_company_id']
-
-        return super(account_invoice, self).write(cr, uid, ids, vals=vals, context=context)
-
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
