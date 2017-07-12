@@ -22,8 +22,9 @@
 import time
 from datetime import datetime
 from openerp.report import report_sxw
+from natuurpunt_tools import report
 
-class account_invoice(report_sxw.rml_parse):
+class account_invoice(report.natuurpunt_contact_rml_parse):
     def __init__(self, cr, uid, name, context):
 	print "PARSER CALLED"
         super(account_invoice, self).__init__(cr, uid, name, context=context)
@@ -31,7 +32,7 @@ class account_invoice(report_sxw.rml_parse):
             'time': time,
  	        'tax_summarize': self._tax_summarize,
             'payment_term': self._payment_term,                                
-            'get_account_number': self._get_account_number,                                
+            'get_account_number': self._get_account_number,
                                   })
     def _get_account_number(self):
         return  'IBAN BE69 0017 7905 5778'
@@ -44,8 +45,6 @@ class account_invoice(report_sxw.rml_parse):
             str_dagen = ' dag'
         else: str_dagen = ' dagen'
         return  str((d2-d1).days)+ str_dagen 
-
-    
 
     def _tax_summarize(self, invoice_id, context=None):
         cr = self.cr

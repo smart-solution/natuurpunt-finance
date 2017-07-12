@@ -85,8 +85,9 @@ class account_invoice_mail_compose_message(osv.TransientModel):
 
             json_string = wizard.json_object
             email_cc = ''
-            for json_data in json.loads(json_string):
-                email_cc = email_cc + json_data['email'] + ','
+            if json_string:
+                for json_data in json.loads(json_string):
+                    email_cc = email_cc + json_data['email'] + ','
 
             if recipient_ids:
                 warning = self.check_partners_email(cr, uid, recipient_ids, context=context)
