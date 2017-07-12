@@ -752,7 +752,7 @@
 
       <menuitem name="Human Resources"
             id="hr.menu_hr_root"
-            groups="base.group_hr_manager,account.group_account_user,account.group_account_manager"
+            groups="base.group_hr_user,account.group_account_user,account.group_account_manager"
             sequence="90"/>
 
         <record id="view_account_bank_statement_validate" model="ir.ui.view">
