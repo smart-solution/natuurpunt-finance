@@ -115,7 +115,7 @@ class account_bank_statement_line(osv.osv):
         if 'move_flag' not in vals or not vals['move_flag']:
 # New analytic code contract, fonds, project
             if 'name_zonder_adres' in vals and vals['name_zonder_adres']:
-
+                
                 analytic_account_obj = self.pool.get('account.analytic.account')
                 acc_coda_acc_obj = self.pool.get('account.coda.account')
 
@@ -123,7 +123,7 @@ class account_bank_statement_line(osv.osv):
                 omschrijving = vals['name_zonder_adres'].upper().split()
                 patterns = [('^[A-Z]{3}-[0-9]{4}-[0-9]{4}',False), # kostenplaats
                             ('^P-[0-9]{2}-[0-9]{6}$',True),        # project
-                            ('^F-[0-9]{5}$',True),                 # fonds  
+                            ('^F-[0-9]{5}$',True),                 # fonds
                             ('^C-[A-Z]{2}-',False),]               # contract
 
                 analytic_res = lambda dim1,dim2,dim3: {'dim1':dim1,'dim2':dim2,'dim3':dim3}
@@ -175,6 +175,13 @@ class account_bank_statement_line(osv.osv):
                     pattern = '^[A-Z.:]*[0-9]{4}'
                     func = lambda match : ''.join([i for i in match if i.isdigit()])
                     res = apply_regex_to_omschrijving(pattern,True,'old_code','=ilike',func)
+                if not res: #P - 10 - 000035
+                    pattern = '^[0-9]{6}'
+                    res = apply_regex_to_omschrijving(pattern,False,'old_code')
+                if not res:
+                    pattern = '^[0-9]{6}[A-Z]$'
+                    func = lambda match : ''.join([i for i in match if i.isdigit()])
+                    res = apply_regex_to_omschrijving(pattern,True,'old_code','=',func)
 
                 if res:
                     ids = acc_coda_acc_obj.search(cr, uid,[('name', '=', 'Giften-afleiding')])
