@@ -12,7 +12,7 @@
     "description": """
 """,
     "depends" : ["base",],
-    "update_xml" : [
+    "data" : [
         'natuurpunt_koalect_view.xml',
         ],
     "active": False,
