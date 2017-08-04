@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+        <record id="view_res_koalect_tree" model="ir.ui.view">
+            <field name='name'>view.res.koalect.tree</field>
+            <field name='model'>res.koalect</field>
+            <field name='arch' type='xml'>
+                <tree string="Koalect">
+                        <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_res_koalect_form" model="ir.ui.view">
+            <field name='name'>view.res.koalect.form</field>
+            <field name='model'>res.koalect</field>
+            <field name='arch' type='xml'>
+                <form string="Koalect">
+                        <group colspan="2" col="2">
+                                <field name="name"/>
+                                <field name="url"/>
+                                <field name="key"/>
+                        </group>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_koalect">
+            <field name="name">Koalect</field>
+            <field name="res_model">res.koalect</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="menu_koalect" name="Koalect"
+            parent="base.menu_users" sequence="40"
+            action="base.menu_config" groups="base.group_no_one"/>
+
+    </data>
+</openerp>
+
