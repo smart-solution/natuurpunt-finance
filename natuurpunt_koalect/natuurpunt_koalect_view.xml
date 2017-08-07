@@ -7,7 +7,7 @@
             <field name='model'>res.koalect</field>
             <field name='arch' type='xml'>
                 <tree string="Koalect">
-                        <field name="name"/>
+                        <field name="project"/>
                 </tree>
             </field>
         </record>
@@ -18,7 +18,7 @@
             <field name='arch' type='xml'>
                 <form string="Koalect">
                         <group colspan="2" col="2">
-                                <field name="name"/>
+                                <field name="project"/>
                                 <field name="url"/>
                                 <field name="key"/>
                         </group>
@@ -34,8 +34,8 @@
         </record>
 
         <menuitem id="menu_koalect" name="Koalect"
-            parent="base.menu_users" sequence="40"
-            action="base.menu_config" groups="base.group_no_one"/>
+            parent="base.menu_config" sequence="40"
+			action="action_koalect" groups="base.group_no_one"/>
 
     </data>
 </openerp>

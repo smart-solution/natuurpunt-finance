@@ -1,8 +1,7 @@
 # -*- encoding: utf-8 -*-
 ##############################################################################
 #
-#    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2009 Tiny SPRL (<http://tiny.be>).
+#    Natuurpunt VZW
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -25,9 +24,11 @@ class res_koalect(osv.osv):
     _name = 'res.koalect'
     _description = 'koalect API configuration'
     _columns = {
-                'name': fields.char(string="Name", size=100,),
+                'project': fields.char(string="Koalect project name", size=100, required=True),
                 'url': fields.char(string="API URL", size=100, required=True),
                 'key': fields.char(string="API Key", size=100, required=True), 
     }
+
+res_koalect()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -11,7 +11,7 @@
     "category" : "Generic Modules/Base",
     "description": """
 """,
-    "depends" : ["base",],
+    "depends" : ["natuurpunt_coda",],
     "data" : [
         'natuurpunt_koalect_view.xml',
         ],
