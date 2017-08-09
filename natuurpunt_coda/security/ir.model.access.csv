@@ -11,4 +11,4 @@ access_account_coda_account_user,access.account.coda.account.user,model_account_
 access_account_analytic_account_user,access.account.analytic.account.user,model_account_analytic_account,natuurpunt_coda.group_natuurpunt_coda_user,1,0,0,0
 access_account_bank_statement_user,access.account.bank.statement.user,model_account_bank_statement,natuurpunt_coda.group_natuurpunt_coda_user,1,1,1,1
 access_account_bank_statement_line_user,access.account.bank.statement.line.user,model_account_bank_statement_line,natuurpunt_coda.group_natuurpunt_coda_user,1,1,1,1
-access_res_koalect,access.res.koalect,model_res_koalect,natuurpunt_coda.group_natuurpunt_coda_user,1,1,1,1
+access_account_coda_koalect,access.account.coda.koalect,model_account_coda_koalect,natuurpunt_coda.group_natuurpunt_coda_user,1,1,1,1
