@@ -12,11 +12,24 @@ from openerp import SUPERUSER_ID
 from openerp import tools
 from md5 import md5
 import re
-from natuurpunt_tools import compose
+from natuurpunt_tools import koalect_webservice
 
 import logging
 
 _logger = logging.getLogger(__name__)
+
+def parse_koalect_free_comm(free_comm):
+    split_free_comm = re.split(r'[ ](?=[^0-9])', free_comm)[0].split(' ')
+    if len(split_free_comm) > 1:
+        koalect_comm = split_free_comm[0]
+        koalect_id = int(split_free_comm[1])
+    else:
+        koalect_comm = False
+        koalect_id = int(split_free_comm[0])
+    return koalect_comm, koalect_id
+
+def consume_webservices(webservices):
+    return reduce(lambda f,g : lambda x: g(f(x)),map(lambda x : x.values()[0], webservices))
 
 class account_coda_account(osv.osv):
     _name = 'account.coda.account'
@@ -357,6 +370,27 @@ class account_coda_lines3(osv.osv):
     
 account_coda_lines3()
 
+class account_coda_koalect(osv.osv):
+    _name = 'account.coda.koalect'
+    _description = 'Coda Line Item Koalect'
+
+    _columns = {
+        'stat_line_id': fields.many2one('account.bank.statement.line', 'Bank Statementline', select=True, ondelete='cascade'),
+        'payment_method': fields.char('Betaalmethode'),
+        'firstname': fields.char('Voornaam'),
+        'lastname': fields.char('Achternaam'),
+        'email': fields.char('E-mail'),
+        'street': fields.char('Straat'),
+        'number': fields.char('Huisnummer'),
+        'city': fields.char('Stad'),
+        'postal_code': fields.char('Postcode'),
+        'country': fields.char('Land'),
+        'is_tax_certificate': fields.integer('Fiscaal attest'),
+        'koalect_id': fields.integer('Koalect ID'),
+    }
+
+account_coda_koalect()
+
 class account_coda_det2(osv.osv):
     _name = 'account.coda.det2'
     _description = 'Coda Detail lines'
@@ -547,6 +581,9 @@ class account_coda_import(osv.osv_memory):
         invoice_obj = self.pool.get('account.invoice')
         sdd_ref_obj = self.pool.get('account.coda.sdd.refused')
         sdd_mandate_obj = self.pool.get('sdd.mandate')
+        koalect_obj = self.pool.get('res.koalect')
+        res_partner_obj = self.pool.get('res.partner')
+        account_coda_koalect_obj = self.pool.get('account.coda.koalect')
  
         data_md5 = md5(codafile).digest()       
         exists = fys_file_obj.search(cr, uid, [('filename','=',data_md5)], context=context)
@@ -1058,6 +1095,14 @@ class account_coda_import(osv.osv_memory):
             sequence = 0
             
             used_moves = {}
+
+            # get available koalect webservice(s), key per koalect project
+            # configurable in settings > configuration > koalect
+            koalect_ids = koalect_obj.search(cr, uid, [])
+            koalect_webservices = []
+            if koalect_ids:
+                for koalect_api in koalect_obj.browse(cr, uid, koalect_ids):
+                    koalect_webservices.append({koalect_api.project:koalect_webservice(koalect_api.url,koalect_api.key)})
             
 #            nbr_lines = len(cfile.lines2_ids)
 	    nbr_lines = 0
@@ -1094,6 +1139,7 @@ class account_coda_import(osv.osv_memory):
                 name_zonder_adres = "\n".join(filter(None, [lines2.t23_partner, structcomm_message, lines2.t21_free_comm, lines2.t22_free_comm, lines2.t23_free_comm, name3_zonder_adres]))
                 note=[]
                 voucher_id = None
+
 
                 if type == 'information':
                     coda_note = "\n".join([coda_note, type + ' with Ref. ' + ref, 'Date: ' + lines2.t21_date_booking, 'Communication: ' + name, ''])
@@ -1201,6 +1247,30 @@ class account_coda_import(osv.osv_memory):
                         voucher_id = self.pool.get('account.voucher').create(cr, uid, voucher_vals, context=context)
 # 		        print datetime.datetime.now() , 'voucher gemaakt '
 
+                koalect_output = 0
+                if lines2.t23_partner == 'MANGOPAY SA' and koalect_webservices:
+                    koalect_comm, koalect_id = parse_koalect_free_comm(lines2.t21_free_comm)
+                    #koalect_api  = [api for api in koalect_webservices if koalect_comm in api]
+                    #koalect_data = koalect_webservices[0]['Natuurpunt giften'](koalect_id)
+                    koalect_output = consume_webservices(koalect_webservices)(koalect_id)
+                    if isinstance(koalect_output, tuple):
+                        idspb = []
+                        idspb = res_partner_obj.search(cr, uid, [('email', '=ilike', koalect_output[1]['user']['email'])])
+                        count_partners = 0
+                        if idspb and len(idspb) > 0:
+                            partner = res_partner_obj.browse(cr, uid, idspb[0])
+                            count_partners += 1
+                        if count_partners == 1:
+                            if not(partner_id):
+                                partner_id = partner.id
+                            if not move_line:
+                                if partner.customer and not (partner.supplier):
+                                    account = partner.property_account_receivable.id
+                                    transaction_type = 'customer'
+                                elif partner.supplier and not (partner.customer):
+                                    account = partner.property_account_payable.id
+                                    transaction_type = 'supplier'
+
                 if lines2.t23_account_nbr:
                     idspb= []
                     idspb = partner_obj.search(cr, uid, [('acc_number'.replace(' ',''), '=', lines2.t23_account_nbr.replace(' ',''))])
@@ -1279,6 +1349,22 @@ class account_coda_import(osv.osv_memory):
                       'lines2_id': lines2.id,
                       'move_flag': move_flag,
                       }, context=context)
+
+                if isinstance(koalect_output, tuple):
+                    account_coda_koalect_obj.create(cr, uid, {
+                        'stat_line_id': stat_line_id,
+                        'firstname': koalect_output[1]['user']['firstname'],
+                        'lastname': koalect_output[1]['user']['lastname'],
+                        'email': koalect_output[1]['user']['email'],
+                        'street': koalect_output[1]['user']['address']['street'],
+                        'number': koalect_output[1]['user']['address']['number'],
+                        'city': koalect_output[1]['user']['address']['city'],
+                        'postal_code': koalect_output[1]['user']['address']['postal_code'],
+                        'country': koalect_output[1]['user']['address']['country'],
+                        'is_tax_certificate': koalect_output[1]['is_tax_certificate'],
+                        'koalect_id': koalect_output[0],
+                       }, context=context)
+
 # 		print datetime.datetime.now() , 'statement gemaakt ' 
 #  if Sepa Direct Debit and payment is refused create a coda_sdd_reference record 
 #                 if lines2.t21_struct:
