@@ -15,6 +15,9 @@
     "data" : [
         'natuurpunt_koalect_view.xml',
         ],
+    "update_xml" : [
+        'security/ir.model.access.csv'
+        ],
     "active": False,
     "installable": True
 }
