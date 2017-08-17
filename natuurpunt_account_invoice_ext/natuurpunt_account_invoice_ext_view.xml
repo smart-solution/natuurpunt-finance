@@ -18,7 +18,20 @@
         
         </field>
     </record>
-   
+
+    <record model="ir.ui.view" id="view_natuurpunt_partner_accounting">
+        <field name="name">view.natuurpunt.partner.accounting</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="account.view_partner_property_form"/>
+        <field name="priority">2</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='accounting']" position="attributes">
+				<attribute name="attrs">{}</attribute>
+            </xpath>
+        </field>
+    </record>
+
     <record model="ir.ui.view" id="view_invoice_ext_partner_form">
         <field name="name">view.invoice.ext.partner.form</field>
         <field name="model">res.partner</field>
@@ -28,10 +41,13 @@
            <field name="child_ids" position="attributes">
                <attribute name="readonly">1</attribute>
            </field>
-           <xpath expr="//kanban/templates//div[@t-if='record.phone.raw_value']" position="before">
-             <div>ID: <field name="id"/></div>
-           </xpath>
-		   <!--<xpath expr="//sheet/notebook/page/field/form[@string='Contact']" position="replace"/>-->
+			<xpath expr="//kanban/templates//div[@t-if='record.phone.raw_value']" position="before">
+				<div>ID: <field name="id"/></div>
+			</xpath>
+			<xpath expr="//page[@name='accounting_disabled']" position="attributes">
+				<attribute name="invisible">1</attribute>
+			</xpath>
+			<!--<xpath expr="//sheet/notebook/page/field/form[@string='Contact']" position="replace"/>-->
        </field>
     </record>
 

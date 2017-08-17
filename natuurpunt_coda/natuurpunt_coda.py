@@ -137,6 +137,7 @@ class account_bank_statement_line(osv.osv):
                 patterns = [('^[A-Z]{3}-[0-9]{4}-[0-9]{4}',False), # kostenplaats
                             ('^P-[0-9]{2}-[0-9]{6}$',True),        # project
                             ('^F-[0-9]{5}$',True),                 # fonds
+                            ('^[0-6]{6}$',False),                  # fonds
                             ('^C-[A-Z]{2}-',False),]               # contract
 
                 analytic_res = lambda dim1,dim2,dim3: {'dim1':dim1,'dim2':dim2,'dim3':dim3}

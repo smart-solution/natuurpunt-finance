@@ -22,6 +22,18 @@
 from osv import osv, fields
 from openerp.tools.translate import _
 
+
+class res_partner(osv.osv):
+
+    _inherit = 'res.partner'
+
+    def _fields_sync(self, cr, uid, partner, update_values, context=None):
+        """
+        disable syncing of VAT and other fields
+        the natuurpunt implementation skips this feature of field sync
+        """
+        pass
+
 class account_invoice(osv.osv):
 
     _inherit = 'account.invoice'
