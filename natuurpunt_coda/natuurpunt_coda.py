@@ -19,7 +19,7 @@ import logging
 _logger = logging.getLogger(__name__)
 
 def parse_koalect_free_comm(free_comm):
-    split_free_comm = re.split(r'[ ](?=[^0-9])', free_comm)[0].split(' ')
+    split_free_comm = re.split(r'[ ](?=[^0-9])', free_comm)[1].split(' ')
     if len(split_free_comm) > 1:
         koalect_comm = split_free_comm[0]
         koalect_id = int(split_free_comm[1])
