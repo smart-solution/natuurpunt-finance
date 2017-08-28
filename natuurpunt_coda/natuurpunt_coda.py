@@ -383,7 +383,7 @@ class account_coda_koalect(osv.osv):
         'email': fields.char('E-mail'),
         'street': fields.char('Straat'),
         'number': fields.char('Huisnummer'),
-        'box' : field.char('Bus'),
+        'box' : fields.char('Bus'),
         'city': fields.char('Stad'),
         'postal_code': fields.char('Postcode'),
         'country': fields.char('Land'),
