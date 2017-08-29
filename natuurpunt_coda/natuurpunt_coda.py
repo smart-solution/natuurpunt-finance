@@ -127,11 +127,11 @@ class account_bank_statement_line(osv.osv):
         
         if 'move_flag' not in vals or not vals['move_flag']:
 # New analytic code contract, fonds, project
-            if 'name_zonder_adres' in vals and vals['name_zonder_adres']:
+            if 'name_zonder_adres' in vals and vals['name_zonder_adres'] and vals['type'] != 'supplier':
                 
                 analytic_account_obj = self.pool.get('account.analytic.account')
                 acc_coda_acc_obj = self.pool.get('account.coda.account')
-
+                
                 # split omschrijving  
                 omschrijving = vals['name_zonder_adres'].upper().split()
                 patterns = [('^[A-Z]{3}-[0-9]{4}-[0-9]{4}',False), # kostenplaats
@@ -186,7 +186,7 @@ class account_bank_statement_line(osv.osv):
                     pattern = '^[0-9]{4}'
                     res = apply_regex_to_omschrijving(pattern,True,'old_code')
                 if not res: # Prefix string PROJECT4444, NR.4444, NR:3333
-                    pattern = '^[A-Z.:]*[0-9]{4}'
+                    pattern = '^[A-Z]+.[:.]?\d{4}'
                     func = lambda match : ''.join([i for i in match if i.isdigit()])
                     res = apply_regex_to_omschrijving(pattern,True,'old_code','=ilike',func)
                 if not res: #P - 10 - 000035
@@ -1325,7 +1325,7 @@ class account_coda_import(osv.osv_memory):
                 journal = self.pool.get('account.journal').browse(cr, uid, journal_id)
                 if journal.membership_journal:
                     transaction_type = 'general'
-
+                    
                 stat_line_id = stat_line_obj.create(cr, uid, {
                       'ref': ref,
                       'statement_id': stat_id,
