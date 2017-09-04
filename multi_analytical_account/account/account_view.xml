@@ -750,10 +750,7 @@
             groups="account.group_account_user,account.group_account_manager,account.group_account_invoice"
             parent="account.menu_finance_payables"/>
 
-      <menuitem name="Human Resources"
-            id="hr.menu_hr_root"
-            groups="base.group_hr_manager,account.group_account_user,account.group_account_manager"
-            sequence="90"/>
+        <menuitem id="hr.menu_hr_main" groups="account.group_account_user" parent="hr.menu_hr_root" name="Human Resources" sequence="0"/>
 
         <record id="view_account_bank_statement_validate" model="ir.ui.view">
             <field name="name">view.account.bank.statement.validate</field>
