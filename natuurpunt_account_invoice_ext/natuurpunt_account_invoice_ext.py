@@ -111,4 +111,19 @@ class account_invoice(osv.osv):
         'is_company_with_contact': fields.boolean('Is company with contact'),
     }
 
+
+class res_organisation_function(osv.osv):
+    _name = 'res.organisation.function'
+    _inherit = 'res.organisation.function'
+
+    def unlink(self, cr, uid, ids, context=None):
+        for function in self.browse(cr, uid, ids, context=context):
+            if function.person_id.parent_id and function.name == 'penningmeester':
+                parent = function.person_id.parent_id
+                message = 'Penningmeester %s is contactpersoon voor %s %s\nVerwijder eerst de contactpersoon relatie!'
+                raise osv.except_osv(_('Error!'), _(message % (function.person_id.name, parent.organisation_type_id.name, parent.name)))
+        return super(res_organisation_function, self).unlink(cr, uid, ids, context=context)
+
+res_organisation_function()
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
