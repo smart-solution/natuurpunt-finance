@@ -21,7 +21,12 @@
 
 from osv import osv, fields
 from openerp.tools.translate import _
+from openerp import SUPERUSER_ID
 
+class OrganisatiePartnerEnum():
+    AFDELING = 'Afdeling'
+    WERKGROEP = 'Werkgroep'
+    REGIONALE = 'Regionaal samenwerkingsverband'
 
 class res_partner(osv.osv):
 
@@ -33,6 +38,40 @@ class res_partner(osv.osv):
         the natuurpunt implementation skips this feature of field sync
         """
         pass
+
+    def is_penningmeester(self, cr, uid, ids, parent_id, context=None):
+        res = False
+        if ids:
+            res_org_fnc_obj = self.pool.get('res.organisation.function')
+            domain = [('partner_id', '=', parent_id),('person_id', 'in', ids)]
+            res_org_fnc_ids = res_org_fnc_obj.search(cr, SUPERUSER_ID, domain)
+            for function in res_org_fnc_obj.browse(cr, SUPERUSER_ID, res_org_fnc_ids, context=context):
+                if function.name == 'penningmeester':
+                    res = True
+                    break
+        return res
+
+    def onchange_address(self, cr, uid, ids, use_parent_address, parent_id, context=None):
+
+        result = super(res_partner,self).onchange_address(cr, uid, ids, \
+                 use_parent_address, parent_id, context=context)
+
+        if parent_id:
+            parent = self.browse(cr, uid, parent_id, context=context)
+            orgs = [
+                OrganisatiePartnerEnum.AFDELING,
+                OrganisatiePartnerEnum.WERKGROEP,
+                OrganisatiePartnerEnum.REGIONALE,
+            ]
+            # check function of partner for org types
+            if parent.organisation_type_id.name in orgs and not(self.is_penningmeester(cr, uid, ids, parent_id)):
+                message = _('Contactpersoon bij %s %s kan enkel als penningmeester!'%(parent.organisation_type_id.name, parent.name))
+                warning = {'title':'Error!','message':message}
+                return {
+                    'warning': {'title': _('Error'), 'message': message,},
+                    'value': { 'parent_id': False },
+                }
+        return result
 
 class account_invoice(osv.osv):
 
