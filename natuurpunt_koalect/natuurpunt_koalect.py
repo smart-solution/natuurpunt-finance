@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
+# -*- encoding: utf-8 -*-
 ##############################################################################
 #
-#    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2010 Tiny SPRL (<http://tiny.be>).
+#    Natuurpunt VZW
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -19,26 +18,17 @@
 #
 ##############################################################################
 
-import time
-from openerp.report import report_sxw
-from natuurpunt_tools import report
+from openerp.osv import fields, osv
 
-class account_vordering(report.natuurpunt_rml_parse):
-    def __init__(self, cr, uid, name, context):
-	print "PARSER CALLED"
-        super(account_vordering, self).__init__(cr, uid, name, context=context)
-        self.localcontext.update({
-            'time': time,
-            'get_account_number': self._get_account_number,
-                                  })
+class res_koalect(osv.osv):
+    _name = 'res.koalect'
+    _description = 'koalect API configuration'
+    _columns = {
+                'project': fields.char(string="Koalect project name", size=100, required=True),
+                'url': fields.char(string="API URL", size=100, required=True),
+                'key': fields.char(string="API Key", size=100, required=True), 
+    }
 
-    def _get_account_number(self):
-        return  'IBAN BE56 2930 2120 7588'
+res_koalect()
 
-report_sxw.report_sxw(
-    'report.account.vordering',
-    'account.invoice',
-    'addons/natuurpunt_account/report/vordering.rml',
-    parser=account_vordering
-)
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

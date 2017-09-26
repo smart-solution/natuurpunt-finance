@@ -243,6 +243,10 @@ class account_analytic_account(osv.osv):
 
     def write(self, cr, uid, ids, vals, context=None):
         """Create the analytical account in the allowed account"""
+        if 'name' in vals and vals['name']:
+            partner_ids = self.pool.get('res.partner').search(cr, uid,[('analytic_account_id','in', ids)])
+            self.pool.get('res.partner').write(cr, uid, partner_ids,{'last_name':vals['name']})
+
         for account in self.browse(cr, uid ,ids):
             """Doesn't allow 2 acccounts with same code for the same company"""
             if 'code' in vals and vals['code']:

@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_res_koalect,access.res.koalect,model_res_koalect,natuurpunt_coda.group_natuurpunt_coda_user,1,1,1,1
