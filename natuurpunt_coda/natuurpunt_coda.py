@@ -1325,6 +1325,10 @@ class account_coda_import(osv.osv_memory):
                 journal = self.pool.get('account.journal').browse(cr, uid, journal_id)
                 if journal.membership_journal:
                     transaction_type = 'general'
+
+                if isinstance(koalect_output, tuple):
+                    if koalect_output[1]['project']['meta_id']:
+                        name_zonder_adres = koalect_output[1]['project']['meta_id']
                     
                 stat_line_id = stat_line_obj.create(cr, uid, {
                       'ref': ref,
