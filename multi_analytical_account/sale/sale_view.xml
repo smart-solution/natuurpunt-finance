@@ -2,6 +2,36 @@
 <openerp>
     <data>
 
+
+        <record id="view_sale_order_line_delivery_wizard" model="ir.ui.view">
+            <field name="name">Purchase Order Line Delivery</field>
+            <field name="model">sale.order.line.delivery</field>
+            <field name="arch" type="xml">
+                <form string="Sale Order Line Delivery" version="7.0">
+                    <group>
+                        <field name="delivered_qty"/>
+                        <field name="delivered_flag"/>
+                    </group>
+                    <footer>
+                        <button name="delivery_state_set" string="Save" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_sale_order_line_delivery" model="ir.actions.act_window">
+               <field name="name">Sale Order Line Delivery</field>
+               <field name="type">ir.actions.act_window</field>
+               <field name="res_model">sale.order.line.delivery</field>
+               <field name="view_type">form</field>
+               <field name="view_mode">form</field>
+               <field name="target">new</field>
+        </record>
+
+
+
             <record id="view_np_sale_order_form" model="ir.ui.view">
             <field name="name">view.np.sale.order.form</field>
             <field name="model">sale.order</field>
@@ -14,12 +44,16 @@
 			    <field name="analytic_dimension_1_required" context="{'sale_line_id':active_id}" invisible="1"/>
 			    <field name="analytic_dimension_2_required" context="{'sale_line_id':active_id}" invisible="1"/>
 			    <field name="analytic_dimension_3_required" context="{'sale_line_id':active_id}" invisible="1"/>
+		    </xpath>
+		    <xpath expr="//field[@name='order_line']/tree//field[@name='price_subtotal']" position="after">
 			    <field name="delivered_qty"/>
+			    <field name="delivered_flag"/>
+			    <button name="%(action_sale_order_line_delivery)d" string="Delivery Status" type="action" icon="gtk-execute"/>
 		    </xpath>
             </field>
         </record>
         
-
+<!--
             <record id="view_np_sale_order_form2" model="ir.ui.view">
             <field name="name">view.np.sale.order.form2</field>
             <field name="model">sale.order</field>
@@ -32,10 +66,15 @@
 			    <field name="analytic_dimension_1_required" context="{'sale_line_id':active_id}" invisible="1"/>
 			    <field name="analytic_dimension_2_required" context="{'sale_line_id':active_id}" invisible="1"/>
 			    <field name="analytic_dimension_3_required" context="{'sale_line_id':active_id}" invisible="1"/>
+		    </xpath>
+		    <xpath expr="//field[@name='order_line']/tree//field[@name='price_subtotal']" position="after">
 			    <field name="delivered_qty"/>
+			    <field name="delivered_flag"/>
+			    <button name="%(action_sale_order_line_delivery)d" string="Delivery Status" type="action"/>
 		    </xpath>
             </field>
         </record>
+-->
 
             <record id="view_np_sale_order_line_form" model="ir.ui.view">
             <field name="name">view.np.sale.order.line.form</field>
@@ -50,6 +89,7 @@
 			    <field name="analytic_dimension_2_required" context="{'sale_line_id':active_id}" invisible="1"/>
 			    <field name="analytic_dimension_3_required" context="{'sale_line_id':active_id}" invisible="1"/>
 			    <field name="delivered_qty"/>
+			    <field name="delivered_flag"/>
 		    </field>
             </field>
         </record>
