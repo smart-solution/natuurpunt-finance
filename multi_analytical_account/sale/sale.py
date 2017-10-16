@@ -55,20 +55,6 @@ class sale_order(osv.osv):
 
 sale_order()
 
-class sale_order_line(osv.osv):
-
-    _inherit = 'sale.order.line'
-    
-    _columns = {
-        'analytic_dimension_1_id': fields.many2one('account.analytic.account', 'Dimension 1'),
-        'analytic_dimension_2_id': fields.many2one('account.analytic.account', 'Dimension 2'),
-        'analytic_dimension_3_id': fields.many2one('account.analytic.account', 'Dimension 3'),
-        'analytic_dimension_1_required': fields.boolean("Analytic Dimension 1 Required"),
-        'analytic_dimension_2_required': fields.boolean("Analytic Dimension 2 Required"),
-        'analytic_dimension_3_required': fields.boolean("Analytic Dimension 3 Required"),
-        'delivered_qty': fields.float('0pleverhoeveelheden', digits_compute= dp.get_precision('Product UoS')),
-	'delivered_flag': fields.boolean('Facturatie'),
-    }
 
 
 class sale_order_line_delivery(osv.osv_memory):
@@ -88,8 +74,22 @@ class sale_order_line_delivery(osv.osv_memory):
         return True
 
 
+class sale_order_line(osv.osv):
+
+    _inherit = 'sale.order.line'
+    
+    _columns = {
+        'analytic_dimension_1_id': fields.many2one('account.analytic.account', 'Dimension 1'),
+        'analytic_dimension_2_id': fields.many2one('account.analytic.account', 'Dimension 2'),
+        'analytic_dimension_3_id': fields.many2one('account.analytic.account', 'Dimension 3'),
+        'analytic_dimension_1_required': fields.boolean("Analytic Dimension 1 Required"),
+        'analytic_dimension_2_required': fields.boolean("Analytic Dimension 2 Required"),
+        'analytic_dimension_3_required': fields.boolean("Analytic Dimension 3 Required"),
+        'delivered_qty': fields.float('0pleverhoeveelheden', digits_compute= dp.get_precision('Product UoS')),
+	'delivered_flag': fields.boolean('Facturatie'),
+    }
+
     def _prepare_order_line_invoice_line(self, cr, uid, line, account_id=False, context=None):
-        print "YY############## context:",context
         """Prepare the dict of values to create the new invoice line for a
            sales order line. This method may be overridden to implement custom
            invoice generation (making sure to call super() to establish
@@ -100,6 +100,7 @@ class sale_order_line_delivery(osv.osv_memory):
                (this is used for returning products including service)
            :return: dict of values to create() the invoice line
         """
+	print "################# _prepare_order context:",context
         res = {}
         if not line.invoiced:
             if not account_id:
