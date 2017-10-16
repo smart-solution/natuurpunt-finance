@@ -66,8 +66,27 @@ class sale_order_line(osv.osv):
         'analytic_dimension_1_required': fields.boolean("Analytic Dimension 1 Required"),
         'analytic_dimension_2_required': fields.boolean("Analytic Dimension 2 Required"),
         'analytic_dimension_3_required': fields.boolean("Analytic Dimension 3 Required"),
-        'delivered_qty': fields.float('0pleverhoeveelheden', digits_compute= dp.get_precision('Product UoS'))
+        'delivered_qty': fields.float('0pleverhoeveelheden', digits_compute= dp.get_precision('Product UoS')),
+	'delivered_flag': fields.boolean('Facturatie'),
     }
+
+
+class sale_order_line_delivery(osv.osv_memory):
+
+    _name = "sale.order.line.delivery"
+
+    _columns = {
+        'delivered_qty': fields.float('0pleverhoeveelheden', digits_compute= dp.get_precision('Product UoS')),
+	'delivered_flag': fields.boolean('Facturatie'),
+    }
+
+    def delivery_state_set(self, cr, uid, ids, context=None):
+        for wiz in self.browse(cr, uid ,ids):
+            self.pool.get('sale.order.line').write(cr, uid, [context['active_id']],
+		 {'delivered_qty':wiz.delivered_qty,
+		 'delivered_flag':wiz.delivered_flag})
+        return True
+
 
     def _prepare_order_line_invoice_line(self, cr, uid, line, account_id=False, context=None):
         print "YY############## context:",context
@@ -311,7 +330,7 @@ class sale_order_line_make_invoice(osv.osv_memory):
                     flag = False
                     break
             if flag:
-                line.order_id.write({'state': 'progress'})
+                line.order_id.write({'state': 'done'})
                 wf_service.trg_validate(uid, 'sale.order', order.id, 'all_lines', cr)
 
         if not invoices:
