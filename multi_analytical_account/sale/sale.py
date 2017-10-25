@@ -73,6 +73,15 @@ class sale_order_line_delivery(osv.osv_memory):
 		 'delivered_flag':wiz.delivered_flag})
         return True
 
+    def default_get(self, cr, uid, fields, context=None):
+        so_line_obj = self.pool.get('sale.order.line')
+        lines = []
+        so_line = so_line_obj.browse(cr, uid, context.get('active_id', []), context=context)
+        defaults = super(sale_order_line_delivery, self).default_get(cr, uid, fields, context=context)
+        defaults['delivered_qty'] = so_line.delivered_qty or 0.0
+        defaults['delivered_flag'] = so_line.delivered_flag or ""
+        return defaults
+
 
 class sale_order_line(osv.osv):
 
@@ -272,6 +281,10 @@ class sale_order_line_make_invoice(osv.osv_memory):
     _columns = {
 
         'use_delivered_qty': fields.boolean('0pleverhoeveelheden')
+    }
+
+    _defaults = {
+	'use_delivered_qty': True,
     }
 
     def make_invoices(self, cr, uid, ids, context=None):

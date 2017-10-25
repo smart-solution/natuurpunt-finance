@@ -38,7 +38,7 @@
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
 		    <xpath expr="//field[@name='order_line']/tree//field[@name='name']" position="after">
-			    <field name="analytic_dimension_1_id" context="{'sale_line_id':active_id,'dimension':1,'dimension2':analytic_dimension_2_id,'dimension3':analytic_dimension_3_id}" attrs="{'required':[('analytic_dimension_1_required','=',True)]}"/>
+			    <field name="analytic_dimension_1_id" context="{'sale_line_id':active_id,'dimension':1,'dimension2':analytic_dimension_2_id,'dimension3':analytic_dimension_3_id}" attrs="{'required':[('analytic_dimension_1_required','=',True)]}" required="True"/>
 			    <field name="analytic_dimension_2_id" context="{'sale_line_id':active_id,'dimension':2,'dimension1':analytic_dimension_1_id,'dimension3':analytic_dimension_3_id}" attrs="{'required':[('analytic_dimension_2_required','=',True)]}"/>
 			    <field name="analytic_dimension_3_id" context="{'sale_line_id':active_id,'dimension':3,'dimension1':analytic_dimension_1_id,'dimension2':analytic_dimension_2_id}" attrs="{'required':[('analytic_dimension_3_required','=',True)]}"/>
 			    <field name="analytic_dimension_1_required" context="{'sale_line_id':active_id}" invisible="1"/>
@@ -101,6 +101,7 @@
             <field name="arch" type="xml">
 		    <field name="name" position="after">
 			<field name="delivered_qty"/>
+			<field name="delivered_flag"/>
 		    </field>
             </field>
         </record>
@@ -116,6 +117,22 @@
 		      </group>
 		    </xpath>
             </field>
+        </record>
+
+        <record id="view_sales_order_uninvoiced_line_np_filter" model="ir.ui.view">
+            <field name="name">sale.order.uninvoiced.np.line</field>
+            <field name="model">sale.order.line</field>
+	    <field name="inherit_id" ref="sale.view_sales_order_uninvoiced_line_filter"/>
+            <field name="arch" type="xml">
+		<filter name="uninvoiced" position="after">
+			<filter icon="terp-dolar-ok!" name="delivery_invoice_ok" string="0pleverhoeveelheden te factureren" domain="[('delivered_flag','=',1),('invoiced','=',0),('state','&lt;&gt;','draft'),('state','&lt;&gt;','cancel')]"/>
+		</filter>
+            </field>
+        </record>
+
+        <record id="sale.action_order_line_tree2" model="ir.actions.act_window">
+            <field name="search_view_id" ref="view_sales_order_uninvoiced_line_np_filter"/>
+            <field name="context">{"search_default_delivery_invoice_ok":1}</field>
         </record>
         
     </data>

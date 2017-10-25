@@ -149,7 +149,7 @@ class account_analytic_account(osv.osv):
 
         if context.get('dimension'):
 	    allowed_dimensions = []
-	    if 'purchase_line_id' in context or 'sale_line_id' in context or 'purchase_requisition_line_id' in context:
+	    if 'purchase_line_id' in context or 'sale_line_id' in context or 'purchase_requisition_line_id' in context or 'sale_create_line_id' in context:
 		    # Set all dimensions allowed
 		    allowed_dimensions = self.pool.get('account.analytic.dimension').search(cr, uid, [], context=context)
 		    print "Allowed DIMS:",allowed_dimensions
