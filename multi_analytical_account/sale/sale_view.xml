@@ -11,6 +11,7 @@
                     <group>
                         <field name="delivered_qty"/>
                         <field name="delivered_flag"/>
+                        <field name="delivered_text"/>
                     </group>
                     <footer>
                         <button name="delivery_state_set" string="Save" type="object" class="oe_highlight"/>
@@ -46,6 +47,7 @@
 			    <field name="analytic_dimension_3_required" context="{'sale_line_id':active_id}" invisible="1"/>
 		    </xpath>
 		    <xpath expr="//field[@name='order_line']/tree//field[@name='price_subtotal']" position="after">
+			    <field name="delivered_text"/>
 			    <field name="delivered_qty"/>
 			    <field name="delivered_flag"/>
 			    <button name="%(action_sale_order_line_delivery)d" string="Delivery Status" type="action" icon="gtk-execute"/>
