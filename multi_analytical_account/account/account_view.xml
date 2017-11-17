@@ -268,8 +268,11 @@
 	                <attribute name="create">0</attribute>
 	                <attribute name="delete">0</attribute>
 	                <attribute name="edit">0</attribute>
-	            </xpath>
- -->                <field name="analytic_account_id" position="replace">
+				</xpath>-->
+                <field name="account_id" position="attributes">
+                     <attribute name="on_change">onchange_account_id(account_id)</attribute>
+                 </field>
+                <field name="analytic_account_id" position="replace">
 		    		<field name="analytic_account_id" invisible="1"/>
                     <field name="analytic_dimension_1_id" context="{'statement_line_id':active_id,'account_id':account_id,'dimension':1,'dimension2':analytic_dimension_2_id,'dimension3':analytic_dimension_3_id, 'search_default_dimension1':1}" attrs="{'required':[('analytic_dimension_1_required','=',True)]}"/>
                     <field name="analytic_dimension_2_id" context="{'statement_line_id':active_id,'account_id':account_id,'dimension':2,'dimension1':analytic_dimension_1_id,'dimension3':analytic_dimension_3_id, 'search_default_dimension2':1}" attrs="{'required':[('analytic_dimension_2_required','=',True)]}"/>
@@ -293,6 +296,9 @@
 	                <attribute name="create">0</attribute>
 	                <attribute name="delete">0</attribute>
 	            </xpath>
+				<field name="account_id" position="attributes">
+					 <attribute name="on_change">onchange_account_id(account_id)</attribute>
+				</field>
                 <field name="sequence" position="after">
                   <newline/>
                   <group colspan="2" col="2">

@@ -1175,7 +1175,13 @@ class account_coda_import(osv.osv_memory):
                     _logger.info("processing reference: {}".format(structcomm_message))
                     if len(invoice_ids) == 1:
                         for invoice in invoice_obj.browse(cr, uid, invoice_ids):
-                            ids = move_line_obj.search(cr, uid, [('move_id','=', invoice.move_id.id),('reconcile_id', '=', False),('account_id.reconcile', '=', True)])
+                            move_line_domain = [
+                                ('move_id','=', invoice.move_id.id),
+                                ('reconcile_id', '=', False),
+                                ('reconcile_partial_id', '=', False),
+                                ('account_id.reconcile', '=', True)
+                            ]
+                            ids = move_line_obj.search(cr, uid, move_line_domain)
                             if ids:
                                 move_line = move_line_obj.browse(cr, uid, ids[0])
 # 		print datetime.datetime.now() , 'move gezocht '

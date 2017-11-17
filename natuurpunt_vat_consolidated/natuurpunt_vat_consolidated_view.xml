@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<openerp>
+   <data>
+        <record id="natuurpunt_vat_consolidated_form" model="ir.ui.view">
+                <field name="name">natuurpunt.vat.consolidated.form</field>
+                <field name="model">natuurpunt.vat.consolidated</field>
+				<field name="arch" type="xml">
+					<form string="xml" version="7.0">
+						<group>
+		    			    <field name="period" required="1"/>
+					        <label string="Comments"/>
+							<field name="comments" nolabel="1"/>
+						</group>
+						<footer>
+                        	<button name="create_xml" string="Create XML" type="object" default_focus="1" class="oe_highlight"  />
+	                        or
+    	                    <button string="Cancel" class="oe_link" special="cancel" />
+        	            </footer>
+					</form>
+                </field>
+        </record>
+
+        <record id="natuurpunt_view_vat_consolidated_save_form" model="ir.ui.view">
+			<field name="name">natuurpunt.view.vat.consolidated.save.form</field>
+            <field name="model">natuurpunt.vat.consolidated</field>
+            <field name="arch" type="xml">
+				<form string="savexml">
+                    <label string="Save the File with '.xml' extension."/>
+					<field name="file_save" readonly="True" filename="name" nolabel="1"/>
+					<field name="name" readonly="True" invisible="1"/>
+				</form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_natuurpunt_vat_consolidated">
+                <field name="name">Vat Consolidated</field>
+                <field name="res_model">natuurpunt.vat.consolidated</field>
+                <field name="view_type">form</field>
+                <field name="view_mode">form</field>
+                <field name="view_id" ref="natuurpunt_vat_consolidated_form" />
+                <field name="target">new</field>
+        </record>
+
+        <menuitem
+            name="VAT Declaration Consolidated"
+            parent="l10n_be.menu_finance_belgian_statement"
+            action="action_natuurpunt_vat_consolidated"
+            id="vat_declaration_consolidated"
+            groups="account.group_account_manager"/>
+
+        </data>
+</openerp>
