@@ -68,9 +68,27 @@ class sale_order_line(osv.osv):
         'analytic_dimension_2_required': fields.boolean("Analytic Dimension 2 Required"),
         'analytic_dimension_3_required': fields.boolean("Analytic Dimension 3 Required"),
         'delivered_qty': fields.float('0pleverhoeveelheden', digits_compute= dp.get_precision('Product UoS')),
-	'delivered_flag': fields.boolean('Facturatie'),
-	'delivered_text': fields.char('Status levering', size=128),
+      	'delivered_flag': fields.boolean('Facturatie'),
+      	'delivered_text': fields.char('Status levering', size=128),
     }
+
+
+class sale_order_line_delivery(osv.osv_memory):
+
+    _name = "sale.order.line.delivery"
+
+    _columns = {
+        'delivered_qty': fields.float('0pleverhoeveelheden', digits_compute= dp.get_precision('Product UoS')),
+	'delivered_flag': fields.boolean('Facturatie'),
+    }
+
+    def delivery_state_set(self, cr, uid, ids, context=None):
+        for wiz in self.browse(cr, uid ,ids):
+            self.pool.get('sale.order.line').write(cr, uid, [context['active_id']],
+		 {'delivered_qty':wiz.delivered_qty,
+		 'delivered_flag':wiz.delivered_flag})
+        return True
+
 
     def _prepare_order_line_invoice_line(self, cr, uid, line, account_id=False, context=None):
         """Prepare the dict of values to create the new invoice line for a
