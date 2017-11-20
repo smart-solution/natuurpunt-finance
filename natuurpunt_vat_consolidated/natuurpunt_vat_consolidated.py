@@ -3,6 +3,8 @@ from osv import fields
 from openerp.tools.translate import _
 from collections import Counter
 import base64
+from datetime import date
+from dateutil.relativedelta import relativedelta
 
 class res_company(osv.osv):
     _inherit = "res.company"
@@ -58,7 +60,8 @@ class natuurpunt_vat_consolidated(osv.osv_memory):
         account_period_ids = [int(data.period)]
         for account_period in  obj_acc_period.browse(cr,uid, account_period_ids, context=context):
             period = {
-                'code': account_period.code,
+                'date_start': account_period.date_start,
+                'date_stop': account_period.date_stop,
                 'month': str(account_period.date_start[5:7]),
                 'year': str(account_period.date_stop[:4]),
             }
@@ -107,16 +110,21 @@ class natuurpunt_vat_consolidated(osv.osv_memory):
         tax_counter = Counter()
         for account_tax_code in obj_tax_code.browse(cr, uid, account_tax_code_ids, context=context):
             if not account_tax_code.company_id.vat_quarterly:
-                code_domain = ('code','=',period['code'])
+                code_domain = [
+                    ('date_start','=',period['date_start']),
+                    ('date_stop','=',period['date_stop']),
+                    ('special','=',False)
+                ]
+            elif int(starting_month) % 3 == 0:
+                code_domain = [
+                    ('date_start','>=',str(date(int(period['year']),int(period['month']),1)+relativedelta(months=-2))),
+                    ('date_stop','<=',period['date_stop']),
+                    ('special','=',False)
+                ]
             else:
-                if int(starting_month) % 3 == 0:
-                    def get_period(year,month,offset):
-                        return '{0:02d}'.format(int(month)-offset)+'/'+year
-                    code_domain = ('code','in',[get_period(period['year'],period['month'], x) for x in [0, 1, 2]])
-                else:
-                    continue
+                continue
             tax_code_ids = obj_tax_code.search(cr, uid, [('parent_id','child_of',account_tax_code.id)], context=context)
-            account_period_domain = [code_domain,('company_id','=',account_tax_code.company_id.id)]
+            account_period_domain = code_domain + [('company_id','=',account_tax_code.company_id.id)]
             account_period_ids = obj_acc_period.search(cr, uid, account_period_domain, context=context)
             for account_period in obj_acc_period.browse(cr,uid, account_period_ids, context=context):
                 ctx = context.copy()
