@@ -1,6 +1,18 @@
 <?xml version="1.0"?>
 <openerp>
    <data>
+
+        <record id="company_view_vat_consolidated" model="ir.ui.view">
+            <field name="name">company.view.vat.consolidated.form</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="arch" type="xml">
+                <field name="currency_id" position="before">
+					<field name="vat_quarterly"/>
+                </field>
+            </field>
+        </record>
+
         <record id="natuurpunt_vat_consolidated_form" model="ir.ui.view">
                 <field name="name">natuurpunt.vat.consolidated.form</field>
                 <field name="model">natuurpunt.vat.consolidated</field>
