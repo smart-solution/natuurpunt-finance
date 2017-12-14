@@ -130,7 +130,13 @@ class natuurpunt_vat_consolidated(osv.osv_memory):
                 ctx = context.copy()
                 ctx['period_id'] = account_period.id
                 for tax_code in obj_tax_code.read(cr, uid, tax_code_ids, ['code','sum_period'], context=ctx):
-                    tax_counter[tax_code['code']] += tax_code['sum_period']
+                    if tax_code['code'] == 'VI':
+                        if tax_code['sum_period'] >= 0:
+                            tax_counter['71'] += abs(tax_code['sum_period'])
+                        else:
+                            tax_counter['72'] += abs(tax_code['sum_period'])
+                    else:
+                        tax_counter[tax_code['code']] += abs(tax_code['sum_period'])
         tax_info = [{'code': code, 'sum_period': sum_period} for code, sum_period in tax_counter.items()]
 
         data_of_file = """<?xml version="1.0"?>
@@ -173,19 +179,13 @@ class natuurpunt_vat_consolidated(osv.osv_memory):
             if item['code'] == '91' and ending_month != 12:
                 #the tax code 91 can only be send for the declaration of December
                 continue
-            if item['code'] and item['sum_period']:
-                if item['code'] == 'VI':
-                    if item['sum_period'] >= 0:
-                        item['code'] = '71'
-                    else:
-                        item['code'] = '72'
-                if item['code'] in list_of_tags:
-                    cases_list.append(item)
+            if item['code'] and item['sum_period'] and item['code'] in list_of_tags:
+                cases_list.append(item)
         cases_list.sort()
         for item in cases_list:
             grid_amount_data = {
                     'code': str(int(item['code'])),
-                    'amount': str(abs(item['sum_period'])),
+                    'amount': str(item['sum_period']),
                     }
             data_of_file += '\n\t\t\t<ns2:Amount GridNumber="%(code)s">%(amount)s</ns2:Amount''>' % (grid_amount_data)
 
