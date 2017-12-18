@@ -121,20 +121,24 @@
             </field>
         </record>
 
-        <record id="view_sales_order_uninvoiced_line_np_filter" model="ir.ui.view">
-            <field name="name">sale.order.uninvoiced.np.line</field>
-            <field name="model">sale.order.line</field>
-	    <field name="inherit_id" ref="sale.view_sales_order_uninvoiced_line_filter"/>
-            <field name="arch" type="xml">
-		<filter name="uninvoiced" position="after">
-			<filter icon="terp-dolar-ok!" name="delivery_invoice_ok" string="0pleverhoeveelheden te factureren" domain="[('delivered_flag','=',1),('invoiced','=',0),('state','&lt;&gt;','draft'),('state','&lt;&gt;','cancel')]"/>
-		</filter>
-            </field>
-        </record>
-
         <record id="sale.action_order_line_tree2" model="ir.actions.act_window">
-            <field name="search_view_id" ref="view_sales_order_uninvoiced_line_np_filter"/>
-            <field name="context">{"search_default_delivery_invoice_ok":1}</field>
+            <field name="name">Order Lines to Invoice</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order.line</field>
+            <field name="domain">[('delivered_flag','=',1),('invoiced','=',0),('state','&lt;&gt;','draft'),('state','&lt;&gt;','cancel')]</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="sale.view_sales_order_uninvoiced_line_filter"/>
+            <field name="context">{"search_default_uninvoiced":0}</field>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+              <p>
+                Here is a list of each sales order line to be invoiced. You can
+                invoice sales orders partially, by lines of sales order. You do
+                not need this list if you invoice from the delivery orders or
+                if you invoice sales totally.
+              </p>
+            </field>
         </record>
         
     </data>
