@@ -1335,7 +1335,9 @@ class account_coda_import(osv.osv_memory):
                 if isinstance(koalect_output, tuple):
                     if koalect_output[1]['project']['meta_id']:
                         name_zonder_adres = koalect_output[1]['project']['meta_id']
-                    
+                    if koalect_output[1]['project']['project_code']:
+                        name_zonder_adres = koalect_output[1]['project']['project_code']
+
                 stat_line_id = stat_line_obj.create(cr, uid, {
                       'ref': ref,
                       'statement_id': stat_id,
