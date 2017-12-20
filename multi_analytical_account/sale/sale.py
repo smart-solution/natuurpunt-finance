@@ -34,43 +34,10 @@ class sale_order_line(osv.osv):
         'analytic_dimension_1_required': fields.boolean("Analytic Dimension 1 Required"),
         'analytic_dimension_2_required': fields.boolean("Analytic Dimension 2 Required"),
         'analytic_dimension_3_required': fields.boolean("Analytic Dimension 3 Required"),
-        'delivered_qty': fields.float('Opleverhoeveelheden', digits_compute= dp.get_precision('Product UoS')),
+        'delivered_qty': fields.float('Oplever hoeveelheden', digits_compute= dp.get_precision('Product UoS')),
       	'delivered_flag': fields.boolean('Facturatie'),
       	'delivered_text': fields.char('Status levering', size=128),
     }
-
-class sale_order_line_delivery(osv.osv_memory):
-
-    _name = "sale.order.line.delivery"
-
-    _columns = {
-        'delivered_qty': fields.float('Opleverhoeveelheden', digits_compute= dp.get_precision('Product UoS')),
-        'delivered_flag': fields.boolean('Facturatie'),
-        'delivered_text': fields.char('Status levering', size=128),
-    }
-
-    def delivery_state_set(self, cr, uid, ids, context=None):
-        for wiz in self.browse(cr, uid ,ids):
-            line = self.pool.get('sale.order.line').browse(cr, uid, [context['active_id']])[0]
-            if line.invoiced:
-                raise osv.except_osv(_('Error!'),
-                     _('An invoiced sale order line cannot be modified'))
-            self.pool.get('sale.order.line').write(cr, uid, [context['active_id']],
-                 {'delivered_qty':wiz.delivered_qty,
-                 'delivered_flag':wiz.delivered_flag,
-                 'delivered_text':wiz.delivered_text})
-        return True
-
-    def default_get(self, cr, uid, fields, context=None):
-        so_line_obj = self.pool.get('sale.order.line')
-        lines = []
-        so_line = so_line_obj.browse(cr, uid, context.get('active_id', []), context=context)
-        defaults = super(sale_order_line_delivery, self).default_get(cr, uid, fields, context=context)
-        defaults['delivered_qty'] = so_line.delivered_qty or 0.0
-        defaults['delivered_flag'] = so_line.delivered_flag or ""
-        defaults['delivered_text'] = so_line.delivered_text or ""
-        return defaults
-
     def _prepare_order_line_invoice_line(self, cr, uid, line, account_id=False, context=None):
         """Prepare the dict of values to create the new invoice line for a
            sales order line. This method may be overridden to implement custom
@@ -137,11 +104,45 @@ class sale_order_line_delivery(osv.osv_memory):
             }
 
             print "XX############## context:",context
+            print "XX############## res:",res
 
         return res
 
-
 sale_order_line()
+
+class sale_order_line_delivery(osv.osv_memory):
+
+    _name = "sale.order.line.delivery"
+
+    _columns = {
+        'delivered_qty': fields.float('Oplever hoeveelheden', digits_compute= dp.get_precision('Product UoS')),
+        'delivered_flag': fields.boolean('Facturatie'),
+        'delivered_text': fields.char('Status levering', size=128),
+    }
+
+    def delivery_state_set(self, cr, uid, ids, context=None):
+        for wiz in self.browse(cr, uid ,ids):
+            line = self.pool.get('sale.order.line').browse(cr, uid, [context['active_id']])[0]
+            if line.invoiced:
+                raise osv.except_osv(_('Error!'),
+                     _('An invoiced sale order line cannot be modified'))
+            self.pool.get('sale.order.line').write(cr, uid, [context['active_id']],
+                 {'delivered_qty':wiz.delivered_qty,
+                 'delivered_flag':wiz.delivered_flag,
+                 'delivered_text':wiz.delivered_text})
+        return True
+
+    def default_get(self, cr, uid, fields, context=None):
+        so_line_obj = self.pool.get('sale.order.line')
+        lines = []
+        so_line = so_line_obj.browse(cr, uid, context.get('active_id', []), context=context)
+        defaults = super(sale_order_line_delivery, self).default_get(cr, uid, fields, context=context)
+        defaults['delivered_qty'] = so_line.delivered_qty or 0.0
+        defaults['delivered_flag'] = so_line.delivered_flag or ""
+        defaults['delivered_text'] = so_line.delivered_text or ""
+        return defaults
+
+sale_order_line_delivery()
 
 
 class sale_order_line_make_invoice(osv.osv_memory):
@@ -170,6 +171,7 @@ class sale_order_line_make_invoice(osv.osv_memory):
              @return: A dictionary which of fields with values.
 
         """
+	print "in make_invoices"
         if context is None: context = {}
         res = False
         invoices = {}
@@ -196,7 +198,6 @@ class sale_order_line_make_invoice(osv.osv_memory):
             if (not line.invoiced) and (line.state not in ('draft', 'cancel')):
                 if not line.order_id in invoices:
                     invoices[line.order_id] = []
-                print "1"
                 context['use_delivered_qty'] = wizard.use_delivered_qty
                 line_id = sales_order_line_obj.invoice_line_create(cr, uid, [line.id], context=context)
                 for lid in line_id:
@@ -228,6 +229,7 @@ class sale_order_line_make_invoice(osv.osv_memory):
 		'delivered_qty': 0,
 		'delivered_flag': False,
 	    })
+	    print "newline:",newline
 	    sales_order_line_obj.write(cr, uid, [line.id], {'product_uom_qty':line.delivered_qty})
 
         return {'type': 'ir.actions.act_window_close'}
