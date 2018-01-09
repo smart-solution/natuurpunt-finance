@@ -50,7 +50,7 @@
 			    <field name="delivered_text"/>
 			    <field name="delivered_qty"/>
 			    <field name="delivered_flag"/>
-			    <button name="%(action_sale_order_line_delivery)d" string="Delivery Status" type="action" icon="gtk-execute"/>
+			    <button name="%(action_sale_order_line_delivery)d" string="Delivery Status" type="action" icon="gtk-execute" states="draft, manual,confirmed"/>
 		    </xpath>
             </field>
         </record>
