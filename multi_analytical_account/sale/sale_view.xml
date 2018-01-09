@@ -115,7 +115,7 @@
             <field name="arch" type="xml">
 		    <xpath expr="/form/p" position="replace">
 		      <group>
-			<field name="use_delivered_qty"/>
+			<field name="use_delivered_qty" invisible="1"/>
 		      </group>
 		    </xpath>
             </field>
