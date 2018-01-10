@@ -49,7 +49,6 @@ class sale_order_line(osv.osv):
                (this is used for returning products including service)
            :return: dict of values to create() the invoice line
         """
-	print "################# _prepare_order context:",context
         res = {}
         if not line.invoiced:
             if not account_id:
@@ -103,9 +102,6 @@ class sale_order_line(osv.osv):
                 'sale_order_line_id': line.id
             }
 
-            print "XX############## context:",context
-            print "XX############## res:",res
-
         return res
 
 sale_order_line()
@@ -151,88 +147,12 @@ class sale_order_line_make_invoice(osv.osv_memory):
 
     _columns = {
 
-        'use_delivered_qty': fields.boolean('0pleverhoeveelheden')
+        'use_delivered_qty': fields.boolean('Opleverhoeveelheden')
     }
 
     _defaults = {
 	'use_delivered_qty': True,
     }
-
-    def make_invoices(self, cr, uid, ids, context=None):
-        """
-             To make invoices.
-
-             @param self: The object pointer.
-             @param cr: A database cursor
-             @param uid: ID of the user currently logged in
-             @param ids: the ID or list of IDs
-             @param context: A standard dictionary
-
-             @return: A dictionary which of fields with values.
-
-        """
-	print "in make_invoices"
-        if context is None: context = {}
-        res = False
-        invoices = {}
-
-        def make_invoice(order, lines):
-            """
-                 To make invoices.
-
-                 @param order:
-                 @param lines:
-
-                 @return:
-
-            """
-            inv = self._prepare_invoice(cr, uid, order, lines)
-            inv_id = self.pool.get('account.invoice').create(cr, uid, inv)
-            return inv_id
-
-        sales_order_line_obj = self.pool.get('sale.order.line')
-        sales_order_obj = self.pool.get('sale.order')
-        wf_service = netsvc.LocalService('workflow')
-        wizard = self.browse(cr, uid ,ids)[0]
-        for line in sales_order_line_obj.browse(cr, uid, context.get('active_ids', []), context=context):
-            if (not line.invoiced) and (line.state not in ('draft', 'cancel')):
-                if not line.order_id in invoices:
-                    invoices[line.order_id] = []
-                context['use_delivered_qty'] = wizard.use_delivered_qty
-                line_id = sales_order_line_obj.invoice_line_create(cr, uid, [line.id], context=context)
-                for lid in line_id:
-                    invoices[line.order_id].append(lid)
-        for order, il in invoices.items():
-            res = make_invoice(order, il)
-            cr.execute('INSERT INTO sale_order_invoice_rel \
-                    (order_id,invoice_id) values (%s,%s)', (order.id, res))
-            flag = True
-            data_sale = sales_order_obj.browse(cr, uid, order.id, context=context)
-            for line in data_sale.order_line:
-                if not line.invoiced:
-                    flag = False
-                    break
-            if flag:
-                line.order_id.write({'state': 'done'})
-                wf_service.trg_validate(uid, 'sale.order', order.id, 'all_lines', cr)
-
-        if not invoices:
-            raise osv.except_osv(_('Warning!'), _('Invoice cannot be created for this Sales Order Line due to one of the following reasons:\n1.The state of this sales order line is either "draft" or "cancel"!\n2.The Sales Order Line is Invoiced!'))
-        if context.get('open_invoices', False):
-            return self.open_invoices(cr, uid, ids, res, context=context)
-
-	# Copy line and change quantities
-	if line.delivered_qty < line.product_uom_qty:
-	    dif_qty = line.product_uom_qty - line.delivered_qty 
-            newline = sales_order_line_obj.copy(cr, uid, line.id, {
-		'product_uom_qty':dif_qty,
-		'delivered_qty': 0,
-		'delivered_flag': False,
-	    })
-	    print "newline:",newline
-	    sales_order_line_obj.write(cr, uid, [line.id], {'product_uom_qty':line.delivered_qty})
-
-        return {'type': 'ir.actions.act_window_close'}
 
     def open_invoices(self, cr, uid, ids, invoice_ids, context=None):
         """ open a view on one of the given invoice_ids """
