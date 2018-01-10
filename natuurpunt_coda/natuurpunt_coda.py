@@ -1333,10 +1333,10 @@ class account_coda_import(osv.osv_memory):
                     transaction_type = 'general'
 
                 if isinstance(koalect_output, tuple):
-                    if koalect_output[1]['project']['meta_id']:
-                        name_zonder_adres = koalect_output[1]['project']['meta_id']
-                    elif koalect_output[1]['project']['project_code']:
+                    if koalect_output[1]['project']['project_code']:
                         name_zonder_adres = koalect_output[1]['project']['project_code']
+                    elif koalect_output[1]['project']['meta_id']:
+                         name_zonder_adres = koalect_output[1]['project']['meta_id']
                     else:
                         name_zonder_adres = ''
 
