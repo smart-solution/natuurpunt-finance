@@ -10,7 +10,7 @@
                 <form string="Sale Order Line Delivery" version="7.0">
                     <group>
                         <field name="delivered_qty"/>
-                        <field name="delivered_flag"/>
+						<field name="delivered_flag" attrs="{'invisible':[('delivered_qty','=',0)]}"/>
                         <field name="delivered_text"/>
                     </group>
                     <footer>
@@ -49,7 +49,7 @@
 		    <xpath expr="//field[@name='order_line']/tree//field[@name='price_subtotal']" position="after">
 			    <field name="delivered_text"/>
 			    <field name="delivered_qty"/>
-			    <field name="delivered_flag"/>
+				<field name="delivered_flag" attrs="{'invisible':[('delivered_qty','=',0)]}"/>
 			    <button name="%(action_sale_order_line_delivery)d" string="Delivery Status" type="action" icon="gtk-execute" states="draft, manual,confirmed"/>
 		    </xpath>
             </field>
@@ -91,7 +91,7 @@
 			    <field name="analytic_dimension_2_required" context="{'sale_line_id':active_id}" invisible="1"/>
 			    <field name="analytic_dimension_3_required" context="{'sale_line_id':active_id}" invisible="1"/>
 			    <field name="delivered_qty"/>
-			    <field name="delivered_flag"/>
+				<field name="delivered_flag" attrs="{'invisible':[('delivered_qty','=',0)]}"/>
 		    </field>
             </field>
         </record>
@@ -103,7 +103,7 @@
             <field name="arch" type="xml">
 		    <field name="name" position="after">
 			<field name="delivered_qty"/>
-			<field name="delivered_flag"/>
+			<field name="delivered_flag" attrs="{'invisible':[('delivered_qty','=',0)]}"/>
 		    </field>
             </field>
         </record>

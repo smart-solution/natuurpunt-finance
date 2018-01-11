@@ -124,7 +124,7 @@ class sale_order_line_delivery(osv.osv_memory):
                      _('An invoiced sale order line cannot be modified'))
             self.pool.get('sale.order.line').write(cr, uid, [context['active_id']],
                  {'delivered_qty':wiz.delivered_qty,
-                 'delivered_flag':wiz.delivered_flag,
+                 'delivered_flag':wiz.delivered_flag if wiz.delivered_qty else False,
                  'delivered_text':wiz.delivered_text})
         return True
 
