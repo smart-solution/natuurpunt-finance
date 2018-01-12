@@ -121,6 +121,27 @@
             </field>
         </record>
 
+        <record id="view_sale_order_line_np_tree2" model="ir.ui.view">
+            <field name="name">view.np.order.lines.to.invoice</field>
+            <field name="model">sale.order.line</field>
+            <field name="arch" type="xml">
+                <tree string="Order Lines to Invoice" version="7.0" create="false" edit="false">
+                    <field name="order_id"/>
+                    <field name="order_partner_id"/>
+                    <field name="name"/>
+                    <field name="analytic_dimension_1_id" width="10"/>
+                    <field name="analytic_dimension_2_id" width="10"/>
+                    <field name="analytic_dimension_3_id" width="10"/>
+                    <field name="product_uom_qty" string="Qty"/>
+                    <field name="product_uom" string="Unit of Measure" groups="product.group_uom"/>
+                    <field name="salesman_id"/>
+                    <field name="delivered_qty"/>
+                    <field name="price_subtotal" sum="Total"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
         <record id="sale.action_order_line_tree2" model="ir.actions.act_window">
             <field name="name">Order Lines to Invoice</field>
             <field name="type">ir.actions.act_window</field>
@@ -129,6 +150,7 @@
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="search_view_id" ref="sale.view_sales_order_uninvoiced_line_filter"/>
+			<field name="view_id" ref="view_sale_order_line_np_tree2"/>
             <field name="context">{"search_default_uninvoiced":0}</field>
             <field name="filter" eval="True"/>
             <field name="help" type="html">
