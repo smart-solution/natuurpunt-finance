@@ -26,7 +26,8 @@
     Custom mail support for natuurpunt account 
 """,
     "depends" : ["natuurpunt_account","natuurpunt_purchase_mail"],
-    "data" : ["natuurpunt_account_mail_view.xml",],
+    "data" : ["natuurpunt_account_mail_view.xml",
+              "edi/natuurpunt_vordering_template.xml"],
     "init_xml" : [],
     "update_xml" : [],
     "active": False,
