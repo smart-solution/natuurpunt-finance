@@ -198,9 +198,13 @@ class account_invoice(osv.osv):
             '''
             This function opens a window to compose an email, with the edi invoice template message loaded by default
             '''
+            inv = self.browse(cr,uid,ids)[0]
             ir_model_data = self.pool.get('ir.model.data')
             try:
-                template_id = ir_model_data.get_object_reference(cr, uid, 'account', 'email_template_edi_invoice')[1]
+                if inv.journal_id.code == 'VO':
+                    template_id = ir_model_data.get_object_reference(cr, uid, 'natuurpunt_account_mail', 'email_template_edi_vordering')[1]
+                else:
+                    template_id = ir_model_data.get_object_reference(cr, uid, 'account', 'email_template_edi_invoice')[1]
             except ValueError:
                 template_id = False
             ctx = dict(context)
