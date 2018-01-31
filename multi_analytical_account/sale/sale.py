@@ -116,6 +116,18 @@ class sale_order_line_delivery(osv.osv_memory):
         'delivered_text': fields.char('Status levering', size=128),
     }
 
+    def onchange_delivered_qty(self, cr, uid, ids, qty, context=None):
+        res = {}
+        if qty == 0:
+            res['delivered_flag'] = None
+        return {'value':res}
+
+    def onchange_delivered_flag(self, cr, uid, ids, qty, context=None):
+        res = {}
+        if qty == 0:
+            res['delivered_flag'] = None
+        return {'value':res}
+
     def delivery_state_set(self, cr, uid, ids, context=None):
         for wiz in self.browse(cr, uid ,ids):
             line = self.pool.get('sale.order.line').browse(cr, uid, [context['active_id']])[0]
@@ -124,7 +136,7 @@ class sale_order_line_delivery(osv.osv_memory):
                      _('An invoiced sale order line cannot be modified'))
             self.pool.get('sale.order.line').write(cr, uid, [context['active_id']],
                  {'delivered_qty':wiz.delivered_qty,
-                 'delivered_flag':wiz.delivered_flag,
+                 'delivered_flag':wiz.delivered_flag if wiz.delivered_qty else False,
                  'delivered_text':wiz.delivered_text})
         return True
 
