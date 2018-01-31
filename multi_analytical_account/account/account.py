@@ -1158,7 +1158,7 @@ class account_move_line(osv.osv):
                         'analytic_account_id': acc.id or False,
                         })
 
-                        vals = {
+                        vals2 = {
                             'name': line.name,
                             'date': line.date,
                             'account_id': vals['analytic_dimension_1_id'],
@@ -1173,7 +1173,7 @@ class account_move_line(osv.osv):
                             'user_id': uid,
                             'period_id': line.move_id.period_id.id
                         }
-                        analytic_obj.create(cr, uid, vals, context=context)
+                        analytic_obj.create(cr, uid, vals2, context=context)
 
             if 'analytic_dimension_1_id' in vals and not vals['analytic_dimension_1_id']:
                 #If dimesnion removed delete the dimension entry
@@ -1210,7 +1210,7 @@ class account_move_line(osv.osv):
                         'analytic_account_id': acc.id or False,
                         })
 
-                        vals = {
+                        vals2 = {
                             'name': line.name,
                             'date': line.date,
                             'account_id': vals['analytic_dimension_2_id'],
@@ -1225,7 +1225,7 @@ class account_move_line(osv.osv):
                             'user_id': uid,
                             'period_id': line.move_id.period_id.id
                         }
-                        analytic_obj.create(cr, uid, vals, context=context)
+                        analytic_obj.create(cr, uid, vals2, context=context)
 
             if 'analytic_dimension_2_id' in vals and not vals['analytic_dimension_2_id']:
                 #If dimesnion removed delete the dimension entry
@@ -1262,7 +1262,7 @@ class account_move_line(osv.osv):
                         'analytic_account_id': acc.id or False,
                         })
 
-                        vals = {
+                        vals2 = {
                             'name': line.name,
                             'date': line.date,
                             'account_id': vals['analytic_dimension_3_id'],
@@ -1277,7 +1277,7 @@ class account_move_line(osv.osv):
                             'user_id': uid,
                             'period_id': line.move_id.period_id.id
                         }
-                        analytic_obj.create(cr, uid, vals, context=context)
+                        analytic_obj.create(cr, uid, vals2, context=context)
 
             if 'analytic_dimension_3_id' in vals and not vals['analytic_dimension_3_id']:
                 #If dimesnion removed delete the dimension entry
