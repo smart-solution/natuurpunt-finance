@@ -19,13 +19,18 @@ import logging
 _logger = logging.getLogger(__name__)
 
 def parse_koalect_free_comm(free_comm):
-    split_free_comm = re.split(r'[ ](?=[^0-9])', free_comm)[1].split(' ')
-    if len(split_free_comm) > 1:
-        koalect_comm = split_free_comm[0]
-        koalect_id = int(split_free_comm[1])
+    try:
+        split_free_comm = re.split(r'[ ](?=[^0-9])', free_comm)[1].split(' ')
+    except IndexError:
+        koalect_comm = free_comm
+        koalect_id = ""
     else:
-        koalect_comm = False
-        koalect_id = int(split_free_comm[0])
+        if len(split_free_comm) > 1:
+            koalect_comm = split_free_comm[0]
+            koalect_id = int(split_free_comm[1])
+        else:
+            koalect_comm = False
+            koalect_id = int(split_free_comm[0])
     return koalect_comm, koalect_id
 
 def consume_webservices(webservices):
