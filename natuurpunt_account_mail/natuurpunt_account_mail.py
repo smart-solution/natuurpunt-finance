@@ -203,6 +203,8 @@ class account_invoice(osv.osv):
             try:
                 if inv.journal_id.code == 'VO':
                     template_id = ir_model_data.get_object_reference(cr, uid, 'natuurpunt_account_mail', 'email_template_edi_vordering')[1]
+                elif inv.journal_id.code == 'VK':
+                    template_id = ir_model_data.get_object_reference(cr, uid, 'natuurpunt_account_mail', 'email_template_edi_onkostennota')[1]
                 else:
                     template_id = ir_model_data.get_object_reference(cr, uid, 'account', 'email_template_edi_invoice')[1]
             except ValueError:
