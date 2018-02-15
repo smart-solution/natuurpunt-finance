@@ -29,8 +29,12 @@ def parse_koalect_free_comm(free_comm):
             koalect_comm = split_free_comm[0]
             koalect_id = int(split_free_comm[1])
         else:
-            koalect_comm = False
-            koalect_id = int(split_free_comm[0])
+            try:
+                koalect_comm = False
+                koalect_id = int(split_free_comm[0])
+            except ValueError:
+                koalect_comm = free_comm
+                koalect_id = ""
     return koalect_comm, koalect_id
 
 def consume_webservices(webservices):
