@@ -159,8 +159,9 @@ class account_invoice_mail_compose_message(osv.TransientModel):
         ctx.update({'bypass_create':True})
         res_id = context.get('default_res_id',False)
         model = context.get('default_model',False)
+        service_name = context.get('service_name','account.invoice')
         ir_actions_report = self.pool.get('ir.actions.report.xml')
-        report_ids = ir_actions_report.search(cr, uid, [('report_name','=','account.invoice')])
+        report_ids = ir_actions_report.search(cr, uid, [('report_name','=',service_name)])
         for report in ir_actions_report.browse(cr, uid, report_ids, context=ctx):
             report_service = 'report.' + report.report_name
             service = netsvc.LocalService(report_service)
@@ -203,8 +204,13 @@ class account_invoice(osv.osv):
             try:
                 if inv.journal_id.code == 'VO':
                     template_id = ir_model_data.get_object_reference(cr, uid, 'natuurpunt_account_mail', 'email_template_edi_vordering')[1]
+                    service_name = 'account.vordering'
+                elif inv.journal_id.code == 'VK':
+                    template_id = ir_model_data.get_object_reference(cr, uid, 'natuurpunt_account_mail', 'email_template_edi_onkostennota')[1]
+                    service_name = 'account.expense'
                 else:
                     template_id = ir_model_data.get_object_reference(cr, uid, 'account', 'email_template_edi_invoice')[1]
+                    service_name = 'account.invoice'
             except ValueError:
                 template_id = False
             ctx = dict(context)
@@ -214,6 +220,7 @@ class account_invoice(osv.osv):
                 'default_use_template': bool(template_id),
                 'default_template_id': template_id,
                 'default_composition_mode': 'comment',
+                'service_name': service_name,
             })
             return self.pool.get('account.invoice.mail.compose.message').get_wizard(cr, uid, context=ctx)
 
