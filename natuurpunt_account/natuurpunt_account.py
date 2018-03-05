@@ -151,6 +151,7 @@ class account_invoice(osv.osv):
         """Clear the supplier reference at copy"""
         default['supplier_invoice_number'] = False
         default['reference'] = False
+        default['origin'] = False
         return super(account_invoice, self).copy(cr, uid, id, default=default, context=context)
 
     def onchange_date_invoice(self, cr, uid, ids, invoice_date, payment_term, context=None):
