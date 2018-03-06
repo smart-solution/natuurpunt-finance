@@ -19,15 +19,20 @@ import logging
 _logger = logging.getLogger(__name__)
 
 def parse_koalect_free_comm(free_comm):
+    payins = False
     try:
-        split_free_comm = re.split(r'[ ](?=[^0-9])', free_comm)[1].split(' ')
+        split_free_comm = re.split(r'[ ](?=[^P0-9])', free_comm)[1].split(' ')
     except IndexError:
         koalect_comm = free_comm
         koalect_id = ""
     else:
         if len(split_free_comm) > 1:
             koalect_comm = split_free_comm[0]
-            koalect_id = int(split_free_comm[1])
+            if split_free_comm[1][0] == 'P':
+                payins = True
+                koalect_id = int(split_free_comm[1][1:])
+            else:
+                koalect_id = int(split_free_comm[1])
         else:
             try:
                 koalect_comm = False
@@ -35,7 +40,7 @@ def parse_koalect_free_comm(free_comm):
             except ValueError:
                 koalect_comm = free_comm
                 koalect_id = ""
-    return koalect_comm, koalect_id
+    return koalect_comm, koalect_id, payins
 
 def consume_webservices(webservices):
     return reduce(lambda f,g : lambda x: g(f(x)),map(lambda x : x.values()[0], webservices))
@@ -1266,10 +1271,11 @@ class account_coda_import(osv.osv_memory):
 
                 koalect_output = 0
                 if lines2.t23_partner == 'MANGOPAY SA' and koalect_webservices:
-                    koalect_comm, koalect_id = parse_koalect_free_comm(lines2.t21_free_comm)
-                    #koalect_api  = [api for api in koalect_webservices if koalect_comm in api]
-                    #koalect_data = koalect_webservices[0]['Natuurpunt giften'](koalect_id)
-                    koalect_output = consume_webservices(koalect_webservices)(koalect_id)
+                    koalect_comm, koalect_id, payins = parse_koalect_free_comm(lines2.t21_free_comm)
+                    if payins:
+                        koalect_output = consume_webservices(koalect_webservices[3:])(koalect_id)
+                    else:
+                        koalect_output = consume_webservices(koalect_webservices[:3])(koalect_id)
                     if isinstance(koalect_output, tuple):
                         idspb = []
                         idspb = res_partner_obj.search(cr, uid, [('email', '=ilike', koalect_output[1]['user']['email'])])
@@ -1387,7 +1393,7 @@ class account_coda_import(osv.osv_memory):
                         'city': koalect_output[1]['user']['address']['city'],
                         'postal_code': koalect_output[1]['user']['address']['postal_code'],
                         'country': koalect_output[1]['user']['address']['country'],
-                        'is_tax_certificate': koalect_output[1]['is_tax_certificate'],
+                        'is_tax_certificate': False if payins else koalect_output[1]['is_tax_certificate'],
                         'koalect_id': koalect_output[0],
                        }, context=context)
 
