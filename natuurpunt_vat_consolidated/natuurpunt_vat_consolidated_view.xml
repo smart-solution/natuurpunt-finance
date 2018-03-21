@@ -58,7 +58,7 @@
             parent="l10n_be.menu_finance_belgian_statement"
             action="action_natuurpunt_vat_consolidated"
             id="vat_declaration_consolidated"
-            groups="account.group_account_manager"/>
+            groups="account.group_account_user"/>
 
         </data>
 </openerp>
