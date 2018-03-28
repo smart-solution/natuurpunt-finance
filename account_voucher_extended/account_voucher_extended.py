@@ -23,6 +23,11 @@ from osv import osv, fields
 from openerp.tools.translate import _
 from openerp.tools import float_compare
 
+def uncheck_reconcile(d):
+    if 'reconcile' in d:
+        d['reconcile'] = False
+    return d
+
 class account_bank_statement(osv.osv):
 
     _inherit = "account.bank.statement"
@@ -315,12 +320,15 @@ class account_voucher(osv.osv):
                 context['move_line_ids'] = move_line_pool.search(cr, uid, [('account_id.type', 'in', ['receivable','payable']), ('state','=','valid'), ('account_id.reconcile','=',True), ('reconcile_id', '=', False), ('partner_id', '=', partner_id), ('credit','>',0),], context=context)
 
         if 'move_line_ids' in context and context['move_line_ids']:
-            return super(account_voucher,self).recompute_voucher_lines(cr, uid, ids, partner_id, journal_id, line_amount, currency_id, ttype, date, context)
+            default = super(account_voucher,self).recompute_voucher_lines(cr, uid, ids, partner_id, journal_id, line_amount, currency_id, ttype, date, context)
+            default['value']['line_cr_ids'] = map(uncheck_reconcile,default['value']['line_cr_ids'])
+            default['value']['line_dr_ids'] = map(uncheck_reconcile,default['value']['line_dr_ids'])
+            return default
         else:
             default = {
                  'value': {'line_dr_ids': [] ,'line_cr_ids': [] ,'pre_line': False,},
             }
-            return default 
+            return default
 
 class account_voucher_line(osv.osv):
 
