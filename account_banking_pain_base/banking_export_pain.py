@@ -418,7 +418,7 @@ class banking_export_pain(orm.AbstractModel):
                     cr, uid, 'Creditor Structured Reference',
                     'line.communication', {'line': line}, 35,
                     gen_args=gen_args,
-                    context=context)
+                    context=context).translate(None,'+/')
         return True
 
     def generate_creditor_scheme_identification(
