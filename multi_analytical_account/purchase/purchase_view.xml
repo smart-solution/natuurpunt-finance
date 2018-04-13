@@ -8,8 +8,8 @@
             <field name="arch" type="xml">
 		    <xpath expr="//field[@name='order_line']/tree//field[@name='name']" position="after">
 			    <field name="analytic_dimension_1_id" context="{'purchase_line_id':active_id,'dimension':1,'dimension2':analytic_dimension_2_id,'dimension3':analytic_dimension_3_id}" attrs="{'required':[('analytic_dimension_1_required','=',True)]}" required="True"/>
-			    <field name="analytic_dimension_2_id" context="{'purchase_line_id':active_id,'dimension':2,'dimension1':analytic_dimension_1_id,'dimension3':analytic_dimension_3_id}" attrs="{'required':[('analytic_dimension_2_required','=',True)]}"/>
-			    <field name="analytic_dimension_3_id" context="{'purchase_line_id':active_id,'dimension':3,'dimension1':analytic_dimension_1_id,'dimension2':analytic_dimension_2_id}" attrs="{'required':[('analytic_dimension_3_required','=',True)]}"/>
+			    <field name="analytic_dimension_2_id" context="{'purchase_line_id':active_id,'dimension':2,'dimension1':analytic_dimension_1_id,'dimension3':analytic_dimension_3_id}" attrs="{'required':[('analytic_dimension_2_required','=',True)]}" on_change="onchange_dimension(analytic_dimension_2_id,analytic_dimension_3_id)"/>
+			    <field name="analytic_dimension_3_id" context="{'purchase_line_id':active_id,'dimension':3,'dimension1':analytic_dimension_1_id,'dimension2':analytic_dimension_2_id}" attrs="{'required':[('analytic_dimension_3_required','=',True)]}" on_change="onchange_dimension(analytic_dimension_2_id,analytic_dimension_3_id)"/>
 			    <field name="analytic_dimension_1_required" context="{'purchase_line_id':active_id}" invisible="1"/>
 			    <field name="analytic_dimension_2_required" context="{'purchase_line_id':active_id}" invisible="1"/>
 			    <field name="analytic_dimension_3_required" context="{'purchase_line_id':active_id}" invisible="1"/>
@@ -33,8 +33,8 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='line_ids']/tree//field[@name='name']" position="after">
 			    <field name="analytic_dimension_1_id" context="{'purchase_requisition_line_id':active_id,'dimension':1,'dimension2':analytic_dimension_2_id,'dimension3':analytic_dimension_3_id}" attrs="{'required':[('analytic_dimension_1_required','=',True)]}" required="True"/>
-			    <field name="analytic_dimension_2_id" context="{'purchase_requisition_line_id':active_id,'dimension':2,'dimension1':analytic_dimension_1_id,'dimension3':analytic_dimension_3_id}" attrs="{'required':[('analytic_dimension_2_required','=',True)]}"/>
-			    <field name="analytic_dimension_3_id" context="{'purchase_requisition_line_id':active_id,'dimension':3,'dimension1':analytic_dimension_1_id,'dimension2':analytic_dimension_2_id}" attrs="{'required':[('analytic_dimension_3_required','=',True)]}"/>
+			    <field name="analytic_dimension_2_id" context="{'purchase_requisition_line_id':active_id,'dimension':2,'dimension1':analytic_dimension_1_id,'dimension3':analytic_dimension_3_id}" attrs="{'required':[('analytic_dimension_2_required','=',True)]}" on_change="onchange_dimension(analytic_dimension_2_id,analytic_dimension_3_id)"/>
+			    <field name="analytic_dimension_3_id" context="{'purchase_requisition_line_id':active_id,'dimension':3,'dimension1':analytic_dimension_1_id,'dimension2':analytic_dimension_2_id}" attrs="{'required':[('analytic_dimension_3_required','=',True)]}" on_change="onchange_dimension(analytic_dimension_2_id,analytic_dimension_3_id)"/>
 			    <field name="analytic_dimension_1_required" context="{'purchase_requisition_line_id':active_id}" invisible="1"/>
 			    <field name="analytic_dimension_2_required" context="{'purchase_requisition_line_id':active_id}" invisible="1"/>
 			    <field name="analytic_dimension_3_required" context="{'purchase_requisition_line_id':active_id}" invisible="1"/>

@@ -234,6 +234,27 @@ class purchase_order_line(osv.osv):
         'analytic_dimension_2_required': fields.boolean("Analytic Dimension 2 Required"),
         'analytic_dimension_3_required': fields.boolean("Analytic Dimension 3 Required"),
     }
+
+    def onchange_dimension(self, cr, uid, ids, analytic_dimension_2_id,analytic_dimension_3_id):
+        """Check for required dimension"""
+        result =  {'value':{}}
+        result['value']['analytic_dimension_2_required'] = False
+        result['value']['analytic_dimension_3_required'] = False
+
+        def check_dims_mandatory(analytic_account):
+            if analytic_account.dimensions_mandatory:
+                for dimension in analytic_account.allowed_account_ids:
+                    if dimension.dimension_id.name == 'Netwerk Dimensie':
+                       result['value']['analytic_dimension_2_required'] = True
+                    if dimension.dimension_id.name == 'Projecten, Contracten, Fondsen':
+                       result['value']['analytic_dimension_3_required'] = True
+
+        if analytic_dimension_2_id:
+            check_dims_mandatory(self.pool.get('account.analytic.account').browse(cr, uid, analytic_dimension_2_id))
+        if analytic_dimension_3_id:
+            check_dims_mandatory(self.pool.get('account.analytic.account').browse(cr, uid, analytic_dimension_3_id))
+        return result
+
 purchase_order_line()
 
 class purchase_requisition(osv.osv):
@@ -308,8 +329,6 @@ class purchase_requisition(osv.osv):
     
         return res
 
-
-
 class purchase_requisition_line(osv.osv):
 
     _inherit = 'purchase.requisition.line'
@@ -322,6 +341,27 @@ class purchase_requisition_line(osv.osv):
         'analytic_dimension_2_required': fields.boolean("Analytic Dimension 2 Required"),
         'analytic_dimension_3_required': fields.boolean("Analytic Dimension 3 Required"),
     }
+
+    def onchange_dimension(self, cr, uid, ids, analytic_dimension_2_id,analytic_dimension_3_id):
+        """Check for required dimension"""
+        result =  {'value':{}}
+        result['value']['analytic_dimension_2_required'] = False
+        result['value']['analytic_dimension_3_required'] = False
+
+        def check_dims_mandatory(analytic_account):
+            if analytic_account.dimensions_mandatory:
+                for dimension in analytic_account.allowed_account_ids:
+                    if dimension.dimension_id.name == 'Netwerk Dimensie':
+                       result['value']['analytic_dimension_2_required'] = True
+                    if dimension.dimension_id.name == 'Projecten, Contracten, Fondsen':
+                       result['value']['analytic_dimension_3_required'] = True
+
+        if analytic_dimension_2_id:
+            check_dims_mandatory(self.pool.get('account.analytic.account').browse(cr, uid, analytic_dimension_2_id))
+        if analytic_dimension_3_id:
+            check_dims_mandatory(self.pool.get('account.analytic.account').browse(cr, uid, analytic_dimension_3_id))
+        return result
+
 purchase_requisition_line()
 
 #class purchase_line_invoice(osv.osv_memory):

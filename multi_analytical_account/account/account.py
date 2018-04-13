@@ -1701,11 +1701,14 @@ class account_bank_statement(osv.osv):
                 statement_obj.write(cr, uid, [statement.id], {'state':'error'})
            else:
                 statement_obj.write(cr, uid, [statement.id], {'validated':True,'state':'draft'})
-       
+      
+        """
         return {
            'type': 'ir.actions.client',
            'tag': 'reload',
-        }       
+        }  
+        """
+        return True
 
     def button_retry_bank(self, cr, uid, ids, context=None):
         return self.button_validate_bank(cr, uid, ids, context=context)

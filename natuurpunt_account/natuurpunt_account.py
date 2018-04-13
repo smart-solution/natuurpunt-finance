@@ -512,18 +512,18 @@ class payment_line(osv.osv):
     }
 
 class product_product(osv.osv):
-
-
+ 
+ 
     _inherit = "product.product"
-
-    def create(self, cr, uid, vals, context=None):
-        """Add the np sequence referece"""
-        seq_id = self.pool.get('ir.sequence').search(cr, uid, [('code','=','res.product.np.ref')])
-        print seq_id
-        vals['default_code'] = self.pool.get('ir.sequence').next_by_id(cr, uid, seq_id, context)
-        print vals
-        vals['company_id'] = False
-        return super(product_product, self).create(cr, uid, vals, context=context)
+ 
+#     def create(self, cr, uid, vals, context=None):
+#         """Add the np sequence referece"""
+#         seq_id = self.pool.get('ir.sequence').search(cr, uid, [('code','=','res.product.np.ref')])
+#         print seq_id
+#         vals['default_code'] = self.pool.get('ir.sequence').next_by_id(cr, uid, seq_id, context)
+#         print vals
+#         vals['company_id'] = False
+#         return super(product_product, self).create(cr, uid, vals, context=context)
 
 
 class account_journal(osv.osv):
