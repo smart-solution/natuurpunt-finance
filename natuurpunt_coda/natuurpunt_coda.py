@@ -19,7 +19,7 @@ import logging
 _logger = logging.getLogger(__name__)
 
 def parse_koalect_free_comm(free_comm):
-    payins = False
+    payin = False
     try:
         split_free_comm = re.split(r'[ ](?=[^P0-9])', free_comm)[1].split(' ')
     except IndexError:
@@ -29,7 +29,7 @@ def parse_koalect_free_comm(free_comm):
         if len(split_free_comm) > 1:
             koalect_comm = split_free_comm[0]
             if split_free_comm[1][0] == 'P':
-                payins = True
+                payin = True
                 koalect_id = int(split_free_comm[1][1:])
             else:
                 koalect_id = int(split_free_comm[1])
@@ -40,7 +40,7 @@ def parse_koalect_free_comm(free_comm):
             except ValueError:
                 koalect_comm = free_comm
                 koalect_id = ""
-    return koalect_comm, koalect_id, payins
+    return koalect_comm, koalect_id, payin
 
 def consume_webservices(webservices):
     return reduce(lambda f,g : lambda x: g(f(x)),map(lambda x : x.values()[0], webservices))
@@ -138,14 +138,15 @@ class account_bank_statement_line(osv.osv):
 
     def create(self, cr, uid, vals, context=None):
         coda_id = 0
-        
+
         if 'move_flag' not in vals or not vals['move_flag']:
 # New analytic code contract, fonds, project
             if 'name_zonder_adres' in vals and vals['name_zonder_adres'] and vals['type'] != 'supplier':
-                
+
                 analytic_account_obj = self.pool.get('account.analytic.account')
                 acc_coda_acc_obj = self.pool.get('account.coda.account')
-                
+                acc_coda_name = 'Giften-afleiding-koalect-payin' if ('payin' in context and context['payin']) else 'Giften-afleiding'
+
                 # split omschrijving  
                 omschrijving = vals['name_zonder_adres'].upper().split()
                 patterns = [('^[A-Z]{3}-[0-9]{4}-[0-9]{4}',False), # kostenplaats
@@ -212,7 +213,7 @@ class account_bank_statement_line(osv.osv):
                     res = apply_regex_to_omschrijving(pattern,True,'old_code','=',func)
 
                 if res:
-                    ids = acc_coda_acc_obj.search(cr, uid,[('name', '=', 'Giften-afleiding')])
+                    ids = acc_coda_acc_obj.search(cr, uid,[('name', '=', acc_coda_name)])
                     for acc_coda_acc in acc_coda_acc_obj.browse(cr, uid, ids):
                        vals['account_id'] = acc_coda_acc.account_id.id
                     vals['analytic_dimension_1_id'] = res['dim1']
@@ -1267,10 +1268,9 @@ class account_coda_import(osv.osv_memory):
                         voucher_id = self.pool.get('account.voucher').create(cr, uid, voucher_vals, context=context)
 # 		        print datetime.datetime.now() , 'voucher gemaakt '
 
-                koalect_output = 0
                 if lines2.t23_partner == 'MANGOPAY SA' and koalect_webservices:
-                    koalect_comm, koalect_id, payins = parse_koalect_free_comm(lines2.t21_free_comm)
-                    if payins:
+                    koalect_comm, koalect_id, payin = parse_koalect_free_comm(lines2.t21_free_comm)
+                    if payin:
                         koalect_output = consume_webservices(koalect_webservices[3:])(koalect_id)
                     else:
                         koalect_output = consume_webservices(koalect_webservices[:3])(koalect_id)
@@ -1291,6 +1291,10 @@ class account_coda_import(osv.osv_memory):
                                 elif partner.supplier and not (partner.customer):
                                     account = partner.property_account_payable.id
                                     transaction_type = 'supplier'
+                else:
+                    koalect_output = 0
+                    payin = False
+                context['payin'] = payin
 
                 if lines2.t23_account_nbr:
                     idspb= []
@@ -1391,7 +1395,7 @@ class account_coda_import(osv.osv_memory):
                         'city': koalect_output[1]['user']['address']['city'],
                         'postal_code': koalect_output[1]['user']['address']['postal_code'],
                         'country': koalect_output[1]['user']['address']['country'],
-                        'is_tax_certificate': False if payins else koalect_output[1]['is_tax_certificate'],
+                        'is_tax_certificate': False if payin else koalect_output[1]['is_tax_certificate'],
                         'koalect_id': koalect_output[0],
                        }, context=context)
 
