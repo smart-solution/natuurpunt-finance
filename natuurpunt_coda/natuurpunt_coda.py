@@ -13,6 +13,9 @@ from openerp import tools
 from md5 import md5
 import re
 from natuurpunt_tools import koalect_webservice
+from natuurpunt_tools import compose
+from natuurpunt_tools import match_with_existing_partner
+from functools import partial
 
 import logging
 
@@ -1275,22 +1278,30 @@ class account_coda_import(osv.osv_memory):
                     else:
                         koalect_output = consume_webservices(koalect_webservices[:3])(koalect_id)
                     if isinstance(koalect_output, tuple):
-                        idspb = []
-                        idspb = res_partner_obj.search(cr, uid, [('email', '=ilike', koalect_output[1]['user']['email'])])
-                        count_partners = 0
-                        if idspb and len(idspb) > 0:
-                            partner = res_partner_obj.browse(cr, uid, idspb[0])
-                            count_partners += 1
-                        if count_partners == 1:
-                            if not(partner_id):
-                                partner_id = partner.id
-                            if not move_line:
-                                if partner.customer and not (partner.supplier):
-                                    account = partner.property_account_receivable.id
-                                    transaction_type = 'customer'
-                                elif partner.supplier and not (partner.customer):
-                                    account = partner.property_account_payable.id
-                                    transaction_type = 'supplier'
+                        koalect_vals = {
+                            'first_name':koalect_output[1]['user']['firstname'],
+                            'last_name':koalect_output[1]['user']['lastname'],
+                            'street':koalect_output[1]['user']['address']['street'],
+                            'zip':koalect_output[1]['user']['address']['postal_code'],
+                            'street_nbr':koalect_output[1]['user']['address']['number'],
+                        }
+                        data = (koalect_vals, _logger, '')
+                        ids_partner_koalect = compose(
+                            partial(match_with_existing_partner,res_partner_obj,cr,uid),
+                            lambda (p,l,a):[p.id] if p else False
+                        )(data)
+                        if ids_partner_koalect:
+                            _logger.info("Koalect partner match:{} - {}".format(koalect_id,ids_partner_koalect))
+                            partner = res_partner_obj.browse(cr, uid, ids_partner_koalect)
+                            partner_id = partner[0].id
+                            if partner[0].customer and not (partner[0].supplier):
+                                account = partner[0].property_account_receivable.id
+                                transaction_type = 'customer'
+                            elif partner[0].supplier and not (partner[0].customer):
+                                account = partner[0].property_account_payable.id
+                                transaction_type = 'supplier'
+                        else:
+                            _logger.info("Geen koalect partner match:{} - {}".format(koalect_id,koalect_vals))
                 else:
                     koalect_output = 0
                     payin = False
