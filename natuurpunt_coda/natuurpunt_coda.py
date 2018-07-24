@@ -10,16 +10,19 @@ from openerp.osv import fields, osv
 from openerp.tools.translate import _
 from openerp import SUPERUSER_ID
 from openerp import tools
-from md5 import md5
+import hashlib
 import re
 from natuurpunt_tools import koalect_webservice
+from natuurpunt_tools import compose
+from natuurpunt_tools import match_with_existing_partner
+from functools import partial
 
 import logging
 
 _logger = logging.getLogger(__name__)
 
 def parse_koalect_free_comm(free_comm):
-    payins = False
+    payin = False
     try:
         split_free_comm = re.split(r'[ ](?=[^P0-9])', free_comm)[1].split(' ')
     except IndexError:
@@ -29,7 +32,7 @@ def parse_koalect_free_comm(free_comm):
         if len(split_free_comm) > 1:
             koalect_comm = split_free_comm[0]
             if split_free_comm[1][0] == 'P':
-                payins = True
+                payin = True
                 koalect_id = int(split_free_comm[1][1:])
             else:
                 koalect_id = int(split_free_comm[1])
@@ -40,7 +43,7 @@ def parse_koalect_free_comm(free_comm):
             except ValueError:
                 koalect_comm = free_comm
                 koalect_id = ""
-    return koalect_comm, koalect_id, payins
+    return koalect_comm, koalect_id, payin
 
 def consume_webservices(webservices):
     return reduce(lambda f,g : lambda x: g(f(x)),map(lambda x : x.values()[0], webservices))
@@ -138,14 +141,15 @@ class account_bank_statement_line(osv.osv):
 
     def create(self, cr, uid, vals, context=None):
         coda_id = 0
-        
+
         if 'move_flag' not in vals or not vals['move_flag']:
 # New analytic code contract, fonds, project
             if 'name_zonder_adres' in vals and vals['name_zonder_adres'] and vals['type'] != 'supplier':
-                
+
                 analytic_account_obj = self.pool.get('account.analytic.account')
                 acc_coda_acc_obj = self.pool.get('account.coda.account')
-                
+                acc_coda_name = 'Giften-afleiding-koalect-payin' if ('payin' in context and context['payin']) else 'Giften-afleiding'
+
                 # split omschrijving  
                 omschrijving = vals['name_zonder_adres'].upper().split()
                 patterns = [('^[A-Z]{3}-[0-9]{4}-[0-9]{4}',False), # kostenplaats
@@ -212,12 +216,20 @@ class account_bank_statement_line(osv.osv):
                     res = apply_regex_to_omschrijving(pattern,True,'old_code','=',func)
 
                 if res:
-                    ids = acc_coda_acc_obj.search(cr, uid,[('name', '=', 'Giften-afleiding')])
+                    ids = acc_coda_acc_obj.search(cr, uid,[('name', '=', acc_coda_name)])
                     for acc_coda_acc in acc_coda_acc_obj.browse(cr, uid, ids):
                        vals['account_id'] = acc_coda_acc.account_id.id
                     vals['analytic_dimension_1_id'] = res['dim1']
                     vals['analytic_dimension_2_id'] = res['dim2']
                     vals['analytic_dimension_3_id'] = res['dim3']
+                else:
+                    sql_stat = "select account_coda_account.id as coda_id, account_id, analytic_dimension_1_id, analytic_dimension_2_id, analytic_dimension_3_id  from account_coda_account, account_bank_statement where ('%s' like '%s' || communication_like || '%s') and not(communication_like IS NULL) and account_coda_account.company_id = (select company_id from account_account where account_account.id = %d) and account_bank_statement.id = %d and account_bank_statement.journal_id = account_coda_account.journal_id" % (vals['name_zonder_adres'].replace("'", ""), '%', '%', vals['account_id'], vals['statement_id'], )
+                    cr.execute(sql_stat)
+                    for sql_res in cr.dictfetchall():
+                        vals['account_id'] = sql_res['account_id']
+                        vals['analytic_dimension_1_id'] = sql_res['analytic_dimension_1_id']
+                        vals['analytic_dimension_2_id'] = sql_res['analytic_dimension_2_id']
+                        vals['analytic_dimension_3_id'] = sql_res['analytic_dimension_3_id']
 
 # Amount
             sql_stat = 'select account_coda_account.id as coda_id, account_id, analytic_dimension_1_id, analytic_dimension_2_id, analytic_dimension_3_id  from account_coda_account, account_bank_statement where amount <> 0 and amount = %f and account_coda_account.company_id = (select company_id from account_account where account_account.id = %d) and account_bank_statement.id = %d and account_bank_statement.journal_id = account_coda_account.journal_id' % (vals['amount'], vals['account_id'], vals['statement_id'], )
@@ -227,16 +239,6 @@ class account_bank_statement_line(osv.osv):
                 vals['analytic_dimension_1_id'] = sql_res['analytic_dimension_1_id']
                 vals['analytic_dimension_2_id'] = sql_res['analytic_dimension_2_id']
                 vals['analytic_dimension_3_id'] = sql_res['analytic_dimension_3_id']
-
-# Description
-            if 'name_zonder_adres' in vals and vals['name_zonder_adres']:
-                sql_stat = "select account_coda_account.id as coda_id, account_id, analytic_dimension_1_id, analytic_dimension_2_id, analytic_dimension_3_id  from account_coda_account, account_bank_statement where ('%s' like '%s' || communication_like || '%s') and not(communication_like IS NULL) and account_coda_account.company_id = (select company_id from account_account where account_account.id = %d) and account_bank_statement.id = %d and account_bank_statement.journal_id = account_coda_account.journal_id" % (vals['name_zonder_adres'].replace("'", ""), '%', '%', vals['account_id'], vals['statement_id'], )
-                cr.execute(sql_stat)
-                for sql_res in cr.dictfetchall():
-                    vals['account_id'] = sql_res['account_id']
-                    vals['analytic_dimension_1_id'] = sql_res['analytic_dimension_1_id']
-                    vals['analytic_dimension_2_id'] = sql_res['analytic_dimension_2_id']
-                    vals['analytic_dimension_3_id'] = sql_res['analytic_dimension_3_id']
 
 # Transaction code
             if 'transaction_code' in vals and vals['transaction_code'] and vals['transaction_code'] != '':
@@ -600,13 +602,13 @@ class account_coda_import(osv.osv_memory):
         koalect_obj = self.pool.get('res.koalect')
         res_partner_obj = self.pool.get('res.partner')
         account_coda_koalect_obj = self.pool.get('account.coda.koalect')
- 
-        data_md5 = md5(codafile).digest()       
+
+        data_md5 = hashlib.sha224(codafile).hexdigest()
         exists = fys_file_obj.search(cr, uid, [('filename','=',data_md5)], context=context)
         if exists:
             raise osv.except_osv(_('Error'),_('Error') + _('Duplicate Coda filename'))
         fys_file_id = fys_file_obj.create(cr, uid, {'filename': data_md5}, context=context)
-        
+
         prev = 9
         expect = 0
         counter = 0
@@ -1269,30 +1271,41 @@ class account_coda_import(osv.osv_memory):
                         voucher_id = self.pool.get('account.voucher').create(cr, uid, voucher_vals, context=context)
 # 		        print datetime.datetime.now() , 'voucher gemaakt '
 
-                koalect_output = 0
                 if lines2.t23_partner == 'MANGOPAY SA' and koalect_webservices:
-                    koalect_comm, koalect_id, payins = parse_koalect_free_comm(lines2.t21_free_comm)
-                    if payins:
+                    koalect_comm, koalect_id, payin = parse_koalect_free_comm(lines2.t21_free_comm)
+                    if payin:
                         koalect_output = consume_webservices(koalect_webservices[3:])(koalect_id)
                     else:
                         koalect_output = consume_webservices(koalect_webservices[:3])(koalect_id)
                     if isinstance(koalect_output, tuple):
-                        idspb = []
-                        idspb = res_partner_obj.search(cr, uid, [('email', '=ilike', koalect_output[1]['user']['email'])])
-                        count_partners = 0
-                        if idspb and len(idspb) > 0:
-                            partner = res_partner_obj.browse(cr, uid, idspb[0])
-                            count_partners += 1
-                        if count_partners == 1:
-                            if not(partner_id):
-                                partner_id = partner.id
-                            if not move_line:
-                                if partner.customer and not (partner.supplier):
-                                    account = partner.property_account_receivable.id
-                                    transaction_type = 'customer'
-                                elif partner.supplier and not (partner.customer):
-                                    account = partner.property_account_payable.id
-                                    transaction_type = 'supplier'
+                        koalect_vals = {
+                            'first_name':koalect_output[1]['user']['firstname'],
+                            'last_name':koalect_output[1]['user']['lastname'],
+                            'street':koalect_output[1]['user']['address']['street'],
+                            'zip':koalect_output[1]['user']['address']['postal_code'],
+                            'street_nbr':koalect_output[1]['user']['address']['number'],
+                        }
+                        data = (koalect_vals, _logger, '')
+                        ids_partner_koalect = compose(
+                            partial(match_with_existing_partner,res_partner_obj,cr,uid),
+                            lambda (p,l,a):[p.id] if p else False
+                        )(data)
+                        if ids_partner_koalect:
+                            _logger.info("Koalect partner match:{} - {}".format(koalect_id,ids_partner_koalect))
+                            partner = res_partner_obj.browse(cr, uid, ids_partner_koalect)
+                            partner_id = partner[0].id
+                            if partner[0].customer and not (partner[0].supplier):
+                                account = partner[0].property_account_receivable.id
+                                transaction_type = 'customer'
+                            elif partner[0].supplier and not (partner[0].customer):
+                                account = partner[0].property_account_payable.id
+                                transaction_type = 'supplier'
+                        else:
+                            _logger.info("Geen koalect partner match:{} - {}".format(koalect_id,koalect_vals))
+                else:
+                    koalect_output = 0
+                    payin = False
+                context['payin'] = payin
 
                 if lines2.t23_account_nbr:
                     idspb= []
@@ -1393,7 +1406,7 @@ class account_coda_import(osv.osv_memory):
                         'city': koalect_output[1]['user']['address']['city'],
                         'postal_code': koalect_output[1]['user']['address']['postal_code'],
                         'country': koalect_output[1]['user']['address']['country'],
-                        'is_tax_certificate': False if payins else koalect_output[1]['is_tax_certificate'],
+                        'is_tax_certificate': False if payin else koalect_output[1]['is_tax_certificate'],
                         'koalect_id': koalect_output[0],
                        }, context=context)
 
