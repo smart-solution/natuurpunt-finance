@@ -10,7 +10,7 @@ from openerp.osv import fields, osv
 from openerp.tools.translate import _
 from openerp import SUPERUSER_ID
 from openerp import tools
-from md5 import md5
+import hashlib
 import re
 from natuurpunt_tools import koalect_webservice
 from natuurpunt_tools import compose
@@ -602,13 +602,13 @@ class account_coda_import(osv.osv_memory):
         koalect_obj = self.pool.get('res.koalect')
         res_partner_obj = self.pool.get('res.partner')
         account_coda_koalect_obj = self.pool.get('account.coda.koalect')
- 
-        data_md5 = md5(codafile).digest()       
+
+        data_md5 = hashlib.sha224(codafile).hexdigest()
         exists = fys_file_obj.search(cr, uid, [('filename','=',data_md5)], context=context)
         if exists:
             raise osv.except_osv(_('Error'),_('Error') + _('Duplicate Coda filename'))
         fys_file_id = fys_file_obj.create(cr, uid, {'filename': data_md5}, context=context)
-        
+
         prev = 9
         expect = 0
         counter = 0
