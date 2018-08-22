@@ -135,7 +135,7 @@ class account_bank_statement(osv.osv):
         return True
     
 account_bank_statement()
-    
+
 class account_bank_statement_line(osv.osv):
     _inherit = 'account.bank.statement.line'
 
@@ -230,6 +230,16 @@ class account_bank_statement_line(osv.osv):
                         vals['analytic_dimension_1_id'] = sql_res['analytic_dimension_1_id']
                         vals['analytic_dimension_2_id'] = sql_res['analytic_dimension_2_id']
                         vals['analytic_dimension_3_id'] = sql_res['analytic_dimension_3_id']
+
+
+            if 'name_zonder_adres' in vals and vals['name_zonder_adres'] and vals['type'] == 'supplier':
+                sql_stat = "select account_coda_account.id as coda_id, account_id, analytic_dimension_1_id, analytic_dimension_2_id, analytic_dimension_3_id  from account_coda_account, account_bank_statement where ('%s' like '%s' || communication_like || '%s') and not(communication_like IS NULL) and account_coda_account.company_id = (select company_id from account_account where account_account.id = %d) and account_bank_statement.id = %d and account_bank_statement.journal_id = account_coda_account.journal_id" % (vals['name_zonder_adres'].replace("'", ""), '%', '%', vals['account_id'], vals['statement_id'], )
+                cr.execute(sql_stat)
+                for sql_res in cr.dictfetchall():
+                    vals['account_id'] = sql_res['account_id']
+                    vals['analytic_dimension_1_id'] = sql_res['analytic_dimension_1_id']
+                    vals['analytic_dimension_2_id'] = sql_res['analytic_dimension_2_id']
+                    vals['analytic_dimension_3_id'] = sql_res['analytic_dimension_3_id']
 
 # Amount
             sql_stat = 'select account_coda_account.id as coda_id, account_id, analytic_dimension_1_id, analytic_dimension_2_id, analytic_dimension_3_id  from account_coda_account, account_bank_statement where amount <> 0 and amount = %f and account_coda_account.company_id = (select company_id from account_account where account_account.id = %d) and account_bank_statement.id = %d and account_bank_statement.journal_id = account_coda_account.journal_id' % (vals['amount'], vals['account_id'], vals['statement_id'], )
