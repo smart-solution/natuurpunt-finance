@@ -152,7 +152,7 @@ class partner_vat_list(osv.osv_memory):
         sum_tax = 0.00
         sum_turnover = 0.00
         amount_data = {}
-        for line in datas:
+        for line in sorted(datas, key=lambda k: k['name'].lower()):
             if not line:
                 continue
             seq += 1
