@@ -439,9 +439,33 @@
                         <filter string="Partner Reference" icon="terp-partner" domain="[]" context="{'group_by':'partner_ref'}"/>
                         <filter string="Journal" icon="terp-folder-orange" domain="[]" context="{'group_by':'journal_id'}"/>
                         <filter string="Account"  icon="terp-folder-green" context="{'group_by':'account_id'}"/>
-                        <filter string="Period" icon="terp-go-month" domain="[]" context="{'group_by':'period_id'}"/>
+                        <filter string="Period" icon="terp-go-month" domain="[]" context="{'group_by':'period_id','quick_filter':'period'}"/>
                     </group>
                 </search>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_natuurpunt_account_move_search_quickfilter">
+          <field name="name">view.natuurpunt.account.move.search.quickfilter</field>
+          <field name="model">account.move</field>
+          <field name="inherit_id" ref="account.view_account_move_filter"/>
+          <field name="type">form</field>
+          <field name="arch" type="xml">
+              <filter string="Period" position="attributes">
+                  <attribute name="context">{'group_by':'period_id','quick_filter':'period'}</attribute>
+              </filter>
+          </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_natuurpunt_bank_statement_search_quickfilter">
+            <field name="name">view.natuurpunt.bank.statement.search.quickfilter</field>
+            <field name="model">account.bank.statement</field>
+            <field name="inherit_id" ref="account.view_bank_statement_search"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <filter string="Period" position="attributes">
+                    <attribute name = "context">{'group_by':'period_id','quick_filter':'period'}</attribute>
+                </filter>
             </field>
         </record>
 
