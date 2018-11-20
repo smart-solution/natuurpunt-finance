@@ -46,5 +46,37 @@
             </field>
         </record>
 
+        <record id="view_account_multi_move_entry_lines_import_wizard" model="ir.ui.view">
+            <field name="name">Import Multiple Journal Items</field>
+            <field name="model">account.multi.move.lines.import.wizard</field>
+            <field name="arch" type="xml">
+            <form string="Import Multi Journal Items" version="7.0">
+                <group colspan="4">
+                    <field name="journal_id"/>
+                    <field name="lines_file"/>
+                </group>
+                <footer>
+                 <div name="journal_entry_lines_import">
+                        <button name="entry_lines_import" type="object" string="Import File" class="oe_highlight"/>
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                 </div>
+                 </footer>
+            </form>
+            </field>
+        </record>
+
+        <record id="act_account_multi_move_entry_lines_import_wizard" model="ir.actions.act_window">
+            <field name="name">Import Multiple Journal Items</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.multi.move.lines.import.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_account_multi_move_entry_lines_import_wizard"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem name="Import Account Move" id="account_multi_move_entry_lines_import_wizard_menu" parent="account.menu_finance_entries"
+                  action="act_account_multi_move_entry_lines_import_wizard" sequence="3"/>
+
     </data>
 </openerp>

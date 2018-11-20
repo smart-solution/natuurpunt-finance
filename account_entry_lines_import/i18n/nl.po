@@ -1,20 +1,232 @@
-# Dutch translation for a Smart Solution module
-# Copyright (c) 2012-Today Smart Solution
-# FIRST AUTHOR <fabian.semal@smartsolution.be>
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+#	* account_entry_lines_import
 #
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2013-06-07 19:37+0000\n"
-"PO-Revision-Date: 2013-07-13 22:42+0000\n"
-"Last-Translator: Fabian Semal <fabian.semal@smartsolution.be>\n"
+"Project-Id-Version: OpenERP Server 7.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-11-20 13:11+0000\n"
+"PO-Revision-Date: 2018-11-20 13:11+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
 
+#. module: account_entry_lines_import
+#: code:addons/account_entry_lines_import/account_entry_invoice_lines.py:97
+#, python-format
+msgid "No car registration plate could be found for that reference %s"
+msgstr "No car registration plate could be found for that reference %s"
 
-#. module: lunch
-#: field:lunch.product,category_id:0
-#: field:lunch.product.category,name:0
-msgid "Category"
-msgstr "Categorie"
+#. module: account_entry_lines_import
+#: code:addons/account_entry_lines_import/account_entry_invoice_lines.py:49
+#, python-format
+msgid "No account could be found for that code %s"
+msgstr "No account could be found for that code %s"
+
+#. module: account_entry_lines_import
+#: model:ir.model,name:account_entry_lines_import.model_account_multi_move_lines_import_wizard
+msgid "account.multi.move.lines.import.wizard"
+msgstr "account.multi.move.lines.import.wizard"
+
+#. module: account_entry_lines_import
+#: code:addons/account_entry_lines_import/account_entry_invoice_lines.py:119
+#, python-format
+msgid "No currency found !"
+msgstr "No currency found !"
+
+#. module: account_entry_lines_import
+#: code:addons/account_entry_lines_import/account_entry_invoice_lines.py:85
+#, python-format
+msgid "No employee found !"
+msgstr "Geen geldig werknemer veld!"
+
+#. module: account_entry_lines_import
+#: view:account.move:0
+#: view:account.move.lines.import.wizard:0
+#: model:ir.actions.act_window,name:account_entry_lines_import.act_entry_lines_import_wizard
+msgid "Import Journal Items"
+msgstr "Importeer Boekingslijnen"
+
+#. module: account_entry_lines_import
+#: view:account.move.lines.import.wizard:0
+#: view:account.multi.move.lines.import.wizard:0
+msgid "Import File"
+msgstr "Importeer Bestand"
+
+#. module: account_entry_lines_import
+#: field:account.multi.move.lines.import.wizard,journal_id:0
+msgid "Journal"
+msgstr "Journaal"
+
+#. module: account_entry_lines_import
+#: code:addons/account_entry_lines_import/account_entry_invoice_lines.py:32
+#, python-format
+msgid "No name found !"
+msgstr "Geen geldig naam veld!"
+
+#. module: account_entry_lines_import
+#: code:addons/account_entry_lines_import/account_entry_invoice_lines.py:133
+#, python-format
+msgid "No tax account could be found for that code %s"
+msgstr "No tax account could be found for that code %s"
+
+#. module: account_entry_lines_import
+#: model:ir.model,name:account_entry_lines_import.model_account_multi_move_lines_import
+msgid "account.multi.move.lines.import"
+msgstr "account.multi.move.lines.import"
+
+#. module: account_entry_lines_import
+#: model:ir.model,name:account_entry_lines_import.model_account_move_line
+msgid "Journal Items"
+msgstr "Boekingen"
+
+#. module: account_entry_lines_import
+#: code:addons/account_entry_lines_import/account_entry_invoice_lines.py:237
+#, python-format
+msgid "Imported move accounts"
+msgstr "Imported move accounts"
+
+#. module: account_entry_lines_import
+#: code:addons/account_entry_lines_import/account_entry_invoice_lines.py:97
+#, python-format
+msgid "No plate found !"
+msgstr "Geen geldig nummerplaat veld!!"
+
+#. module: account_entry_lines_import
+#: field:account.move.lines.import.wizard,lines_file:0
+#: field:account.multi.move.lines.import.wizard,lines_file:0
+msgid "Entry Lines File"
+msgstr "Bestand"
+
+#. module: account_entry_lines_import
+#: code:addons/account_entry_lines_import/account_entry_invoice_lines.py:119
+#, python-format
+msgid "No currency could be found for that code %s"
+msgstr "No currency could be found for that code %s"
+
+#. module: account_entry_lines_import
+#: code:addons/account_entry_lines_import/account_entry_invoice_lines.py:41
+#, python-format
+msgid "No partner found !"
+msgstr "Geen geldig relatie veld!"
+
+#. module: account_entry_lines_import
+#: code:addons/account_entry_lines_import/account_entry_invoice_lines.py:57
+#: code:addons/account_entry_lines_import/account_entry_invoice_lines.py:63
+#: code:addons/account_entry_lines_import/account_entry_invoice_lines.py:69
+#, python-format
+msgid "No analytic account found !"
+msgstr "No analytic account found !"
+
+#. module: account_entry_lines_import
+#: code:addons/account_entry_lines_import/account_entry_invoice_lines.py:77
+#, python-format
+msgid "No asset could be found for that code %s"
+msgstr "No asset could be found for that code %s"
+
+#. module: account_entry_lines_import
+#: code:addons/account_entry_lines_import/account_entry_invoice_lines.py:32
+#, python-format
+msgid "No name could be found for the line %s"
+msgstr "No name could be found for the line %s"
+
+#. module: account_entry_lines_import
+#: model:ir.ui.menu,name:account_entry_lines_import.account_multi_move_entry_lines_import_wizard_menu
+msgid "Import Account Move"
+msgstr "Importeer boekingen"
+
+#. module: account_entry_lines_import
+#: code:addons/account_entry_lines_import/account_entry_invoice_lines.py:46
+#: code:addons/account_entry_lines_import/account_entry_invoice_lines.py:49
+#, python-format
+msgid "No account found !"
+msgstr "No account found !"
+
+#. module: account_entry_lines_import
+#: code:addons/account_entry_lines_import/account_entry_invoice_lines.py:41
+#, python-format
+msgid "No partner could be found for that ID %s"
+msgstr "No partner could be found for that ID %s"
+
+#. module: account_entry_lines_import
+#: code:addons/account_entry_lines_import/account_entry_invoice_lines.py:220
+#, python-format
+msgid "Balance error!"
+msgstr "Boeking niet in evenwicht!"
+
+#. module: account_entry_lines_import
+#: model:ir.model,name:account_entry_lines_import.model_account_move_lines_import_wizard
+msgid "account.move.lines.import.wizard"
+msgstr "account.move.lines.import.wizard"
+
+#. module: account_entry_lines_import
+#: code:addons/account_entry_lines_import/account_entry_invoice_lines.py:77
+#, python-format
+msgid "No asset found !"
+msgstr "Geen geldig active veld!"
+
+#. module: account_entry_lines_import
+#: model:ir.actions.act_window,name:account_entry_lines_import.act_account_multi_move_entry_lines_import_wizard
+msgid "Import Multiple Journal Items"
+msgstr "Importeer Boekingen"
+
+#. module: account_entry_lines_import
+#: code:addons/account_entry_lines_import/account_entry_invoice_lines.py:133
+#, python-format
+msgid "No tax account found !"
+msgstr "No tax account found !"
+
+#. module: account_entry_lines_import
+#: code:addons/account_entry_lines_import/account_entry_invoice_lines.py:220
+#, python-format
+msgid "Import is not in balance for code %s"
+msgstr "Import is not in balance for code %s"
+
+#. module: account_entry_lines_import
+#: code:addons/account_entry_lines_import/account_entry_invoice_lines.py:94
+#, python-format
+msgid "Multiple Car Plates found !"
+msgstr "Multiple Car Plates found !"
+
+#. module: account_entry_lines_import
+#: code:addons/account_entry_lines_import/account_entry_invoice_lines.py:94
+#, python-format
+msgid "Several car plates where found for that code %s"
+msgstr "Several car plates where found for that code %s"
+
+#. module: account_entry_lines_import
+#: code:addons/account_entry_lines_import/account_entry_invoice_lines.py:85
+#, python-format
+msgid "No employee could be found for that code %s"
+msgstr "No employee could be found for that code %s"
+
+#. module: account_entry_lines_import
+#: view:account.multi.move.lines.import.wizard:0
+msgid "Import Multi Journal Items"
+msgstr "Import Multi Journal Items"
+
+#. module: account_entry_lines_import
+#: code:addons/account_entry_lines_import/account_entry_invoice_lines.py:57
+#: code:addons/account_entry_lines_import/account_entry_invoice_lines.py:63
+#: code:addons/account_entry_lines_import/account_entry_invoice_lines.py:69
+#, python-format
+msgid "No analytic account could be found for that code %s"
+msgstr "No analytic account could be found for that code %s"
+
+#. module: account_entry_lines_import
+#: view:account.move.lines.import.wizard:0
+#: view:account.multi.move.lines.import.wizard:0
+msgid "Cancel"
+msgstr "Cancel"
+
+#. module: account_entry_lines_import
+#: code:addons/account_entry_lines_import/account_entry_invoice_lines.py:46
+#, python-format
+msgid "No account could be found for the line %s"
+msgstr "Geen rekening gevonden voor lijn %s"
+
 
