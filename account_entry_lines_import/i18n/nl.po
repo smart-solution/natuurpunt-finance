@@ -88,7 +88,7 @@ msgstr "Boekingen"
 #: code:addons/account_entry_lines_import/account_entry_invoice_lines.py:237
 #, python-format
 msgid "Imported move accounts"
-msgstr "Imported move accounts"
+msgstr "Boekingen"
 
 #. module: account_entry_lines_import
 #: code:addons/account_entry_lines_import/account_entry_invoice_lines.py:97
@@ -120,7 +120,7 @@ msgstr "Geen geldig relatie veld!"
 #: code:addons/account_entry_lines_import/account_entry_invoice_lines.py:69
 #, python-format
 msgid "No analytic account found !"
-msgstr "No analytic account found !"
+msgstr "Geen geldig analytische rekening!"
 
 #. module: account_entry_lines_import
 #: code:addons/account_entry_lines_import/account_entry_invoice_lines.py:77
