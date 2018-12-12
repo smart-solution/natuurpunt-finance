@@ -146,7 +146,7 @@
             <field name="name">Order Lines to Invoice</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">sale.order.line</field>
-            <field name="domain">[('delivered_flag','=',1),('invoiced','=',0),('state','&lt;&gt;','draft'),('state','&lt;&gt;','cancel'),('state','&lt;&gt;','closed')('state','&lt;&gt;','done')]</field>
+            <field name="domain">[('delivered_flag','=',1),('invoiced','=',0),('state','&lt;&gt;','draft'),('state','&lt;&gt;','cancel'),('state','&lt;&gt;','closed'),('state','&lt;&gt;','done')]</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="search_view_id" ref="sale.view_sales_order_uninvoiced_line_filter"/>
