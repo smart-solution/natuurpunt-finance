@@ -28,9 +28,9 @@ class sale_order_line(osv.osv):
     _inherit = 'sale.order.line'
     
     _columns = {
-        'analytic_dimension_1_id': fields.many2one('account.analytic.account', 'Dimension 1'),
-        'analytic_dimension_2_id': fields.many2one('account.analytic.account', 'Dimension 2'),
-        'analytic_dimension_3_id': fields.many2one('account.analytic.account', 'Dimension 3'),
+        'analytic_dimension_1_id': fields.many2one('account.analytic.account', 'Dimension 1', domain=[('type','!=','view')]),
+        'analytic_dimension_2_id': fields.many2one('account.analytic.account', 'Dimension 2', domain=[('type','!=','view')]),
+        'analytic_dimension_3_id': fields.many2one('account.analytic.account', 'Dimension 3', domain=[('type','!=','view')]),
         'analytic_dimension_1_required': fields.boolean("Analytic Dimension 1 Required"),
         'analytic_dimension_2_required': fields.boolean("Analytic Dimension 2 Required"),
         'analytic_dimension_3_required': fields.boolean("Analytic Dimension 3 Required"),
