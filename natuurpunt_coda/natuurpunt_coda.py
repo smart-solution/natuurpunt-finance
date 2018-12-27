@@ -1312,6 +1312,9 @@ class account_coda_import(osv.osv_memory):
                                 transaction_type = 'supplier'
                         else:
                             _logger.info("Geen koalect partner match:{} - {}".format(koalect_id,koalect_vals))
+                    else:
+                        _logger.info("Geen koalect webservice resultaat:{}".format(koalect_id))
+                        koalect_output = (koalect_id,{})
                 else:
                     koalect_output = 0
                     payin = False
@@ -1371,10 +1374,13 @@ class account_coda_import(osv.osv_memory):
                     transaction_type = 'general'
 
                 if isinstance(koalect_output, tuple):
-                    if koalect_output[1]['project']['project_code']:
-                        name_zonder_adres = koalect_output[1]['project']['project_code']
-                    elif koalect_output[1]['project']['meta_id']:
-                         name_zonder_adres = koalect_output[1]['project']['meta_id']
+                    if bool(koalect_output[1]):
+                        if koalect_output[1]['project']['project_code']:
+                            name_zonder_adres = koalect_output[1]['project']['project_code']
+                        elif koalect_output[1]['project']['meta_id']:
+                            name_zonder_adres = koalect_output[1]['project']['meta_id']
+                        else:
+                            name_zonder_adres = ''
                     else:
                         name_zonder_adres = ''
 
@@ -1404,7 +1410,7 @@ class account_coda_import(osv.osv_memory):
                       'move_flag': move_flag,
                       }, context=context)
 
-                if isinstance(koalect_output, tuple):
+                if isinstance(koalect_output, tuple) and bool(koalect_output[1]):
                     account_coda_koalect_obj.create(cr, uid, {
                         'stat_line_id': stat_line_id,
                         'firstname': koalect_output[1]['user']['firstname'],
