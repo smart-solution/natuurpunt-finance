@@ -177,7 +177,7 @@ class account_multi_move_lines_import_wizard(osv.TransientModel):
     _name = 'account.multi.move.lines.import.wizard'
     
     _columns = {
-        'journal_id': fields.many2one('account.journal','Journal',required=True, domain="[('type', '=', ('general','situation'))]"),
+        'journal_id': fields.many2one('account.journal','Journal',required=True),
         'lines_file': fields.binary('Entry Lines File',required=True),
     }
 
