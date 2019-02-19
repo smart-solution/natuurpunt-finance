@@ -1083,7 +1083,6 @@ class account_move_line(osv.osv):
 
         wiz_data_obj = self.pool.get('wizard.data')
         analytic_obj = self.pool.get('account.analytic.line')
-        res = super(account_move_line, self).write(cr, uid, ids, vals=vals, context=context, check=check, update_check=update_check)
         for line in self.browse(cr, uid, ids):
             
             if line.move_id.state == 'draft':
@@ -1287,7 +1286,7 @@ class account_move_line(osv.osv):
 
                 dims3 = wiz_data_obj.search(cr, uid, [('move_line_id','=',line.id),('distribution_id','in',dimension)])
                 wiz_data_obj.unlink(cr, uid, dims3)
-        return res
+        return super(account_move_line, self).write(cr, uid, ids, vals=vals, context=context, check=check, update_check=update_check)
 
     def onchange_employee(self, cr, uid, ids, employee_id, context=None):
         result = {'value':{}}
