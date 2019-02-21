@@ -313,11 +313,12 @@ class account_analytic_line(osv.osv):
     }
 
     def unlink(self, cr, uid, ids, context=None):
-        print "analytic line unlink"
-        print "unlink context:",context
-#        if uid != 1 and 'from_view' in context:
-#            raise osv.except_osv(_('Error!'), _('Only the admin user can delete analytic lines'))
-        return super(account_analytic_line, self).unlink(cr, uid, ids, context=context)
+        for line in self.browse(cr,uid,ids):
+            if line.move_id.move_id.state == 'posted':
+	        return True
+            else:
+                return super(account_analytic_line, self).unlink(cr, uid, ids, context=context)
+        return True
 
     def create(self, cr, uid, vals, context=None):
         res = super(account_analytic_line, self).create(cr, uid, vals=vals, context=context)
