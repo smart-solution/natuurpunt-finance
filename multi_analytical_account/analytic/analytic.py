@@ -313,12 +313,15 @@ class account_analytic_line(osv.osv):
     }
 
     def unlink(self, cr, uid, ids, context=None):
-        for line in self.browse(cr,uid,ids):
-            if line.move_id.move_id.state == 'posted':
-	        return True
-            else:
-                return super(account_analytic_line, self).unlink(cr, uid, ids, context=context)
-        return True
+        if context and 'unlink_dimension' in context:
+            return super(account_analytic_line, self).unlink(cr, uid, ids, context=context)
+        else:
+            for line in self.browse(cr,uid,ids):
+                if line.move_id.move_id.state == 'posted':
+	            return True
+                else:
+                    return super(account_analytic_line, self).unlink(cr, uid, ids, context=context)
+            return True
 
     def create(self, cr, uid, vals, context=None):
         res = super(account_analytic_line, self).create(cr, uid, vals=vals, context=context)
