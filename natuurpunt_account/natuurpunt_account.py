@@ -75,12 +75,6 @@ class res_partner(osv.osv):
             ids = self.search(cr, user, args, limit=limit, context=context or {})
         return self.name_get(cr, user, ids, context=context)
 
-    def create(self, cr, uid, vals, context=None):
-        """Add the np sequence reference"""
-        seq_id = self.pool.get('ir.sequence').search(cr, uid, [('code','=','res.partner.np.ref')])
-        vals['ref'] = self.pool.get('ir.sequence').next_by_id(cr, uid, seq_id, context)
-        return super(res_partner, self).create(cr, uid, vals, context=context)
-
     _defaults = {
         'company_id': False,
     }

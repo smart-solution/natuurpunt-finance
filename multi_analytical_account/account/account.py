@@ -1178,7 +1178,9 @@ class account_move_line(osv.osv):
                 #If dimesnion removed delete the dimension entry
                 dimension = self.pool.get('account.analytic.dimension').search(cr, uid, [('name','=','Interne Dimensie')])
                 acc_line_del = self.pool.get('account.analytic.line').search(cr, uid, [('move_id','=',line.id),('dimension_id','in',dimension)])
-                self.pool.get('account.analytic.line').unlink(cr, uid, acc_line_del)
+		ctx = dict(context)
+		ctx.update({'unlink_dimension': True})
+                self.pool.get('account.analytic.line').unlink(cr, uid, acc_line_del,context=ctx)
 
                 dims1 = wiz_data_obj.search(cr, uid, [('move_line_id','=',line.id),('distribution_id','in',dimension)])
                 wiz_data_obj.unlink(cr, uid, dims1)
@@ -1230,7 +1232,9 @@ class account_move_line(osv.osv):
                 #If dimesnion removed delete the dimension entry
                 dimension = self.pool.get('account.analytic.dimension').search(cr, uid, [('name','=','Netwerk Dimensie')])
                 acc_line_del = self.pool.get('account.analytic.line').search(cr, uid, [('move_id','=',line.id),('dimension_id','in',dimension)])
-                self.pool.get('account.analytic.line').unlink(cr, uid, acc_line_del)
+                ctx = dict(context)
+                ctx.update({'unlink_dimension': True})
+                self.pool.get('account.analytic.line').unlink(cr, uid, acc_line_del, context=ctx)
 
                 dims2 = wiz_data_obj.search(cr, uid, [('move_line_id','=',line.id),('distribution_id','in',dimension)])
                 wiz_data_obj.unlink(cr, uid, dims2)
@@ -1282,7 +1286,9 @@ class account_move_line(osv.osv):
                 #If dimesnion removed delete the dimension entry
                 dimension = self.pool.get('account.analytic.dimension').search(cr, uid, [('name','=','Projecten, Contracten, Fondsen')])
                 acc_line_del = self.pool.get('account.analytic.line').search(cr, uid, [('move_id','=',line.id),('dimension_id','in',dimension)])
-                self.pool.get('account.analytic.line').unlink(cr, uid, acc_line_del)
+                ctx = dict(context)
+                ctx.update({'unlink_dimension': True})
+                self.pool.get('account.analytic.line').unlink(cr, uid, acc_line_del, context=ctx)
 
                 dims3 = wiz_data_obj.search(cr, uid, [('move_line_id','=',line.id),('distribution_id','in',dimension)])
                 wiz_data_obj.unlink(cr, uid, dims3)
