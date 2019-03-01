@@ -28,6 +28,10 @@ from natuurpunt_tools import create_xml, create_node, transform,get_approval_sta
 from natuurpunt_tools import sum_groupby
 from itertools import groupby
 
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+import time
+
 class account_invoice(osv.osv):
 
     _inherit = 'account.invoice'
@@ -252,6 +256,39 @@ class account_invoice(osv.osv):
         return True
 
 account_invoice()
+
+class account_fiscalyear(osv.osv):
+    _inherit = "account.fiscalyear"
+
+    def create_period(self, cr, uid, ids, context=None, interval=1):
+        period_obj = self.pool.get('account.period')
+        for fy in self.browse(cr, uid, ids, context=context):
+            ds = datetime.strptime(fy.date_start, '%Y-%m-%d')
+            period_obj.create(cr, uid, {
+                    'name': ds.strftime('%Y-00'),
+                    'code': ds.strftime('%Y-00'),
+                    'date_start': ds,
+                    'date_stop': ds,
+                    'special': True,
+                    'fiscalyear_id': fy.id,
+                })
+            while ds.strftime('%Y-%m-%d') < fy.date_stop:
+                de = ds + relativedelta(months=interval, days=-1)
+
+                if de.strftime('%Y-%m-%d') > fy.date_stop:
+                    de = datetime.strptime(fy.date_stop, '%Y-%m-%d')
+
+                period_obj.create(cr, uid, {
+                    'name': ds.strftime('%Y-%m'),
+                    'code': ds.strftime('%Y-%m'),
+                    'date_start': ds.strftime('%Y-%m-%d'),
+                    'date_stop': de.strftime('%Y-%m-%d'),
+                    'fiscalyear_id': fy.id,
+                })
+                ds = ds + relativedelta(months=interval)
+        return True
+
+account_fiscalyear()
 
 class payment_order(osv.osv):
 
