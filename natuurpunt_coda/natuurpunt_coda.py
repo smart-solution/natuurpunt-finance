@@ -566,14 +566,6 @@ account_coda_sdd_refused()
 class account_coda_import(osv.osv_memory):
     _inherit = 'account.coda.import'
 
-    _columns = {
-        'dimension_match': fields.boolean('Zoek Dimensies in omschrijving',),
-    }
-
-    _defaults = {
-        'dimension_match': True,
-    }
-
     def _get_default_tmp_account(self, cr, uid, context):
         user = self.pool.get('res.users').browse(cr, uid, uid) 
         tmp_accounts = self.pool.get('account.account').search(cr, uid, [('code', '=', '499010'),('company_id','=',user.company_id.id)])
@@ -596,7 +588,6 @@ class account_coda_import(osv.osv_memory):
                 codafile = data.coda_data
                 codafilename = data.coda_fname
                 temporaryaccount = data.temporary_account_id.id
-                dimension_match = data.dimension_match
             except:
                 raise osv.except_osv(_('Error'), _('Wizard in incorrect state. Please hit the Cancel button'))
                 return {}
@@ -1414,7 +1405,7 @@ class account_coda_import(osv.osv_memory):
                       'structcomm_flag': lines2.t21_struct,
                       'structcomm_message': structcomm_message,
                       'name': name,
-                      'name_zonder_adres': name_zonder_adres if dimension_match else '',
+                      'name_zonder_adres': name_zonder_adres,
                       'lines2_id': lines2.id,
                       'move_flag': move_flag,
                       }, context=context)
