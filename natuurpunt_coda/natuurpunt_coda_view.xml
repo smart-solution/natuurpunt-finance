@@ -101,17 +101,6 @@
             </field>
         </record>
 
-        <record id="account_coda_import_np_view" model="ir.ui.view">
-          <field name="name">Import CODA File</field>
-          <field name="model">account.coda.import</field>
-          <field name="inherit_id" ref="l10n_be_coda.account_coda_import_view"/>
-          <field name="arch" type="xml">
-              <field name='temporary_account_id' position='after'>
-                  <field name="dimension_match"/>
-              </field>
-          </field>
-        </record>
-
 
     </data>
 </openerp>
