@@ -1281,7 +1281,7 @@ class account_coda_import(osv.osv_memory):
                         voucher_id = self.pool.get('account.voucher').create(cr, uid, voucher_vals, context=context)
 # 		        print datetime.datetime.now() , 'voucher gemaakt '
 
-                if lines2.t23_partner.startswith("MANGOPAY") and koalect_webservices:
+                if lines2.t23_partner and lines2.t23_partner.startswith("MANGOPAY") and koalect_webservices:
                     koalect_comm, koalect_id, payin = parse_koalect_free_comm(lines2.t21_free_comm)
                     if payin:
                         koalect_output = consume_webservices(koalect_webservices[3:])(koalect_id)
