@@ -303,14 +303,13 @@ class account_move(osv.osv):
 
     def onchange_period_id_date(self, cr, uid, ids, period_id, date, context=None):
         res = {}
-        import pdb; pdb.set_trace()
         if period_id and date:
            period = self.pool.get('account.period').browse(cr,uid,period_id)
            if date >= period.date_start and date <= period.date_stop:
                return True
            else:
-               warning = 'Boekingsdatum valt buiten de Periode'
-               raise osv.except_osv(_('data error'), _(warning))
+               warning = 'Boekingsdatum valt buiten de periode'
+               raise osv.except_osv(_('Opgelet!'), _(warning))
                return True
         else:
            return True
