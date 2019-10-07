@@ -85,7 +85,7 @@ class natuurpunt_vat_consolidated(osv.osv_memory):
             ending_month = period['month']
             quarter = ((int(starting_month) - 1) / 3) + 1
             file_data = {
-                        'issued_by': vat,
+                        'issued_by': 'BE',
                         'vat_no': vat_no,
                         'only_vat': vat,
                         'cmpny_name': company.name,
@@ -185,7 +185,7 @@ class natuurpunt_vat_consolidated(osv.osv_memory):
         for item in cases_list:
             grid_amount_data = {
                     'code': str(int(item['code'])),
-                    'amount': str(item['sum_period']),
+                    'amount': '%.2f' % abs(item['sum_period']),
                     }
             data_of_file += '\n\t\t\t<ns2:Amount GridNumber="%(code)s">%(amount)s</ns2:Amount''>' % (grid_amount_data)
 
