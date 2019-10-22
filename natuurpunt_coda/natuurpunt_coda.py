@@ -24,7 +24,7 @@ _logger = logging.getLogger(__name__)
 def parse_koalect_free_comm(free_comm):
     payin = False
     try:
-        split_free_comm = re.split(r'[ ](?=[^P0-9])', free_comm)[1].split(' ')
+        split_free_comm = re.split(r'[ ](?=[^P0-9])', free_comm)[0].split(' ')
     except IndexError:
         koalect_comm = free_comm
         koalect_id = ""
@@ -1281,7 +1281,7 @@ class account_coda_import(osv.osv_memory):
                         voucher_id = self.pool.get('account.voucher').create(cr, uid, voucher_vals, context=context)
 # 		        print datetime.datetime.now() , 'voucher gemaakt '
 
-                if lines2.t23_partner == 'MANGOPAY SA' and koalect_webservices:
+                if lines2.t23_partner and lines2.t23_partner.startswith("MANGOPAY") and koalect_webservices:
                     koalect_comm, koalect_id, payin = parse_koalect_free_comm(lines2.t21_free_comm)
                     if payin:
                         koalect_output = consume_webservices(koalect_webservices[3:])(koalect_id)
