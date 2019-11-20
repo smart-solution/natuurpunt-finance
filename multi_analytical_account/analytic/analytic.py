@@ -226,6 +226,34 @@ class account_analytic_account(osv.osv):
         print "IDS:",ids
         return self.name_get(cr, uid, ids, context)
 
+
+    def create_patrimonium_account_analytic_account(self, cr, uid, name, code, allowed_account_id, context=None):
+        """
+        interface to setup an account_analytic_account for patrimonium  
+        """
+        patrimonium_aankopen_id = self.search(cr,uid,[('name','=','Patrimonium aankopen')])
+        if not patrimonium_aankopen_id:
+             raise osv.except_osv(_('Error!'), _('Missing analytic account Patrimonium aankopen'))
+        contract_id = self.search(cr,uid,[('name','=','Contract')])
+        if not contract_id:
+             raise osv.except_osv(_('Error!'), _('Missing analytic account Contract'))
+        dimension_id = self.pool.get('account.analytic.dimension').search(cr,uid,[('sequence','=',3)])
+        if not dimension_id:
+             raise osv.except_osv(_('Error!'), _('Missing analytic dimension with sequence 3'))
+        if allowed_account_id and self.search(cr,uid,[('id','=',allowed_account_id)]):
+             allowed_account_ids = [ patrimonium_aankopen_id[0], allowed_account_id ]
+        else:
+             raise osv.except_osv(_('Error!'), _('Missing analytic allowed account'))
+        vals = {
+            'name' : name,
+            'code' : code,
+            'type' : 'normal',
+            'allowed_account_ids' : [(6, 0, allowed_account_ids)],
+            'parent_id' : contract_id[0],
+            'dimension_id' : dimension_id[0],
+        }        
+        return self.create(cr, uid, vals, context=context)
+
     def create(self, cr, uid, vals, context=None):
         """Doesn't allow 2 acccounts with same code for the same company"""
         user = self.pool.get('res.users').browse(cr, uid, uid)
@@ -313,15 +341,11 @@ class account_analytic_line(osv.osv):
     }
 
     def unlink(self, cr, uid, ids, context=None):
-        if context and 'unlink_dimension' in context:
-            return super(account_analytic_line, self).unlink(cr, uid, ids, context=context)
-        else:
-            for line in self.browse(cr,uid,ids):
-                if line.move_id.move_id.state == 'posted':
-	            return True
-                else:
-                    return super(account_analytic_line, self).unlink(cr, uid, ids, context=context)
-            return True
+        print "analytic line unlink"
+        print "unlink context:",context
+#        if uid != 1 and 'from_view' in context:
+#            raise osv.except_osv(_('Error!'), _('Only the admin user can delete analytic lines'))
+        return super(account_analytic_line, self).unlink(cr, uid, ids, context=context)
 
     def create(self, cr, uid, vals, context=None):
         res = super(account_analytic_line, self).create(cr, uid, vals=vals, context=context)
