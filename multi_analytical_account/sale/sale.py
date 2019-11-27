@@ -26,22 +26,6 @@ from openerp.tools.translate import _
 class sale_order_line(osv.osv):
 
     _inherit = 'sale.order.line'
-
-    def read_group(self, cr, uid, domain, fields, groupby, offset=0, limit=None, context=None, orderby=False):
-        if 'delivered_qty' in fields:
-            fields.remove('delivered_qty')
-        if 'product_uom_qty' in fields:
-            fields.remove('product_uom_qty')
-        res = super(sale_order_line, self).read_group(cr, uid, domain, fields, groupby, offset, limit=limit, context=context, orderby=orderby)
-        if 'price_subtotal' in fields:
-            for line in res:
-                if '__domain' in line:
-                    lines = self.search(cr, uid, line['__domain'], context=context)
-                    price_subtotal = 0.0
-                    for current_account in self.browse(cr, uid, lines, context=context):
-                        price_subtotal += current_account.price_subtotal
-                    line['price_subtotal'] = price_subtotal
-        return res
     
     _columns = {
         'analytic_dimension_1_id': fields.many2one('account.analytic.account', 'Dimension 1', domain=[('type','!=','view')]),
@@ -108,7 +92,7 @@ class sale_order_line(osv.osv):
                 'uos_id': uos_id,
                 'product_id': line.product_id.id or False,
                 'invoice_line_tax_id': [(6, 0, [x.id for x in line.tax_id])],
-                'account_analytic_id': line.order_id.project_id and line.order_id.project_id.id or False,
+                'account_analytic_id': False,
                 'analytic_dimension_1_id': line.analytic_dimension_1_id.id,
                 'analytic_dimension_2_id': line.analytic_dimension_2_id.id,
                 'analytic_dimension_3_id': line.analytic_dimension_3_id.id,
