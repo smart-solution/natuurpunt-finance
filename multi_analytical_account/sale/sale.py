@@ -108,7 +108,7 @@ class sale_order_line(osv.osv):
                 'uos_id': uos_id,
                 'product_id': line.product_id.id or False,
                 'invoice_line_tax_id': [(6, 0, [x.id for x in line.tax_id])],
-                'account_analytic_id': line.order_id.project_id and line.order_id.project_id.id or False,
+                'account_analytic_id': False,
                 'analytic_dimension_1_id': line.analytic_dimension_1_id.id,
                 'analytic_dimension_2_id': line.analytic_dimension_2_id.id,
                 'analytic_dimension_3_id': line.analytic_dimension_3_id.id,
