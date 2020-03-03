@@ -109,6 +109,9 @@ class account_analytic_account(osv.osv):
         'active': True,
     }
 
+    def on_change_parent(self, cr, uid, id, parent_id):
+        return {}
+
     def name_get(self, cr, uid, ids, context=None):
         if context is None:
             context = {}
@@ -220,10 +223,8 @@ class account_analytic_account(osv.osv):
                     if not ids: break
                     domain = [('parent_id','in',ids)]
         else:
-            print "ARGS;",args
             ids = self.search(cr, uid, args, context=context, limit=limit)
 
-        print "IDS:",ids
         return self.name_get(cr, uid, ids, context)
 
 
