@@ -241,11 +241,7 @@ class account_analytic_account(osv.osv):
         dimension_id = self.pool.get('account.analytic.dimension').search(cr,uid,[('sequence','=',3)])
         if not dimension_id:
              raise osv.except_osv(_('Error!'), _('Missing analytic dimension with sequence 3'))
-        if allowed_account_id and self.search(cr,uid,[('id','=',allowed_account_id)]):
-             allowed_account_ids = [ patrimonium_aankopen_id[0], allowed_account_id ]
-        else:
-             raise osv.except_osv(_('Error!'), _('Missing analytic allowed account'))
-        allowed_account_ids = []
+        allowed_account_ids = [ patrimonium_aankopen_id[0] ]
         if projects:
             for partner in self.pool.get('res.partner').browse(cr,uid,[int(i) for i in projects]):
                 if partner.analytic_account_id:
