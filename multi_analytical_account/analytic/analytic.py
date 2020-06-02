@@ -228,7 +228,7 @@ class account_analytic_account(osv.osv):
         return self.name_get(cr, uid, ids, context)
 
 
-    def create_patrimonium_account_analytic_account(self, cr, uid, name, code, allowed_account_id, context=None):
+    def create_patrimonium_account_analytic_account(self, cr, uid, name, code, projects, context=None):
         """
         interface to setup an account_analytic_account for patrimonium  
         """
@@ -245,6 +245,11 @@ class account_analytic_account(osv.osv):
              allowed_account_ids = [ patrimonium_aankopen_id[0], allowed_account_id ]
         else:
              raise osv.except_osv(_('Error!'), _('Missing analytic allowed account'))
+        allowed_account_ids = []
+        if projects:
+            for partner in self.pool.get('res.partner').browse(cr,uid,[int(i) for i in projects]):
+                if partner.analytic_account_id:
+                    allowed_account_ids.append(partner.analytic_account_id.id)
         vals = {
             'name' : name,
             'code' : code,
