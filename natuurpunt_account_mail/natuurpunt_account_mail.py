@@ -75,6 +75,7 @@ class account_invoice_mail_compose_message(osv.TransientModel):
     def create_attachments(self, cr, uid, wizard, recipient_id, message_id, context=None):
         # convert report to attachment
         ir_attachment = self.pool.get('ir.attachment')
+        invoice_sent_obj = self.pool.get('account.invoice.sent')
         attachment_ids = []
         attachment_data = {
             'name': wizard['report_name'],
@@ -84,7 +85,20 @@ class account_invoice_mail_compose_message(osv.TransientModel):
             'res_id': message_id,
             'partner_id': recipient_id,
         }
-        attachment_ids.append(ir_attachment.create(cr, uid, attachment_data, context=context))
+
+        wf_service = netsvc.LocalService('workflow')
+        vals = {
+            'invoice_id': context['default_res_id'],
+            'name': context['service_name'],
+        }
+        account_invoice_sent_id = invoice_sent_obj.create(cr,uid,vals)
+        wf_service.trg_validate(uid, 'account.invoice.sent', account_invoice_sent_id, 'print_pdf', cr)
+        for invoice_sent in invoice_sent_obj.browse(cr,uid,[account_invoice_sent_id]):
+            if invoice_sent.state == 'done':
+                attachment_ids.append(invoice_sent.ir_attachment_id.id)
+            else:
+                raise osv.except_osv(_('Error!'),_("Probleem bij aanmaken van PDF!"))
+
         # get the external memory attachments
         if wizard['store_id']:
             ext_att_ids = self.pool.get('memory.ir.attachment').search(cr, uid, [('store_id', '=', wizard['store_id'])])
