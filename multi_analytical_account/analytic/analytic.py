@@ -259,6 +259,9 @@ class account_analytic_account(osv.osv):
     def create(self, cr, uid, vals, context=None):
         """Doesn't allow 2 acccounts with same code for the same company"""
         user = self.pool.get('res.users').browse(cr, uid, uid)
+        if 'project_creation_in_progress' in context:
+             dimension_ids = self.pool.get('account.analytic.dimension').search(cr, uid, [('sequence','=',3),('company_id','=',user.company_id.id)])
+             vals['dimension_id'] = dimension_ids[0]
         if 'code' in vals and vals['code']:
             acc_ids = self.search(cr, uid, [('code','=',vals['code']),('company_id','=',user.company_id.id),'|',('active','=',True),('active','=',False)])
             if acc_ids:
