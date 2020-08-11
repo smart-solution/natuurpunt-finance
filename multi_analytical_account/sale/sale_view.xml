@@ -10,8 +10,10 @@
                 <form string="Sale Order Line Delivery" version="7.0">
                     <group>
                         <field name="delivered_qty" on_change="onchange_delivered_qty(delivered_qty)"/>
-						<field name="delivered_flag" on_change="onchange_delivered_flag(delivered_qty)"/>
+                        <field name="delivered_flag" on_change="onchange_delivered_flag(delivered_qty)"/>
                         <field name="delivered_text"/>
+                        <field name="uitvoering_jaar"/>
+                        <field name="facturatie_jaar"/>
                     </group>
                     <footer>
                         <button name="delivery_state_set" string="Save" type="object" class="oe_highlight"/>
