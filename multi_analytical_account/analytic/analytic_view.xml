@@ -11,7 +11,7 @@
 					<attribute name="string">Contractant</attribute>
 				</field>
                 <field name='company_id' position='after'>
-                    <field name="dimension_id" domain="[('company_id','=',company_id)]"/>
+                    <field name="dimension_id" domain="[('company_id','=',company_id)]" required="1"/>
 				<field name="dimension_sequence" invisible="1"/>
                                 <field name="default_dimension_1_id" attrs="{'invisible':[('dimension_sequence','=',1)]}" context="{'analytic_account_id':active_id,'dimension':1}"/>
                                 <field name="default_dimension_2_id" attrs="{'invisible':[('dimension_sequence','=',2)]}" context="{'analytic_account_id':active_id,'dimension':2}"/>

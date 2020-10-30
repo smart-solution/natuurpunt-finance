@@ -20,6 +20,7 @@
 ##############################################################################
 
 from openerp.osv import fields, osv
+from openerp.tools.translate import _
 
 class res_partner(osv.osv):
     _inherit = 'res.partner'
@@ -34,7 +35,13 @@ class res_partner(osv.osv):
         if isinstance(vat, basestring) and vat[:2].upper() == "BE":
             res['vat_subjected'] = True
             res['company_registration_number'] = vat[2:]
-        return {'value':res}
+
+        warning_msg = {
+            'title': _('Warning!'),
+            'message': _('''Bestaand BTW-nummer niet wijzigen maar nieuw contact creëren indien nodig!''')
+        }
+
+        return {'value':res, 'warning': warning_msg}
 
 res_partner()
 

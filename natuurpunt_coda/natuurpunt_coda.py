@@ -13,9 +13,11 @@ from openerp import tools
 import hashlib
 import re
 from natuurpunt_tools import koalect_webservice
+from natuurpunt_tools import open_pom_connection,get_pom_address,setup_pom_http
 from natuurpunt_tools import compose
 from natuurpunt_tools import match_with_existing_partner
 from functools import partial
+from datetime import datetime, timedelta
 
 import logging
 
@@ -1131,6 +1133,8 @@ class account_coda_import(osv.osv_memory):
             if koalect_ids:
                 for koalect_api in koalect_obj.browse(cr, uid, koalect_ids):
                     koalect_webservices.append({koalect_api.project:koalect_webservice(koalect_api.url,koalect_api.key)})
+
+            pom_http,pom_sender_id = setup_pom_http( partial(self.pool.get('ir.config_parameter').get_param,cr, uid) )
             
 #            nbr_lines = len(cfile.lines2_ids)
 	    nbr_lines = 0
@@ -1281,6 +1285,33 @@ class account_coda_import(osv.osv_memory):
                         voucher_id = self.pool.get('account.voucher').create(cr, uid, voucher_vals, context=context)
 # 		        print datetime.datetime.now() , 'voucher gemaakt '
 
+                if lines2.t23_partner and lines2.t23_partner.startswith("STICHTING DERDENGELDEN BUCKAROO") and pom_http:
+                    with open_pom_connection(pom_http) as pom_connection:
+                         name_zonder_adres = 'F-03333'
+                         to_date = datetime.now().strftime('%Y-%m-%d')
+                         from_date = (datetime.now() + timedelta(days=-14)).strftime('%Y-%m-%d')
+                         date_filter = '?fromDate={}&toDate={}'.format(from_date,to_date)
+                         rest = '/senders/{}/completed-transactions'.format(pom_sender_id) + date_filter + '&communication={}'.format(lines2.t21_struct_comm)
+                         pom_data = (get_pom_address(self,cr,uid,pom_connection(rest)), _logger, '')
+                         ids_partner_pom = compose( 
+                             partial(match_with_existing_partner,res_partner_obj,cr,uid),
+                             lambda (p,l,a):[p.id] if p else False
+                         ) (pom_data) if pom_data[0] else False
+                         if ids_partner_pom:
+                             _logger.info("POM partner match:{} - {}".format(lines2.t21_struct_comm,ids_partner_pom))
+                             partner = res_partner_obj.browse(cr, uid, ids_partner_pom)
+                             partner_id = partner[0].id
+                             if partner[0].customer and not (partner[0].supplier):
+                                 account = partner[0].property_account_receivable.id
+                                 transaction_type = 'customer'
+                             elif partner[0].supplier and not (partner[0].customer):
+                                 account = partner[0].property_account_payable.id
+                                 transaction_type = 'supplier'
+                         else:
+                             _logger.info("Geen POM partner match:{} - {}".format(lines2.t21_struct_comm,ids_partner_pom)) 
+                else:
+                    pom_data = None
+
                 if lines2.t23_partner and lines2.t23_partner.startswith("MANGOPAY") and koalect_webservices:
                     koalect_comm, koalect_id, payin = parse_koalect_free_comm(lines2.t21_free_comm)
                     if payin:
@@ -1409,6 +1440,20 @@ class account_coda_import(osv.osv_memory):
                       'lines2_id': lines2.id,
                       'move_flag': move_flag,
                       }, context=context)
+
+                if pom_data and pom_data[0]:
+                    account_coda_koalect_obj.create(cr, uid, {
+                        'stat_line_id': stat_line_id,
+                        'firstname': pom_data[0]['first_name'],
+                        'lastname': pom_data[0]['last_name'],
+                        'email': pom_data[0]['email'],
+                        'street': pom_data[0]['street'],
+                        'number': pom_data[0]['street_nbr'],
+                        'box': pom_data[0]['street_bus'],
+                        'city': pom_data[0]['city'],
+                        'postal_code': pom_data[0]['zip'],
+                        'is_tax_certificate': True,
+                       }, context=context)
 
                 if isinstance(koalect_output, tuple) and bool(koalect_output[1]):
                     account_coda_koalect_obj.create(cr, uid, {

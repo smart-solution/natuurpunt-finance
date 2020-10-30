@@ -130,6 +130,8 @@ class sale_order_line_delivery(osv.osv_memory):
         'delivered_qty': fields.float('Oplever hoeveelheden', digits_compute= dp.get_precision('Product UoS')),
         'delivered_flag': fields.boolean('Facturatie'),
         'delivered_text': fields.char('Status levering', size=128),
+        'uitvoering_jaar': fields.char('Uitvoering Jaar', size=4, required=True),
+        'facturatie_jaar': fields.char('Facturatie Jaar', size=4, required=True),
     }
 
     def onchange_delivered_qty(self, cr, uid, ids, qty, context=None):
@@ -153,7 +155,9 @@ class sale_order_line_delivery(osv.osv_memory):
             self.pool.get('sale.order.line').write(cr, uid, [context['active_id']],
                  {'delivered_qty':wiz.delivered_qty,
                  'delivered_flag':wiz.delivered_flag if wiz.delivered_qty else False,
-                 'delivered_text':wiz.delivered_text})
+                 'delivered_text':wiz.delivered_text,
+                 'uitvoering_jaar':wiz.uitvoering_jaar,
+                 'facturatie_jaar':wiz.facturatie_jaar})
         return True
 
     def default_get(self, cr, uid, fields, context=None):
@@ -164,6 +168,8 @@ class sale_order_line_delivery(osv.osv_memory):
         defaults['delivered_qty'] = so_line.delivered_qty or 0.0
         defaults['delivered_flag'] = so_line.delivered_flag or ""
         defaults['delivered_text'] = so_line.delivered_text or ""
+        defaults['uitvoering_jaar'] = so_line.uitvoering_jaar or ""
+        defaults['facturatie_jaar'] = so_line.facturatie_jaar or ""
         return defaults
 
 sale_order_line_delivery()
