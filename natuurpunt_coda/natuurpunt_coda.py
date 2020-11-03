@@ -1296,7 +1296,7 @@ class account_coda_import(osv.osv_memory):
                          ids_partner_pom = compose( 
                              partial(match_with_existing_partner,res_partner_obj,cr,uid),
                              lambda (p,l,a):[p.id] if p else False
-                         ) (pom_data) if pom_data[0] else False
+                         ) (pom_data) if pom_data[0] else [int(pom_http['partner_id'])]
                          if ids_partner_pom:
                              _logger.info("POM partner match:{} - {}".format(lines2.t21_struct_comm,ids_partner_pom))
                              partner = res_partner_obj.browse(cr, uid, ids_partner_pom)
